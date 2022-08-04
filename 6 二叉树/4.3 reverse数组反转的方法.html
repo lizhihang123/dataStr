@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Array.prototype._reverse = function () {
+            if (this.length === 0) {
+                return this;
+            }
+            //一分为2
+            // 1，2，3，4,5 需要 2，4换位置，
+            debugger
+            let left = Math.floor(this.length / 2) - 1; //左侧索引
+            let y = this.length % 2;//取个余数（长度是偶数就是0，否则是1）
+            let right = left + y + 1; //右侧索引
+            while (left >= 0 && right < this.length) {
+                //交换位置
+                let value = this[left];
+                this[left] = this[right];
+                this[right] = value;
+                //指针左移
+                left--;
+                //指针右移
+                right++;
+            }
+            return this;
+        }
+        console.log([1, 2, 3, 4, 5]._reverse()) //[5,4,3,2,1]
+    </script>
+</body>
+
+</html>

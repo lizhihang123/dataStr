@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(3)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        // var f = new Node(4)
+        // var g = new Node(3)
+        a.left = b
+        a.right = c
+
+        /* 
+        1 思路：左节点+右节点 放入队列
+                取出
+                判断是否为空的3种情况 都不为空 判断值是否相等
+                左子树左节点 右子树的右节点 左子树的右节点 右子树的左节点 放入队列
+                while循环
+        2 时间：O(n) 节点的个数
+          空间：O(n) n为节点的个数
+        3 用栈也是一模一样的思路
+
+        
+        */
+        var isSymmetric = function (root) {
+            // 根节点为null 就是对称的
+            if (root === null) {
+                return true
+            }
+            let queue = []
+            // 左子树头结点加入队列
+            queue.push(root.left)
+            // 右子树头结点加入队列
+            queue.push(root.right)
+
+            // 判断两棵树是否相互反转
+            while (queue.length > 0) {
+                // 从队列里面取出树
+                let leftNode = queue.pop()
+                let rightNode = queue.pop()
+                // 左和右都是空的 是对称的 已经排除了
+                debugger
+                if (leftNode === null && rightNode === null) {
+                    continue
+                }
+                // 左右节点一个为空 或者 都不为空 但是数值不同 就返回true
+                if (leftNode === null && rightNode !== null) {
+                    return false
+                } else if (leftNode !== null && rightNode === null) {
+                    return false
+                    // 注意是.val
+                } else if (leftNode.val !== rightNode.val) {
+                    return false
+                }
+                // 这里顺序 -》先都内侧 再都外侧
+                queue.push(leftNode.left)
+                queue.push(rightNode.right)
+                queue.push(leftNode.right)
+                queue.push(rightNode.left)
+            }
+            return true
+        }
+        console.log(isSymmetric(a));
+    </script>
+</body>
+
+</html>

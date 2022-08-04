@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /* 
+        1 和第一个版本的区别是：初始化数组 如果碰到obstacleGrid某个地方是1，后续都是0，不能再赋值为1
+        2 第二个区别：数组推导的时候 如果碰到了obstacleGrid[i][j]是1，就要让它的值等于0，因为障碍物这个点就赋值为(0, 0)
+        3 时间复杂度O(m * n)
+          空间复杂度O(m * n)
+        */
+        var uniquePathsWithObstacles = function (obstacleGrid) {
+            // 初始化dp数组
+            let m = obstacleGrid.length
+            let n = obstacleGrid[0].length
+            let dp = new Array(m).fill().map(item => new Array(n).fill(0))
+            /* 
+                1. 思考 初始化数组 下面初始化第一列的代码 注释和没注释的区别 在于 如果碰到一个障碍 后续所有的都是初始化为0 注释掉的代码不能起到这个作用 而放在for循环里面 才会起到这个作用
+            */
+            for (let i = 0; i < m && obstacleGrid[i][0] === 0; i++) {
+                dp[i][0] = 1
+            }
+            // for (let i = 0; i < m; i++) {
+            //     if (obstacleGrid[i][0] === 0) {
+            //         dp[i][0] = 1
+            //     }
+            // }
+            for (let j = 0; j < n && obstacleGrid[0][j] === 0; j++) {
+                dp[0][j] = 1
+            }
+            // for (let j = 0; j < m; j++) {
+            //     if (obstacleGrid[j][0] === 0) {
+            //         dp[j][0] = 1
+            //     }
+            // }
+            console.log(dp);
+            for (let i = 1; i < m; i++) {
+                for (let j = 1; j < n; j++) {
+                    // if (obstacleGrid[i][j] !== 1) {
+                    //     dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+                    // } else {
+                    //     // !修改
+                    //     dp[i][j] = 0
+                    // }
+                    dp[i][j] = obstacleGrid[i][j] === 1 ? 0 : dp[i - 1][j] + dp[i][j - 1]
+                }
+            }
+            return dp[m - 1][n - 1]
+        };
+
+
+        // 初始化数据时 注意 如果碰到障碍物 后续都是0
+        // 遍历时  注意 如果碰到障碍物 就不递归
+        // 还是出现了一些问题
+        // console.log(uniquePathsWithObstacles([[0, 0, 0], [0, 1, 0], [0, 0, 0]]));
+        // console.log(uniquePathsWithObstacles([[0, 1], [0, 0]]));
+        // console.log(uniquePathsWithObstacles([[1, 0]]));
+        // 这个测试用例 提醒我 二维数组初始化必须都为0 因为i j 都是从1开始递归，0就会忽略，如果[[0], [1]]这样就会被设置为undefined
+        // console.log(uniquePathsWithObstacles([[0], [1]]));
+    </script>
+</body>
+
+</html>

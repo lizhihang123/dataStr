@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+        1. 先求左子树 + 递归
+           判断左子树的结果是不是-1
+        2. 再求右子树 + 递归
+           判断右子树的结果是不是-1
+        3. 最后比较 左子树和右子树的深度的差 是否大于 1 如果是 返回-1
+           这一步比较的是中节点
+           左 - 右 - 中
+           如果不是大于1，返回 1+Math.max(leftDepth, rightDepth)
+           为什么要+1呢？因为当前加点也要算上去，
+           result返回的是以当前节点为根节点的最大高度
+        递归解法：
+            1. 参数：根节点
+               返回值 高度 / -1(不是平衡二叉树了)
+            2. 终止条件
+               if (root === null)  {
+                return 0
+               }
+               以当前节点为根节点的高度为0
+            3. 单层递归逻辑
+               左右子树的高度之差 如果小于 1 就是平衡  如果大于1 就返回-1
+
+            4. 为什么平衡二叉 求高度 就是 左右中 而不能是 从上往下找 也即中左右
+               可以这样想，如果最底下的 左右子树的高度差超过 -1 我们就不需要再往上找了，直接 return -1
+               但是如果从上往下找，你只能找到最根部
+
+               为什么“二叉树的最大深度”既可以是左右中，也可以是中左右，因为他求的就是深度，从根节点到最后一个节点
+        */
+
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        // var b = new Node(null)
+        var c = new Node(2)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        // a.left = b
+        a.right = c
+        c.left = f
+        c.right = g
+        console.log(a);
+        // var isBalanced = function (root) {
+        //     return getDepth(root) === -1 ? false : true
+        // };
+
+        // const getDepth = function (node) {
+        //     debugger
+        //     // 终止条件
+        //     if (node === null) {
+        //         return 0
+        //     }
+        //     // 单层递归条件
+        //     // 左子树的高度 并递归 看看是不是-1
+        //     // let leftDepth = getDepth(root.left) === -1 ? -1 :
+        //     let leftDepth = getDepth(node.left)
+        //     if (leftDepth === -1) {
+        //         return -1
+        //     }
+        //     // 右子树的高度 并递归 看看是不是-1
+        //     let rightDepth = getDepth(node.right)
+        //     if (rightDepth === -1) {
+        //         return -1
+        //     }
+        //     let result;
+
+
+        //     // 高度差大于1 就return -1
+        //     // 求得是中节点
+        //     if (Math.abs(leftDepth - rightDepth) > 1) {
+        //         result = -1
+        //     } else {
+        //         result = 1 + Math.max(leftDepth, rightDepth)
+        //     }
+        //     return result
+        // }
+        // console.log(isBalanced(a));
+
+
+        /*         1. 先求左子树 + 递归
+                   判断左子树的结果是不是-1
+                2. 再求右子树 + 递归
+                   判断右子树的结果是不是-1
+                3. 最后比较 左子树和右子树的深度的差 是否大于 1 如果是 返回-1
+                   这一步比较的是中节点
+                   左 - 右 - 中
+                   如果不是大于1，返回 1+Math.max(leftDepth, rightDepth)
+                   为什么要+1呢？因为当前加点也要算上去，
+                   result返回的是以当前节点为根节点的最大高度 */
+
+
+
+        const isBalanced = (root) => {
+            if (root === null) {
+                return true
+            }
+            let result = getDepth(root)
+            return result === -1 ? false : true
+        }
+        const getDepth = (node) => {
+
+            debugger
+            if (node === null) {
+                return 0
+            }
+
+            let result
+            // 左
+            let leftDepth = getDepth(node.left)
+            if (leftDepth === -1) {
+                return -1
+            }
+
+            // 右
+            let rightDepth = getDepth(node.right)
+            if (rightDepth === -1) {
+                return -1
+            }
+
+            // 中
+            if (Math.abs(leftDepth - rightDepth) > 1) {
+                result = -1
+            } else {
+                result = 1 + Math.max(leftDepth, rightDepth)
+            }
+
+            return result
+        }
+        console.log(isBalanced(a));
+
+    </script>
+</body>
+
+</html>

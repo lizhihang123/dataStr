@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 分组的最大数量
+        var maximumGroups = function (grades) {
+
+            // 1. 分治思想 想要先会分数量多的数组 不如先分数量少的数组 思考如何去做?
+            // [1, 2, 3] => [1] [2, 3] 如果是[1, 2] [3] 就会相等 如果是[1, 2, 3]就没变化哇
+            // [10,6,12,7,3,5]
+            // [10] [6, 12, 7, 3, 5]
+            // [10] [6, 12] [7, 3, 5]
+            // [10] [6, 7] [12, 3, 5]
+
+
+            // 声明一个新的数组  二维数组 二维创建二个
+            // 前一个数组的和 是否小于后一个数组的和  + 前一个数组的数量是否小于前一个数组的数量
+
+
+            if (grades.length === 2) {
+                return 1
+            }
+            let result = []
+            result.push([], [])
+            for (let i = 0; i < grades.length; i++) {
+                const num = grades.shift()
+                result[0].push(num)
+            }
+        };
+    </script>
+</body>
+
+</html>

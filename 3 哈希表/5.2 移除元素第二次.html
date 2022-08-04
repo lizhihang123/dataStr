@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 暴力解法 会改变数组的长度
+        var removeElement = function(nums, val) {
+            let len = nums.length
+            for (let i = 0; i < nums.length; i++) {
+                if (nums[i] === val) {
+                    nums.splice(i, 1)
+                    i--
+                    len--
+                }
+            }
+            return nums.length
+        };  
+        console.log(removeElement([1,2,2,3,4,5], 4));
+        console.log(removeElement([1,2,2,3,4,5,8,8,8,9], 4));
+
+        // 2. 暴力解法
+        var removeElement2 = function(nums, val) {
+            let len = nums.length
+            for (let i = 0; i < len; i++) {
+                if (nums[i] === val) {
+                   for(let j = i + 1; j < len; j++) {
+                       nums[j - 1] = nums[j]
+                   }
+                   i--
+                   len--
+                }
+            }
+            console.log(nums);
+            // console.log(nums.length); // 这个还是4 只是len变了
+            return len
+        }
+        // i = 0 x
+        // i = 1 x
+        // i = 2 j = 3 nums[2] = nums[3] -> [1, 2, 4, 4]
+        // i = 1, len = 3 i = 2 j = 3 第二层for循环没进去 i-- len -- i = 1 len = 2
+        // i = 2 for循环跳出 len = 2
+        // 如果是4,4 结尾这样 输出的数组是[1, 2 ,4 ,4]好像没变化 但是len变化了 len是独立的一个变量
+        console.log(removeElement2([1,2,4,4], 4));
+
+        
+        // i = 0,
+        // i = 1,
+        // i = 2 j = 3 nums[2] = num[3] num[3] = num[4] num[4] = num[5] -> [1, 2, 5, 4, 5, 5]
+        // i-- len-- i = 1 len = 5 i++ i = 2
+        // i = 2 
+        // i = 3 j = 4 num[3] = num[4] -> [1, 2, 5, 5, 5, 5]
+        console.log(removeElement2([1,2,4,5,4,5], 4)); // 输出的长度是4 打印的数组是[1,2,5,5,5,5,5,5]
+        
+
+        // 3. 双向双指针法
+        var removeElement2 = function(nums, val) {
+            let slowIndex = 0;
+            for(let fastIndex = 0; fastIndex < nums.length; fastIndex++) {
+                if (nums[fastIndex] !== val) {
+                    nums[slowIndex++] = nums[fastIndex]
+                }
+            }
+            return slowIndex
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 双指针法：
+        // 1. 不理解 最后的pre指向是啥意思
+        var reverseList = function(head) {
+            if (!head || !head.next) {
+                return head
+            }
+            let temp = null, 
+            pre = null,
+            cur = head
+            while(cur) {
+                temp = cur.next
+                cur.next = pre
+                pre = cur
+                cur = temp
+            }
+            // 1. temp = cur.next(B)
+            // !cur.next = pre(null)
+            // pre = cur(A)
+            // cur = temp(B)
+            // 2. temp = cur.next(C)
+            // !cur.next = pre(A)
+            // pre = cur(B)
+            // cur = temp(C)
+            // 3. temp = cur.next(D)
+            // !cur.next = pre(B)
+            // pre = cur(C)
+            // cur = temp(D)
+            // 4. temp = cur.next(null)
+            // !cur.next = pre(C)
+            // pre = cur(D)
+            // cur = temp(null)
+
+            // temp = cur = null
+            return pre
+        }
+
+        // 2. 递归法
+        var reverse2 = function (pre, head) {
+            if (!head) {
+                return pre
+            }
+            // 保存next指针的值
+            const temp = head.next
+            // 反转操作
+            head.next = pre
+            // 更新pre指针
+            pre = head
+            // 通过递归来执行
+            // head = temp 相当于递归操作
+            return reverse2(pre, temp)
+        }
+        var reverseList2 = function (head) {
+            return reverse2(null, head)
+        }
+
+        // 1. pre = null
+        // head = A
+        // temp = head.next = B
+        // head.next = pre = null
+        // pre = head = A
+        // reverse(pre, temp)
+        // reverse(A, B)
+
+
+        // 2. temp = head.next = B.next = C
+        // head.next = pre = A
+        // pre = head = B
+        // reverse(pre = B, temp = C)
+
+        // 3. temp = head.next = D
+        // head.next = pre = B
+        // pre = head = C
+        // reverse(pre = C, temp = D)
+
+        // 4. temp = head.next = null
+        // head.next = pre = C
+        // pre = head = D
+        // reverse(pre = D, temp = null)
+
+
+        // 3. 递归2：
+        // 这个方法 我不能李姐
+        var reverse = function(head) {
+            if(!head || !head.next) return head;
+            // 从后往前翻
+            const pre = reverse(head.next);
+            head.next = pre.next;
+            pre.next = head;
+            return head;
+        }
+
+        var reverseList = function(head) {
+            let cur = head;
+            while(cur && cur.next) {
+                cur = cur.next;
+            }
+            reverse(head);
+            return cur;
+        };
+        console.log(reverseList3);
+    </script>
+</body>
+</html>

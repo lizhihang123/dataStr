@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        var levelOrderBottom = function (root) {
+            let res = []
+            let queue = []
+            if (root) {
+                debugger
+                let level = 0
+                queue.push({ node: root, level })
+                while (queue.length) {
+                    const item = queue.shift()
+                    const node = item.node
+                    const level = item.level
+                    if (level === res.length) {
+                        res.unshift([])
+                    }
+                    res[0].push(node.val)
+                    node.left && queue.push({ node: node.left, level: level + 1 })
+                    node.right && queue.push({ node: node.right, level: level + 1 })
+                }
+            }
+            return res
+        };
+        console.log(levelOrderBottom(a));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        1 倒着层序遍历 最终push进入res数组 改为 unshift进入res数组即可
+        1 root 先放到 queue 中 长度为1
+        2 while 循环退出条件是 queue的长度 < 0
+        3 核心思路：每次遍历当前行的节点，打印，然后判断有没有左节点或者右节点 右的话 就放进去 queue里面 给下一次的for循环使用 不需要层级 每一层的节点个数打印完了就进入下一级
+    */
+        var levelOrderBottom = function (root) {
+            let queue = []
+            let res = []
+            if (!root) {
+                return []
+            }
+            queue.push(root)
+            while (queue.length > 0) {
+                debugger
+                let curLevel = []
+                let length = queue.length
+                for (let i = 0; i < length; i++) {
+                    // 从队列顶部拿值
+                    let node = queue.shift()
+                    // 值放进curLevel
+                    curLevel.push(node.val)
+                    // 左节点和右节点 放到queue
+                    // 先左 再 push 右 到时候shift从顶部拿，就是从左到右打印
+                    node.left && queue.push(node.left)
+                    node.right && queue.push(node.right)
+                }
+                res.unshift(curLevel)
+            }
+            return res
+        };
+    </script>
+</body>
+
+</html>

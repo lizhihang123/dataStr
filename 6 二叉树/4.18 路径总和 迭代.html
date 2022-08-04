@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        // 迭代
+        var pathSum = function (root, targetSum) {
+            if (root === null) {
+                return false
+            }
+            let res = [] // 结果数组
+            const queue = [] // 队列
+            // ！易错 queue里面存的是一个个数组[节点，[路径上的节点的值]]
+            queue.push([root, [root.val]])
+            debugger
+            while (queue.length) {
+                let len = queue.length
+
+                for (let i = 0; i < len; i++) {
+                    // path也是数组
+                    const [node, path] = queue.pop()
+                    // 叶子结点 因为每个节点的下一层的left和right都会进行累加 因此在这里能够直接用node.val进行判断
+                    if (!node.left && !node.right && node.val === targetSum) {
+                        // res.push(path.slice())
+                        // 注意必须用延展运算符去拷贝 避免 拷贝地址联动修改
+                        res.push([...path])
+                        continue
+                    }
+
+                    // 左
+                    if (node.left) {
+                        let newPath = [...path, node.left.val]
+                        // 注意这个先后顺序 先把值放入newPath【上面】 再去进行下面的累加
+                        node.left.val += node.val
+                        queue.push([node.left, newPath])
+                    }
+                    // 右
+                    if (node.right) {
+                        let newPath = [...path, node.right.val]
+                        node.right.val += node.val
+                        // 这里非常容易出错 记得push进入queue的是一个数组
+                        // 原来写成了queue.push(node.right, newPath)
+                        queue.push([node.right, newPath])
+                    }
+                }
+
+
+            }
+            return res
+        }
+        console.log(pathSum(a, 8));
+    </script>
+</body>
+
+</html>

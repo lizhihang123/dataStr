@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(4)
+        var g = new Node(3)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        /* 
+        1 不是层序遍历 不是以前的 前序 、 中序、 后序遍历
+        2 判断二叉树是否是对称的 要比较的二叉树的左子树和右子树是不是相互反转的，要比较两棵树 而不是左节点和右节点
+          如何比较？
+          要比较两棵子树的里侧和外侧的元素是否相等
+          一棵树的顺序：左 -》右 -》中 另一棵树的顺序是 右 -》左 -》中 这两个顺序 都可以理解为是后序
+        
+
+        递归三部曲：
+        1 参数和返回值
+          参数：左子树节点和右子树节点
+          返回值是布尔值
+        2 终止条件
+          节点为空：左节点为空 + 右节点不为空 false
+                   左节点不为空 + 右节点为空 false
+                   左右节点都为空 对称 true
+          左右节点都不为空：
+                   比较数值，不相同 false
+                   相同， true
+        3 终止条件
+          外侧：左子树的左孩子+右子树的右孩子相等 
+          内侧：左子树的右孩子+右子树的左孩子相等
+          内侧+外侧对称 true
+        */
+        var isSymmetric = function (root) {
+            if (root === null) {
+                return true
+            }
+            return compare(root.left, root.right)
+        };
+        function compare(left, right) {
+            // 排除空节点的情况
+
+            // 左节点为空 + 右节点不为空
+            if (left === null && right !== null) {
+                return false
+                // 左节点不为空 + 右节点为空
+            } else if (left !== null && right === null) {
+                return false
+                // 左右节点都为空
+            } else if (left === null && right === null) {
+                return true
+                //左右节点都不为空 数值不相同的情况
+            } else if (left.val !== right.val) {
+                return false
+            }
+
+            // 左右节点都不为空的情况
+            let outside = compare(left.left, right.right)
+            let inside = compare(left.right, right.left)
+            let isSame = outside && inside
+            return isSame
+        }
+        console.log(isSymmetric(a));
+    </script>
+</body>
+
+</html>

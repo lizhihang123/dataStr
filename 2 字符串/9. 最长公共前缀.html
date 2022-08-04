@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var longestCommonPrefix = function(strs) {
+            // 1. 先判断数组的长度 如果为1 就return它自身？
+            // 2. 声明变量 index 用于指向每个字符的内部
+            //    声明变量 str 代表数组的第一个值
+            //    flag变量 判断是否要return 如果for循环当前跳出了 while循环也应当跳出
+            // 3. 外层while循环 index小于第一个值的长度
+            //    内层for循环 遍历数组后续的每一个值
+            //    如果不等 str[index] !== strs[i][index] flag=true break
+            //    后续判断 if(flag) {return false}
+            //    index++
+            if(strs.length <= 1) {
+                return '';
+            }
+            let index = 0, str = strs[0];
+            let flag = false;
+            while(index < str.length) {
+                for(let i = 1; i < strs.length; i++) {
+                    if(str[index] !== strs[i][index]) {
+                        flag = true; // 这里记得flag为true 一旦不相等 就要 break
+                        break;
+                    }
+                    console.log(i,index);
+                    console.log(str[index]);
+                    console.log(strs[i][index]);
+                }
+                if(flag) {
+                    break;
+                }
+                debugger
+                index++
+                console.log(index);
+            }
+            return str.slice(0, index);
+        };
+        console.log(longestCommonPrefix(['abc', 'ab', 'a']));
+        console.log(longestCommonPrefix(['abc', 'abcd', 'abcd']));
+        console.log(longestCommonPrefix(['abc', 'ab', 'abcd']));
+    </script>
+</body>
+</html>

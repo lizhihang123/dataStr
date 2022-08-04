@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var generateMatrix = function(n) {
+            // 1. 准备变量
+            let startX = 0, startY = 0 // 开始和结束变量
+            let offset = 1 // 游标
+            let mid = Math.floor(n / 2) // 用于奇数 中心赋值 的索引
+            let loop = Math.floor(n / 2) // 旋转的圈数
+            let count = 1 // 用于计数
+            let res = new Array(n).fill(0).map(() => new Array(n).fill(0))
+            // 2. 书写逻辑
+            while (loop--) {
+                // 每次新的循环 startX和Y都会变，因此要重置row, col
+                let row = startX, col = startY
+                // 进行循环
+                for (; col < startY + n - offset; col++) {
+                    res[row][col] = count++
+                } 
+
+                for (; row < startX + n - offset; row++) {
+                    res[row][col] = count++
+                }
+
+                for (; col > startY; col--) {
+                    res[row][col] = count++
+                }
+
+                for (; row > startX; row--) {
+                    res[row][col] = count++
+                }
+
+                // 累加值
+                startX++
+                startY++
+                offset +=2
+            }
+            // 3. 如果是奇数 赋值中心值 + 返回值
+            if (n % 2 === 1) {
+                // 这样写是通用的 mid可能是 3 可能是 4 
+                // count 不一定是1 
+                res[mid][mid] = count
+            }
+            return res
+        }
+        // console.log(generateMatrix(6));
+        console.log(generateMatrix(1));
+    </script>
+</body>
+</html>

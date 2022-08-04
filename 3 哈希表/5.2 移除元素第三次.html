@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 暴力解法 直接删 改变数组长度
+        var removeElement = (nums, val) => {
+            let len = nums.length
+            for(let i = 0; i < len; i++) {
+                if (nums[i] === val) {
+                    nums.splice(i, 1)
+                    i--
+                    len--
+                }
+            }
+            return len
+        }
+        console.log(removeElement([1, 2, 3, 4, 4, 5], 4));
+
+        // 2. 暴力解法 直接替换元素
+        var removeElement2 = (nums, val) => {
+            let len = nums.length
+            for (let i = 0; i < len; i++) {
+                if (nums[i] === val) {
+                    for (let j = i + 1; j < len; j++) {
+                        nums[j - 1] = nums[j]
+                    }
+                    i--
+                    len--
+                }
+            }
+            return len
+        }
+
+        // 3. 相交双指针法
+        var removeElement3 = (nums, val) => {
+            let slowIndex = 0
+            for (let fastIndex = 0; fastIndex < nums.length; fastIndex++) {
+                if (nums[fastIndex] !== val) {
+                    nums[slowIndex++] = nums[fastIndex]
+                }
+            }
+            return slowIndex
+        }
+        console.log(removeElement([1, 2, 3, 4, 4, 5], 4));
+    </script>
+</body>
+</html>

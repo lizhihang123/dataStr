@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 分析用例
+        // 1. 窗口的大小固定 => size是给定的
+        // 2. 调用next添加数字 => 需要一个变量来存储值
+        // 3. 如果数字超过窗口的大小，就要剔除第一个进入的数字，后进入的数字和前面的再进行求平均值 => 如果前面的数字剔除了 要剪掉的
+        const MovingAverage = function(size) {
+            this.Queue = new Queue()
+            this.sum = 0
+            this.windowSize = size
+        }
+        MovingAverage.prototype.next = function(val) {
+            // 入队
+            this.Queue.enQueue(val)
+            // 如果入队后，导致窗口大小超出了，就要剔除前面先进入的
+            if(this.Queue.getSize() > this.windowSize) {
+                // sum要减去头部的值
+                this.sum -= this.Queue.getHeader()
+                // 队列要从出队
+                this.Queue.deQueue()
+            }
+            // 求和
+            this.sum += val
+            // 返回平均值
+            return this.sum / this.Queue.getSize()
+        }
+        class Queue {
+            constructor() {
+                // 初始化一个数组
+                this.queue = []
+            }
+            // 入队
+            enQueue(item) {
+                return this.queue.push(item)
+            }
+            // 出队
+            deQueue(item) {
+                return this.queue.shift(item)
+            }
+            // 取-查 作为食堂大妈 你只能看到第一个
+            getHeader() {
+                return this.queue[0]
+            }
+            // 长度
+            getSize() {
+                return this.queue.length
+            }
+            // 是否为空
+            isEmpty() {
+                return this.queue.length === 0
+            }
+        }
+        const move = new MovingAverage(3)
+        console.log(move.next(1))
+        console.log(move.next(12))
+        console.log(move.next(12))
+        console.log(move.next(3))
+        console.log(move.next(3))
+
+
+        // PS:
+        // 如何给原型挂载方法？
+        // 1. 挂载一个方法时，原本的方法变成了构造函数了，因此要new 一个实例 不能直接调用
+        // function User(name) {
+        //     this.name = name
+        // }
+ 
+        // User.prototype.show = function () {
+        //     console.log(this.name)
+        // };
+        // let Joker = new User.prototype.constructor("Joker");
+        // Joker.show(); 
+        // 也可以直接 let Joker = new User('需要的name值')
+
+        // 2. 挂载多个方法时
+        // 下面用了constructor属性的原因是什么?
+        // 因为此时原型赋值给了一个新的对象 想要改回来就要 用constructor 指向原本的构造函数
+        // 新的对象 => 新的构造函数,删除constructor打印下
+        function User(name) {
+            this.name = name
+        }
+ 
+        User.prototype = {
+            constructor: User,
+            show() {
+                console.log(this.name)
+            },
+            hide() {
+
+            }
+        };
+        console.log(User.prototype.constructor);
+        let Joker = new User.prototype.constructor("Joker");
+        Joker.show();
+        Joker.hide();
+    </script>
+</body>
+</html>

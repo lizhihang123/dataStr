@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. subStr
+        // var strStr = function(haystack, needle) {
+        //     if(needle === '') {
+        //         return 0
+        //     }
+        //     let n = haystack.length - 1
+        //     let m = needle.length - 1
+        //     let i = 0
+        //     let j = 0
+        //     let count = 0 // count=0 表示匹配的开始 count>0表示匹配的一个过程 
+        //     let first; // first用于记录匹配的开始 =》第一个索引
+        //     while(i <= n && j <= m) {
+        //         if(haystack[i] !== needle[j]) {
+        //             // 如果碰到不相等的值
+        //             if(count > 0) {
+        //                 // 假设count大于0 且父串子串不等 说明子串查找中断
+        //                 if(i <= n) {
+        //                     // 如果 此时 父串还有值 应该继续遍历
+        //                     // i = first + 1，比如mississippi issip
+        //                     // issis  和 issip 此时发现最后一个字母不同 =>中断
+        //                     // 所以父串索引 从 4 =》 2 从子串开头字母i在父串第一次出现的位置first 后面 + 1开始遍历
+        //                     // 子串索引从 4 =》0
+        //                     // count => 0，表示重新开始匹配
+        //                     i = first + 1
+        //                     j = 0
+        //                     count = 0
+        //                     continue// 用continue 而不是break
+        //                 } else {
+        //                     // 如果 此时中断，父串到头，直接跳出循环
+        //                     return -1
+        //                 }
+        //             }
+        //             i++
+        //         } else {
+        //             // 如果父串查找到和子串一致的，count++
+        //             count++
+        //             // count===1时记录first表示第一次出现相等的索引
+        //             if(count === 1) {
+        //                 first = i
+        //             }
+        //             if( j === m ) {
+        //                 // 如果子串遍历到头 都相等 return first
+        //                 return first
+        //             }
+        //             // 父串和子串都跳出循环
+        //             i++
+        //             j++
+                   
+        //         }
+        //     }
+        //     return -1
+        // };
+        // console.log(strStr('abcd','cd')); // 2
+        // console.log(strStr('abcdf','dfg')); // -1
+        // console.log(strStr('','')); // 0
+        // console.log(strStr('a','')); // 0
+        // console.log(strStr('mississippi','issip')); // 4
+        // console.log(strStr('mississippi','pi')); // 9
+        // console.log(strStr('adceadca','adca')); // 9
+        // // issis中断   issip
+
+
+        // 2. 解法2
+        var strStr = function(haystack, needle) {
+            // 情况1：父串子串都为空 =》 0
+            // 情况2：父串为空 子串不为空 =》-1
+            // 情况3：父串不为空 子串为空 =》0
+            // 情况4：父串的长度 小于 子串的长度 =》 -1
+            if(needle === '') {
+                return 0 // 子串为空时， 不管父串是否为空 都是return 0
+            } else if (haystack.length === 0) {
+                return -1 // 子串不为空时，父串长度等于0 return -1
+            }
+            let m = haystack.length - 1 
+            let n = needle.length -1 
+            let i = 0 // i表示父串
+            let j = 0 // j表示子串
+            while(i <= m && j <= n ) {
+                // 如果子串和父串不相等
+                if(haystack[i] !== needle[j]) {
+                    // 父串匹配完了 => 直接输出-1
+                    if(i === m) {
+                        return -1
+                    }
+                    // 父串没有匹配完
+                    i = i - j + 1; // 这句代码是核心关键
+                    // i - j + 1的作用就是在匹配的时候 如果冲突 就让子串整体右移一位 再和父串进行匹配
+                    j = 0 // 子串 指针从头开始[尽管这样效率很低]
+                    continue // [跳出这一次while循环 进入下一次]
+                }
+                // 如果子串和父串相等 并且子串匹配到最后一个 =》i - j
+                if(j === n) {
+                    return i - j
+                } else if (i === m) {
+                    // 如果子串没有匹配完 但是父串匹配完了 对应情况4
+                    return -1
+                }
+                // 子串和父串相等 两个指针都往后移动
+                i++
+                j++
+            }
+        }   
+        // console.log(strStr('abcabcad','abcad'));    
+        // console.log(strStr('a',''));   // 0 
+        // console.log(strStr('',''));   // 0 
+        // console.log(strStr('','a'));   // -1
+        // console.log(strStr('',''));    
+        // console.log(strStr('aa','aaa')); -1   
+        
+           
+    </script>
+</body>
+</html>

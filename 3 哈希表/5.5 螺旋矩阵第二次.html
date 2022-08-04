@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 0. 理解while循环
+        // while的判断条件等于0时就跳出
+        // let index = 3
+        // while (index--) {
+            // index等于3时，进入 但是自减 变成2
+            // index等于2时，进入 但是自减 变成1
+            // index等于1时，进入 但是自减 变成0
+            // index等于0时，不进入
+        //     console.log(index);
+        // }
+
+        // 总的思路：
+        // 1. 需要 
+        //    startX startY 控制每次循环开始的索引 变化
+        //    loop - 控制循环次数
+        //    mid - 奇数 最中心的索引
+        //    offset - 游标
+        //    res - 初始的数组 注意其初始化的方法 fill
+        // 2. while循环和易错点
+        // 2.1  每次循环开始 循环的起始位置重新赋值
+        // 2.2  四次遍历 到哪里开始 到哪里结束 一定要统一起来 左闭又开 最后一个取不到
+        // 2.3  遍历结束 开始和结束位置要++ 游标要+2 注意为啥是+2 因为最左列取不到 最右边有两列取不到
+        // 2.4  中心值赋值的写法注意 n % 2 === 1 就给res[mid][mid] = count 注意mid值是变化的
+
+
+
+        // 1. 打了断点 好像有点懂了 只是offset为啥每次是减去2 有点不懂
+        var generateMatrix = function(n) {
+            // 1. 声明变量
+            let startX = startY = 0 // 起始位置
+            let loop = Math.floor(n / 2) // 循环的圈数
+            let mid = Math.floor(n / 2) // 如果是奇数 取最中间的位置
+            let offset = 1 // 游标
+            let count = 1 // 用于累加的数字
+            // 二维数组，里面值都是undefined 注意map里面new Array(n).fill() 也要加 n
+            let res = new Array(n).fill().map(() => new Array(n).fill())
+            // 2. 书写逻辑
+            // 2.1 退出条件 循环圈数为0时
+            while (loop--) {
+                // 这句话很关键 为什么？
+                // 2.2 不然每次新的循环进入 col和row都是0 只会修改第一行
+                let row = startX, col = startY
+                // 2.3 四个遍历条件 
+                // 上列 左 -》右 左闭右开
+
+                // 正确
+                for (; col < startY + n - offset; col++) {
+                    res[row][col] = count++
+                } 
+
+                for (; row < startX + n - offset; row++) {
+                    res[row][col] = count++
+                }
+
+                for (; col > startY; col--) {
+                    res[row][col] = count++
+                }
+
+                for (; row > startX; row--) {
+                    res[row][col] = count++
+                }
+                // 错误
+                // for(; row < startX + n - offset; row++) {
+                //     res[col][row] = count++
+                // }
+
+                // for(; col < startY + n - offset; col++) {
+                //     res[col][row] = count++
+                // }
+
+                // for(; row > startX; row--) {
+                //     res[col][row] = count++
+                // }
+
+                // for(; col > startY; col--) {
+                //     res[col][row] = count++
+                // }
+                // 2.4 重新赋值
+                // 起始位置++
+                startX++
+                startY++
+                // 游标+2
+                offset +=2
+            }
+            // 3. mid进行重新赋值
+            if (n % 2 === 1) {
+                res[mid][mid] = count
+            }
+            // 4. 记得返回值
+            return res
+        }
+        console.log(generateMatrix(5));
+    </script>
+</body>
+</html>

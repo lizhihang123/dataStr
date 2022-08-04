@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        function connect3(root) {
+            // 第一层
+            let layer = [root]
+            while (layer.length > 0 && layer[0]) {
+                // 下一层存储
+                let nextLayer = []
+                // layer手动添加一个null 最后一个指向 
+                layer.push(null)
+                // 遍历长度
+                let len = layer.length
+                for (i = 0; i < len - 1; i++) {
+                    debugger
+                    // !记得等于的是layer[i + 1] 不是 layer[i + 1].next
+                    // layer[i].next = layer[i + 1]
+                    layer[i].next = layer[i + 1]
+                    // 下一层
+                    layer[i].left && nextLayer.push(layer[i].left)
+                    layer[i].right && nextLayer.push(layer[i].right)
+                }
+                // 更新layer
+                layer = nextLayer
+            }
+            // 返回根节点 为什么？
+            // 因为对象是引用数据类型 在layer里面更改了 存储的是指针指向堆里面的地址 这里也会被更改
+            return root
+        }
+        console.log(connect3(a));
+    </script>
+</body>
+
+</html>

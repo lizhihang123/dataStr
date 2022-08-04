@@ -1,0 +1,63 @@
+<!--
+ * @Date: 2022-01-15 22:41:30
+ * @LastEditTime: 2022-01-16 20:26:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 贪心原理： 局部最优解 只考虑每个步骤的最优解 不考虑全局
+      // 股票上涨的累计求和，其它的我们不管 前一个数和后一个数的差 形成数组 我们求和是正数的
+      // [1,2,3,4,2,7,1];
+      // [1,1,1,-2,5,-6]
+      // 前一个数和后一个数的差值，形成数组，数组里面正数相加
+      // var maxProfit = function (prices) {
+      //   if (prices === null || prices.length == 0) {
+      //     return 0
+      //   }
+      //   const n = prices.length
+      //   let count = 0
+      //   for (var i = 0; i < n - 1; i++) {
+      //     if (prices[i + 1] - prices[i] > 0) {
+      //       count += prices[i + 1] - prices[i]
+      //     }
+      //   }
+      //   return count
+      // }
+      // console.log(maxProfit([1, 2, 3, 4, 5]))
+      // console.log(maxProfit([7, 1, 5, 3, 6, 4]))
+      // console.log(maxProfit([7, 6, 4, 3, 1]))
+
+      // 解法2：
+      var maxProfit = function (prices) {
+        if (prices.length < 2) {
+          return 0
+        }
+        var index = 0
+        var total = 0
+        console.log(total)
+        var length = prices.length
+        var min
+        while (index < length) {
+          while (index < length - 1 && prices[index] >= prices[index + 1]) {
+            index++
+            min = prices[index]
+          }
+          while (index < length - 1 && prices[index] < prices[index + 1]) {
+            index++
+            console.log(index)
+            total += prices[index] - min
+          }
+          return total
+        }
+      }
+      console.log(maxProfit([1, 2, 3, 4, 3, 5]))
+    </script>
+  </body>
+</html>

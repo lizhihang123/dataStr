@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // 0. map法 用对象
+        var isAnagram = function(s, t) {
+            if(s.length !== t.length) {
+                return false
+            }
+            let map = {}
+            for(let i = 0; i < s.length; i++) {
+                map[s[i]] ? map[s[i]]++ : map[s[i]] = 1
+                console.log(`map[s[i]]是${map[s[i]]}`);
+                map[t[i]] ? map[t[i]]--: map[t[i]] = -1
+                console.log(`map[t[i]]是${map[t[i]]}`);
+            }
+            return Object.keys(map).every(v => map[v] === 0)
+        }
+        console.log(isAnagram('aaab','aaba'));
+
+        // 1. 哈希表的方法
+        // 关键逻辑：利用map数据结构 记录字符里面每个元素出现的次数
+        // 如果之前没有出现，初始值为1 如果之前出现了 基础上+1
+        // 遍历一个哈希表，判断另一个哈希表的是否有这个字符如果有 这个字符的数据是否相同
+        
+        // 代码关键：
+        // map_o.get(item) === undefined 判断是否有这个字符
+        // map_o.set(item,map_o.get(item) + 1) 已有基础+1
+        // for(let [k,value] of map_o) 哈希表的遍历 备注：判断两个map是否相等不能直接===判断 必须一个一个读取属性
+        // var isAnagram = function(s, t) {
+        //     var map_o = new Map()
+        //     var map_t = new Map()
+        //     if(s.length !== t.length) {
+        //         return false
+        //     }
+        //     var n = s.length
+        //     for(let item of s) {
+        //         if(map_o.get(item) === undefined) {
+        //             map_o.set(item, 1)
+        //         } else {
+        //             map_o.set(item,map_o.get(item) + 1)
+        //         }
+        //     }
+        //     for(let item of t) {
+        //         if(map_t.get(item) === undefined) {
+        //             map_t.set(item, 1)
+        //         } else {
+        //             map_t.set(item,map_t.get(item) + 1)
+        //         }
+        //     }
+
+        //     for(let [k,value] of map_o) {
+        //         if(map_t.get(k) === undefined || map_t.get(k) !== value) {
+        //             return false
+        //         }
+        //     }
+        //     return true
+        // };
+        // console.log(isAnagram('aab','baa'));
+        // console.log(isAnagram('aabd','baa'));
+        // https://blog.csdn.net/baidu_33591715/article/details/108522582?ops_request_misc=&request_id=&biz_id=102&utm_term=js%20%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-108522582.pc_search_result_control_group&spm=1018.2226.3001.4187
+
+        // 2. 一个map法
+        // https://blog.csdn.net/leilei7407/article/details/116867116 =》 map方法
+
+        // var isAnagram = function(s, t) {
+        //     // 首先，只是用一个map new 一个
+        //     // 先遍历一个字符串 存入每个子字符出现的次数
+        //     // 其次，遍历第二个字符串，如果map中有这个字符串的子串，个数就-1 如果没有 就return false 表示不是异位
+        //     // 如果最终map.size 为0表示map里面没有数据而s和t的每个子字符串出现的次数一致 return true 否则 是false
+        //     var map = new Map()
+        //     for(let item of s) {
+        //         if(map.get(item) !== undefined) {
+        //             map.set(item, map.get(item) + 1)
+        //         } else {
+        //             map.set(item, 1)
+        //         }
+        //     }
+
+        //     for(let item of t) {
+        //         let value = map.get(item)
+        //         if(value !== undefined) {
+        //             // value这里只是 - 1 和 value = value -1不一样
+        //             map.set(item,value - 1)
+        //             if(map.get(item) <= 0) {
+        //                 // 这里判断条件是map.get(item)<=0 而不是 value 因为value不变
+        //                 map.delete(item)
+        //             }
+        //         } else {
+        //             return false
+        //         }
+        //     }
+
+        //     if(map.size === 0) {
+        //         return true
+        //     } else {
+        //         return false
+        //     }
+        // }
+        // console.log(isAnagram('aab','baa'));
+
+
+        // 3. 先排序 再比较 使用了内置方法 不推荐
+        // 注意点：排序 字符串 => 数组 => sort排序 => 注意charCodeAt()方法 => 再toString() 练习内置方法
+        // s.charAt()方法复习
+        // var isAnagram = function(s, t) {
+        //     if(s.length !== t.length) {
+        //         return false
+        //     }
+
+        //     let sArr = s.split('')
+        //     let tArr = t.split('')
+        //     sArr.sort((a,b) => {
+        //         // console.log(a);
+        //         // console.log(b);
+        //         // console.log(a - b); // NaN
+        //         // console.log(a.charCodeAt()); // 98 
+        //         // console.log(b.charCodeAt()); // 97
+        //         return a.charCodeAt() - b.charCodeAt()
+        //     })
+        //     tArr.sort((a,b) => {
+        //         return a.charCodeAt() - b.charCodeAt()
+        //     })
+
+        //     if(sArr.toString() === tArr.toString()) {
+        //         console.log(sArr.toString());
+        //         console.log(tArr.toString());
+        //         return true
+        //     }
+        //     console.log(sArr.toString());
+        //     console.log(tArr.toString());
+        //     return false
+        // }
+        // console.log(isAnagram('abc','cab'));
+        // console.log('abc'.charCodeAt(0)); // 97 索引为0 的ASCLL为97
+        // console.log('abc'.charAt(0)); // a
+
+
+        // 4. 内置方法
+        // 不推荐 但是可以成功
+        // var isAnagram = function(s, t) {
+        //     if(s.length !== t.length) {
+        //         return false
+        //     }
+        //     let ss = s.split('').sort().join('')
+        //     let tt = t.split('').sort().join('')
+        //     if(ss === tt) {
+        //         return true
+        //     }
+        //     return false
+        // }
+        // console.log(isAnagram('aab','baa'));
+    </script>
+</body>
+</html>

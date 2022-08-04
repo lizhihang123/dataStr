@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        1 m * n的网格 机器人从圆点(0, 0)出发 走到终点的位置 我们把终点理解为(m - 1, n - 1)毕竟在数组里面索引是这样的
+        问走到终点有几种走法
+
+        2 如果是在边缘，比如第一行的第三个位置，只能由第二行的位置走过来，因此 永远都是1，
+        
+        动态规划五部曲：
+        时间复杂度: O(m * n)
+        空间复杂度: O(m * n)
+        1 dp[i][j]的含义是什么 表示每一个位置，有几条路径能够到达这个位置。备注：这里必须用二维数组 之前没有想到
+        2 确定递推公式：
+          dp[i][j]的值可以由什么推导而来，这个是关键之中的关键！
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]这个可以由笔记本/书上面的图形能够画出来
+        3 初始化数组
+          很关键
+          dp[i][0]每一行的第一个数和dp[0][j]每一列的第一个数 都是1 都只有一个路径能来
+          因此用for循环给赋值为1
+          出错：数组声明，必须给二维数组 不然下面会报错
+        4 遍历的顺序 从 前 -》后
+        5 递推数组的推演 纸上画
+          // for循环 遍历 记得是i 和 j都从1开始 为什么 因为0的位置 都已经初始化为1了
+          最终返回 最后一个位置的值 记得要索引要减1
+        
+        */
+        var uniquePaths = function (m, n) {
+            // 初始化dp数组
+            // 原本直接 dp = new Array(m).fill([]) 但是二维数组没有初始化 导致下面赋值 出问题
+            let dp = new Array(m).fill([])
+            console.log(dp);
+            debugger
+            for (let i = 0; i < m; i++) {
+                dp[i][0] = 1
+            }
+            for (let j = 0; j < n; j++) {
+                dp[0][j] = 1
+            }
+            for (let i = 1; i < m; i++) {
+                for (let j = 1; j < n; j++) {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+                }
+            }
+            console.log(dp);
+            // return dp[m - 1][n - 1]
+        };
+        console.log(uniquePaths(3, 7));
+
+        // let uniquePaths2 = function (m, n) {
+        //     // 这里用的是n的长度
+        //     let dp = new Array(n)
+        //     debugger
+        //     for (let i = 0; i < n; i++) dp[i] = 1
+        //     for (let j = 1; j < m; j++) {
+        //         for (let i = 1; i < n; i++) {
+        //             debugger
+        //             dp[i] += dp[i - 1]
+        //         }
+        //     }
+        //     debugger
+        //     console.log(dp);
+        //     return dp[n - 1]
+        // }
+        // // console.log(uniquePaths2(3, 7));
+        // console.log(uniquePaths2(5, 4)); // 35
+    </script>
+</body>
+
+</html>

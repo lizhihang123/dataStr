@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+
+        var a = new Node("a");
+        var b = new Node("b");
+        var c = new Node("c");
+        var d = new Node("d");
+        var e = new Node("e");
+        var f = new Node("f");
+        var g = new Node("g");
+
+        a.left = c;
+        a.right = b;
+        b.left = d;
+        b.right = e;
+        c.left = f;
+        c.right = g;
+        console.log(a); // a 就是二叉树的根节点
+    </script>
+</body>
+</html>

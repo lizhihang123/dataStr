@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间复杂度O(n)
+        // 空间复杂度O(1)
+        // 1 滚动数组法 pre的值来自上一个的cur值 cur值来自本次的cur + pre的求和值
+        // sum pre cur
+        // 1   1   1
+        // 2   1   2
+        // 3   2   3
+        // 5   3   5
+        // 8   5   8
+        // 13  8   13
+        const mod = Math.pow(10, 9) + 7
+        function fibo3(n) {
+            if (n === 0) {
+                return 0
+            }
+            if (n === 1) {
+                return 1
+            }
+            let pre = 0
+            let cur = 1
+            for (let i = 2; i <= n; i++) {
+                debugger
+                // 每一次判断求余mod值
+                const sum = (pre + cur) % mod
+                pre = cur
+                cur = sum
+            }
+            return cur
+        }
+        // fibo3(3)
+        fibo3(4)
+
+
+        // 优化后 
+        // 时间复杂度是O(n)
+        // 空间复杂度是O(1) 和上面类似
+
+
+        // 五部曲：
+        // 1. dp[i] => 第i个斐波那契的数列值
+        // 2. 递推公式 => dp[i] = dp[i - 1] + dp[i - 2]
+        // 3. 初始化dp数组 => dp[0] = 0 dp[1] = 1 => 为什么dp[0] = 0 斐波那契从第一个数开始算
+        // 4. 确定遍历顺序 => 从0 -> 1 -> 2
+        // 5. 举例推导dp数组 => 0 1 1 2 3 5 8 13 21 34
+
+        // 动态规划排错的思路：
+        // 1 写代码前一定根据递推公式 => 模拟推导一下dp数组
+        // 2 代码没通过 -> 打印dp数组 看看和推演的是否一致
+        //   如果dp数组和推演的结果一致 ->递推公式 遍历顺序 结果的初始化 有关系
+        //   如果打印结果和自己推演的不一样 -> 代码的实现有问题
+
+        function feibo4(n) {
+            // 优化1
+            if (n <= 1) {
+                return n
+            }
+            // 初始化dp数组
+            let dp = []
+            dp[0] = 0
+            dp[1] = 1
+            // 优化2
+            // 只需要维护2个数值 不需要填充整个数列
+            for (let i = 2; i <= n; i++) {
+                let sum = dp[0] + dp[1]
+                dp[0] = dp[1]
+                dp[1] = sum
+            }
+            return dp[1]
+        }
+    </script>
+</body>
+
+</html>

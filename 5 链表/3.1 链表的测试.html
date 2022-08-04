@@ -1,0 +1,162 @@
+<!--
+ * @Date: 2022-01-05 22:02:32
+ * @LastEditTime: 2022-06-26 07:40:12
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+    /*
+    * @Date: 2022-01-06 18:51:50
+    * @LastEditTime: 2022-01-06 19:24:49
+    */
+    // 1. 定义节点 类
+    class Node {
+        constructor(v, next) {
+            this.value = v;
+            this.next = next;
+        }
+    }
+
+    // 2. 定义链表类 增 删 改 查
+    class LinkList {
+        constructor() {
+            // 链表的长度
+            this.size = 0;
+            // 初始化 头节点  刚开始 值和next都是null 
+            this.initNode = new Node(null, null);
+        }
+
+        // 检查节点是否超出范围
+        _checkindex(index) {
+            if (index > this.size || index < 0) throw new Error("节点超出范围");
+        }
+
+
+        // 查找上一个节点
+        /**
+         * @name: 
+         * @msg: 
+         * @param {*} header 头节点 初始头开始查找
+         * @param {*} index 查找的目标节点
+         * @param {*} currentIndex 游标位置 从头开始 每向前进一步 游标向前
+         * @return {*}
+         */
+        _find(header, index, currentIndex) {
+            // 查找是一个递归 所以又退出条件 和 递归体
+
+            // 退出条件
+            if (index === currentIndex) {
+                return header
+            };
+            // 递归体 头节点的next->指向的下一个值  游标+1
+            // 记得加return 
+            return this._find(header.next, index, currentIndex + 1);
+        }
+
+
+
+
+        // 2.1 插入节点
+        /**
+         * @name: 
+         * @msg: 
+         * @param {*} v 插入的值
+         * @param {*} index 在哪个位置插入
+         * @return {*}
+         */
+        insertNode(v, index) {
+            // 1. 节点是否存在
+            this._checkindex(index);
+            // 2. 查找上一个节点 查找-一环扣一环
+            let prev = this._find(this.initNode, index, 0);
+            // 3. 当我们要插入的节点 为链表的结尾时，prev.next 为 null
+            // 4. 其它情况 插入的节点的next 就是 prev.next 上一个节点的next就是我即将插入的节点的next
+            // 5. 我让上一个节点的next 指向 新的节点 值是v next是prev.next
+            prev.next = new Node(v, prev.next);
+            this.size++
+            // 返回要插入的节点
+            return prev.next;
+        }
+
+
+        // 删除节点
+        /**
+         * @name: 
+         * @msg: 
+         * @param {*} index 删除的节点的位置
+         * @return {*}
+         */
+        removeNode(index) {
+            // 1. 节点是否存在
+            this._checkindex(index);
+
+            // 2. 查找当前节点的上一个节点
+            let prev = this._find(this.initNode, index, 0);
+            // 3. 当前节点的next就是当前节点
+            let node = prev.next;
+            // 4. 上一个节点的next 改为当前节点的next
+            prev.next = node.next;
+            // 5. 当前节点的next改为null 消失
+            node.next = null
+            // 6. 链表的长度减1
+            this.size--;
+            return node;
+        }
+
+        // 查节点
+        getNode(index) {
+            // 1. 节点是否存在
+            this._checkindex(index);
+            // 2. 节点是否为0
+            if (this.isEmpty()) return;
+            // 3. find方法 上一个节点的next 就是下一个节点
+            return this._find(this.initNode, index, 0).next;
+        }
+
+        // 删除节点
+        // 直接查到节点 getNode 修改值即可 无须修改数组结构
+
+
+        // 判空
+        isEmpty() {
+            return this.size === 0;
+        }
+
+
+        // 链表的长度方法
+        getSize() {
+            return this.size;
+        }
+        // 为什么不能直接通过类的this.size访问到长度，而要声明这样一个方法，因为通过方法返回一个值，比起直接访问类的长度要更加严谨
+    } 
+    const li = new LinkList();
+    li.insertNode(1, 0);
+    // li.insertNode(2, 1);
+    // li.insertNode(3, 2);
+    // console.log(li);
+    // debugger
+    // li.removeNode(1)
+    // console.log(li);
+    // debugger
+    console.log(li.getNode(0));
+
+    // 测试并理解了添加和删除节点的意思：
+    // 1. 如果我要删除索引为3的节点，就要找到索引为2的头结点 _find方法
+    // 依靠索引为2的节点 获取索引为3的节点 node = prev.next
+    // 改变索引为2的next指向 prev.next = node.next 改变当前节点的next指向 node.next = null
+    // 2. 添加节点 也用到了_find方法 这个方法里面的递归记得必须要return 不然报错 添加的节点索引为1，必须先找到prev上一个节点
+    </script>
+</body>
+
+</html>

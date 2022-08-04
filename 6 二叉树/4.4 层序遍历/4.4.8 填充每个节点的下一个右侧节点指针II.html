@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 117
+        // 时间复杂度为O(n)
+        // 空间复杂度O(n) 是队列的空间代价
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.right = g
+
+        var connect = function (root) {
+            let queue = [];
+            // 第一层 当前层
+            queue.push(root);
+            if (root === null) {
+                return [];
+            }
+            // root如果是[] 不能通过 用&&而不是||
+            while (queue.length > 0 && queue[0]) {
+                debugger
+                // 下一层
+                let curLevel = [];
+                // !queue的结尾手动
+                queue.push(null)
+                let length = queue.length;
+                // ！遍历长度这里改为length - 1
+                for (let i = 0; i < length - 1; i++) {
+                    // ！修改 next指向下一个节点 
+                    queue[i].next = queue[i + 1]
+                    // ！下一层
+                    queue[i].left && curLevel.push(queue[i].left)
+                    queue[i].right && curLevel.push(queue[i].right)
+                }
+                queue = curLevel
+            }
+            return root;
+        };
+        console.log(connect(a));
+    </script>
+</body>
+
+</html>

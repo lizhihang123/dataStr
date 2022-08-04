@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        function connect(root) {
+            if (root === null) {
+                return null;
+            }
+            const queue = [root];
+            while (queue.length) {
+                const n = queue.length;
+                let last = null;
+                for (let i = 1; i <= n; ++i) {
+                    let f = queue.shift();
+                    // if (f.left !== null) {
+                    //     queue.push(f.left);
+                    // }
+                    // if (f.right !== null) {
+                    //     queue.push(f.right);
+                    // }
+                    f.left && queue.push(f.left)
+                    f.right && queue.push(f.right)
+                    if (i !== 1) {
+                        // i等于1时 last是null
+                        // last是上一个节点
+                        // 最后一个节点不去管他
+                        // 只要是这次for循环 他们就在这一层
+                        last.next = f;
+                    }
+                    last = f;
+                }
+            }
+            return root;
+        }
+        console.log(connect(a));
+    </script>
+</body>
+
+</html>

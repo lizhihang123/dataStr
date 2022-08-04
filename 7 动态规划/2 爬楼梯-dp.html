@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const dp = []
+        function step(n) {
+            // 边界
+            if (n <= 1) {
+                return n
+            }
+            // 不需要管 dp[0]的值 => 根据dp[i]的定义 没有值是更加合理的
+            dp[1] = 1
+            dp[2] = 2
+            // i需要从2开始 是边界条件
+            // 从 0,1 递推到40的公式就是dp[i - 1] + dp[i - 2]
+            for (let i = 3; i <= n; i++) {
+                // 每一次都要判断mod值
+                dp[i] = (dp[i - 1] + dp[i - 2])
+            }
+            return dp[n]
+        }
+        console.time('1')
+        console.log(step(2)); // 2 
+        console.log(step(3)); // 3
+        console.log(step(5)); // 8
+        console.timeEnd('1')
+
+
+        // 优化版本
+        function step2(n) {
+            if (n <= 1) {
+                return n
+            }
+            dp[1] = 1
+            dp[2] = 2
+            for (let i = 3; i <= n; i++) {
+                let sum = dp[1] + dp[2]
+                dp[1] = dp[2]
+                dp[2] = sum
+            }
+            return dp[2]
+        }
+    </script>
+</body>
+
+</html>

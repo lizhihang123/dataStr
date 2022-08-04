@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.children = null;
+        }
+        const a = new Node('1')
+        const b = new Node(null)
+        const c = new Node('2')
+        const d = new Node('3')
+        const e = new Node('4')
+        const f = new Node('5')
+
+        a.children = [b, c, d]
+        c.children = [e, f]
+        console.log(a);
+        // BFS
+        // N叉树 实现层序 + 队列 广度优先遍历 + 在二叉树的基础的层序遍历的基础上 + 每一层的节点遍历完之后 遍历子节点时， 不是看有没有左右节点 他的子节点是一个数组 可能有很多个
+        var levelOrder2 = function (root) {
+            if (!root || root.length === 0) {
+                return [];
+            }
+            let queue = [];
+            let levels = [];
+            queue.push(root);
+            while (queue.length > 0) {
+                let len = queue.length;
+                let level = [];
+                for (let i = 0; i < len; i++) {
+                    let pr = queue.shift();
+                    level.push(pr.val);
+                    // 这里for循环 会比 for …… of更加稳妥 for循环可以加退出限制条件
+                    // pr.children 放在 i < pr.children.length的前面会更加的稳妥 => 如果pr.children是null 就不要去遍历
+                    for (let i = 0; (pr.children) && i < pr.children.length; i++) {
+                        queue.push(pr.children[i]);
+                    }
+                }
+                if (level.length > 0) levels.push(level);
+            }
+            return levels;
+        };
+        console.log(levelOrder2(a));
+
+
+
+        // 递归法
+        // 类似层序遍历的递归法 + 一条路走到底 + 当前child1有子节点 + child1子节点走下去 + 没有子节点了 + 回退
+        const levelOrder = function (root) {
+            // 边界条件
+            if (!root) {
+                return []
+            }
+            // 初始变量
+            let res = []
+            dfs(root, 0, res)
+            return res
+        }
+        // 递归函数
+        const dfs = function (root, level, res) {
+            // 递归体
+            if (!Array.isArray(res[level])) {
+                res[level] = []
+            }
+            res[level].push(root.val)
+            // root.children -> 递归遍历root的孩子
+            for (let child of root.children) {
+                dfs(child, level + 1, res)
+            }
+        }
+
+    </script>
+</body>
+
+</html>

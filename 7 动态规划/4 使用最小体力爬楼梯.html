@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 
+    1 题目理解:
+      每个下标作为一个台阶 第i个台阶对应一个非负数的体力花费值cost[i] 注意 这不是dp[i]
+      支付体力值 可以选择往上爬到一个指定台阶可以跨1或者2步
+      目标：找到到达楼顶的最低花费，楼顶是超过数组的最后一位才算楼顶
+      可以选择0 或者 1 作为初始台阶 不用花费体力
+      [10, 15, 20] => 选择15作为初始台阶 支付15 => 爬两步到达楼顶
+      1, 100, 1, 1, 1, 100, 1, 1, 100, 1] => 选择1作为初始台阶 => 1 -> 1-> 1 -> 1 -> 1 -> 1 到达楼顶
+    2 动态规划五步法：
+      1 dp[i] => 到达第i个台阶 所需要花费的最小体力值[第一步一定要花费体力值]
+      2 确定递推公式 => 两个途径可以得到dp[i]
+        dp[i - 1] 或者是dp[i - 2] 为什么?
+        选择最小的那个Math.min(dp[i - 1], dp[i - 2]) 
+        递推公式1：dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i]
+        递推公式2：dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
+        为什么要+一个cost[i]？
+          递推公式1把到达这个台阶往后的体力也包了
+    
+      3 初始化dp数组
+        书里说，初始化dp[i]的数组比较难
+        dp数组不可能初始化为爬上第i个台阶 所需花费的最小的体力值
+        那就只初始化dp[0] 和dp[1] 其他的值都可从0和1得出
+        
+        初始化为 表示第1步不用花费体力
+        dp[0] = 0
+        dp[1] = 0
+
+        或者
+        dp[0] = cost[0]
+        dp[1] = cost[1]
+
+      4 确定遍历的顺序
+        从前往后 为什么？因为dp[i]的值可以由 dp[i - 1]和 dp[i - 2]的值的出来
+    
+      5 推到dp数组
+        cost数组 [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]  
+        dp数组[1, 100, 2, 3, 3, 103, 4, 5, 104, 6]
+    
+    3  注意 第二种写法最后直接return dp的倒数第二和第一的最小值 因为到达顶层后 无需【包办再顶层的数据了】
+    */
+
+
+    // 时间和空间都是O(n)
+    var minCostClimbingStairs2 = function (cost) {
+      // 注意dp数组要长一位 最后一位表示顶层
+      let dp = new Array(cost.length)
+      // 第一步不用花费体力
+      dp[0] = 0
+      dp[1] = 0
+      // !边界改为i <= cost.length
+      for (let i = 2; i <= cost.length; i++) {
+        // 里面的min 都要加上 cost对应的值 表示要花费体力？
+        dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
+      }
+      // 要花费体力
+      // [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+      // [0, 0, 1, 2, 2, 3, 3, 4, 4, 5, 6]
+      // console.log(dp);
+      // cost.length 直接表示顶层
+      return Math.min(dp[cost.length])
+    };
+    // console.log(minCostClimbingStairs([10, 15, 20]));
+    console.log(minCostClimbingStairs2([1, 100, 1, 1, 1, 100, 1, 1, 100, 1]));
+
+
+
+
+
+    var minCostClimbingStairs = function (cost) {
+      let dp = new Array(cost.length)
+      dp[0] = cost[0]
+      dp[1] = cost[1]
+      for (let i = 2; i < cost.length; i++) {
+        debugger
+        dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i]
+      }
+      // 最后一步可以理解为不用花费体力 所以可以理解为取倒数第一步、第二步的最小值
+      // 因为最后两步 都可以直接上岸
+      return Math.min(dp[cost.length - 1], dp[cost.length - 2])
+    };
+
+
+  </script>
+</body>
+
+</html>

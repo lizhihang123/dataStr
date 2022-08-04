@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Person (name, age) {
+            this.name = name;
+            this.age = age 
+            // this.sayHello = function() {
+            //     console.log('1')
+            // }
+        }
+        Person.prototype.sayHello = function () {
+            return 1
+        }
+
+        function Student(name, age, className) {
+            this.name = name
+            this.age = age
+            this.className = className
+        }
+        Student.prototype = new Person() // 改造student类的原型的指向 指向Person的实例
+        // 单单给Student添加方法 Person没有
+        Student.prototype.getMax = function() {
+            return 2
+        }
+        let stu = new Student('ls', '18', '111')
+        let per3 = new Person('w2', 19)
+        console.log(stu.sayHello()); // 能够返回1
+        console.log(stu.getMax()); // 能够返回2
+        // console.log(per3.getMax()); // 打印不出来
+
+        let p1 = new Person('ls', 13)
+        let p2 = new Person('ww', 12)
+        p1.sayHello()
+        p2.sayHello()
+        console.log(p1.sayHello === p2.sayHello)
+
+        console.log(Person.hasOwnProperty("name")); // true
+        console.log(Person.hasOwnProperty("sayHello")); // false
+        console.log(Person.prototype.hasOwnProperty("sayHello")); // true
+        console.log(Person.hasOwnProperty("hasOwnProperty"));  // false
+        console.log(Object.prototype.hasOwnProperty("hasOwnProperty")); // true
+    </script>
+</body>
+</html>

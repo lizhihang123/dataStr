@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+<body>
+    <script>
+        function sortArray(nums) {
+            let startIndex = 0
+            let endIndex = nums.length - 1
+            quickSort(nums, startIndex, endIndex)
+            return nums
+        }
+        function quickSort (nums, startIndex, endIndex) {
+            // 递归退出条件
+            if (startIndex >= endIndex) {
+                return 
+            }
+            // 得到基准元素位置
+            debugger
+            let pivotIndex = partition(nums, startIndex, endIndex)
+            // 根据基准元素 分成两部分进行排序
+            quickSort(nums, startIndex, pivotIndex - 1)
+            quickSort(nums, pivotIndex + 1, endIndex)
+        }   
+
+        function partition (arr, startIndex, endIndex) {
+            // 取第一个位置 也可以是随机的位置
+            let pivot = arr[startIndex]
+            let mark = startIndex
+            for (let i = startIndex + 1; i <= endIndex; i++) {
+                if (arr[i] < pivot) {
+                    mark++
+                    let p = arr[mark]
+                    arr[mark] = arr[i]
+                    arr[i] = p
+                }
+            }
+            // 没有比当前基准值更小的元素 就交换当前的pivot的值 到mark上面去
+            arr[startIndex] = arr[mark]
+            arr[mark] = pivot
+            return mark
+        }
+        console.log(sortArray([5, 1, 1, 2, 0, 0]));
+    </script>
+</body>
+</html>

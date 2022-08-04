@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(5)
+        var b = new Node(4)
+        var c = new Node(8)
+        var d = new Node(11)
+        var e = new Node(13)
+        var f = new Node(4)
+        var g = new Node(7)
+        var h = new Node(2)
+        var i = new Node(1)
+        a.left = b
+        a.right = c
+        b.left = d
+        c.left = e
+        c.right = f
+        d.left = g
+        d.right = h
+        e.right = i
+
+
+        // var aa = new Node(1)
+        // var bb = new Node(2)
+        // var cc = new Node(3)
+        // aa.left = bb
+        // aa.right = cc
+        const hasPathSum2 = (root, targetSum) => {
+            if (!root) {
+                return false
+            }
+            debugger
+            return traversal(root, targetSum - root.val)
+        }
+
+        // 递归传入的参数和返回值
+        const traversal = function (node, cnt) {
+            // 递归的退出条件
+            debugger
+            if (cnt === 0 && !node.left && !node.right) {
+                return true
+            }
+            if (!node.left && !node.right) {
+                return false
+            }
+            // 单层递归干什么
+            // 正确写法
+            if (node.right && traversal(node.right, cnt - node.right.val)) {
+                return true
+            }
+
+            if (node.left && traversal(node.left, cnt - node.left.val)) {
+                return true
+            }
+            return false
+
+            // 错误写法
+            // if (node.right && traversal(node.right, cnt - node.right.val)) {
+            //     return true
+            // } else {
+            //     return false
+            // }
+
+            // if (node.left && traversal(node.left, cnt - node.left.val)) {
+            //     return true
+            // } else {
+            //     return false
+            // }
+
+
+
+            // 简写 正确写法
+            // const rightRes = node.right && traversal(node.right, cnt - node.right.val) ? true : false
+
+            // const leftRes = node.left && traversal(node.left, cnt - node.left.val) ? true : false
+
+            // return rightRes || leftRes
+        }
+
+        console.log(hasPathSum2(a, 22));
+
+    </script>
+</body>
+
+</html>

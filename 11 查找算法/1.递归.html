@@ -1,0 +1,60 @@
+/**
+ * @name: 5-31日 学习时间复杂度
+ * @return {*}
+ */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 目标是求 x的n次方
+
+        // 1. 法一 直接是 n * n 时间复杂度是O(n)
+        const function1 = (x, n) => {
+            let result = 1
+            for(let i = 0; i < n; i++) {
+                result = result * x
+            }
+            return result;
+        }
+        console.log(function1(3, 4));
+
+        // 2. 法二 采用递归 每次递归n就做一次减1的操作 就是递归了n次，时间复杂度是O(n) 每次执行一个乘法操作，而乘法操作的时间复杂度是一个常数项O(1), => 最终的时间复杂度是O(n) = O(n * 1)
+        const function2 = (x, n) => {
+            if(n === 0) {
+                return 1 // 所有的数的0次方都等于1
+            }
+            return function2(x, n - 1) * x
+        }
+        console.log(function2(3, 4));
+
+        // 3. 法三 采用递归的其他方式
+        const function3 = (x, n) => {
+            if(n === 0) {
+                return 1
+            }
+            if(n % 2 == 1) {
+                return function3(x, n / 2) * function3(x, n / 2) * 2
+            }
+            return function3(x, n / 2) * function3*(x, n / 2)
+        }
+
+        // 4. 法四 采用递归的其他方式
+        const function4 = (x, n) => {
+            if(n === 0) {
+                return 1
+            }
+            let t = function4(x, n / 2) 
+            if(n % 2 === 1) {
+                return t * t * x
+            }
+            return t * t
+        }
+    </script>
+</body>
+</html>

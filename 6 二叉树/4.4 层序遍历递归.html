@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 实现层序遍历 就是广度优先遍历 | 和 前面的前序 中序 后序遍历都不一样，前序中序后续都是【深度优先遍历】
+        // 2. 具体的思路，
+        // 打印完一层信息 再打印下一层
+        // 3. 和前序不同 前序 只有半边的子树时，才碰巧和这里的广度优先打印的一致
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        var levelOrder = function (root) {
+            const res = []
+            // 调用递归函数
+            set(root, 0, res)
+            return res
+        };
+
+        /* 
+            TreeNode 递归的节点
+            level 深度
+            res 结果数组 每一层 一个数组
+        */
+
+        /* 
+        1 思路: 递归+DFS深度 遍历到一条路的最底部 + 判断有无右节点 没有就回退 再进行打印 + 根据level的标识push到对应的层级
+        2 时间复杂度：O(n)表示递归的节点
+          空间复杂度：O(n) n是节点的个数，最终只会存这么多 尽管是2位，但是占的坑是有限的
+        */
+        function set(TreeNode, level, res) {
+            // 如果节点不存在 就要return
+            if (!TreeNode) return
+            // 如果res数组里面的值，不是数组 就要创建一个数组 用二维的方式
+            if (!Array.isArray(res[level])) {
+                res[level] = []
+            }
+            debugger
+            // 打印节点 数组push进去
+            res[level].push(TreeNode.value)
+            // debugger
+            // 如果存在左节点 就调用递归 存在右节点 也递归
+            TreeNode.left && set(TreeNode.left, level + 1, res)
+            // debugger
+            TreeNode.right && set(TreeNode.right, level + 1, res)
+            // debugger
+        }
+        console.log(levelOrder(a));
+    </script>
+</body>
+
+</html>

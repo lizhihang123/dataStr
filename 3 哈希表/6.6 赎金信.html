@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 字符ransomNote 能不能由 magazine 里面的构成
+        // 第一点：magazine 里面的字符在 ransomNote 都只能使用一次
+        // 第二点：假定字符 都只能是小写字母 其它的不用管
+
+        // 第一个思路：把ransomNote 里面的字符存进map对象里面
+        // 再去 magazine 里面遍历 如果某个字符有的话 就return true 否则return false 
+        // 这样就碰到了一个问题 比如 aa 与 aab b字符在前面肯定是找不到的 就会return false了
+        // 掉换一下思路 反过来就可以解决了
+
+        // 2. 第二个修改：用数组会好过 用map对象
+        // 因为只有26个字母 用数组 内存消耗会更小一些
+        // 核心是 s.charCode() - base
+
+        
+        var canConstruct = function(ransomNote, magazine) {
+            // ransomNote = 'aa'  magazine = "aab"
+            let map = new Map()
+            for (const str1 of magazine) {
+                map.set(str1, (map.get(str1)) + 1 || 1)
+            }
+
+            for (const str2 of ransomNote) {
+                if (map.get(str2) > 0) {
+                    map.set(str2, (map.get(str2)) -1)
+                } else {
+                    return false
+                }
+            }
+            return true
+        };
+        // console.log(canConstruct('aa', 'aab'));
+        // console.log(canConstruct('a', ' b'));
+        // console.log(canConstruct('aaac', 'aaa'));
+
+
+
+        // 替换的思路就是用数组 索引是  s.charCodeAt() - base
+        // base 就是 'a'.charCodeAt()
+        var canConstruct2 = function(ransomNote, magazine) {
+            const strArr = new Array(26).fill(0)
+            const base = 'a'.charCodeAt()
+            for (const s of magazine) {
+                strArr[s.charCodeAt() - base]++
+            }
+
+            for (const m of ransomNote) {
+                if (strArr[m.charCodeAt() - base] <= 0) return false
+                strArr[m.charCodeAt() - base]--
+            }
+            return true
+        };
+        // console.log(canConstruct2('aa', 'aab')); // true
+        // console.log(canConstruct2('a', ' b')); // false
+        // console.log(canConstruct2('aaac', 'aaa')); // false
+        // console.log(canConstruct2('aa', 'ab')); // false
+
+
+        // 思路：A字符是B字符的子集，遍历A字符，如果B字符里面都能找到，就截取出来，放到arr数组里面，如果数组长度相同，就没问题
+        let canConstruct3 = function(ransomNote, magazine) {
+            const arr = []
+            let ransomNoteArr = ransomNote.split('')
+            let magazineArr = magazine.split('')
+            for (let i = 0; i < ransomNoteArr.length; i++) {
+                for (let j = 0; j < magazineArr.length; j++) {
+                    if (ransomNoteArr[i] === magazineArr[j]) {
+                        arr.push(magazineArr.splice(j, 1)[0])
+                        // 每次splice会减去数组的长度 因此j要--
+                        j--
+                        // 找到一样啊的字符 跳出第二个for循环
+                        break
+                    }
+                }
+            }
+            if (arr.length === ransomNoteArr.length) {
+                return true
+            }
+            return false
+        }
+        console.log(canConstruct3('aaab', 'baaac'));
+    </script>
+</body>
+</html>

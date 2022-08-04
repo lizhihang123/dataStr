@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        var aa = new Node(3)
+        var bb = new Node(9)
+        var cc = new Node(20)
+        var dd = new Node(null)
+        var ee = new Node(null)
+        var ff = new Node(15)
+        var gg = new Node(7)
+        aa.left = bb
+        aa.right = cc
+        bb.left = dd
+        bb.right = ee
+        cc.left = ff
+        cc.right = gg
+
+        /* 
+        此题就是求每一层的数组的平均值
+        因为遍历是一层一层遍历的，每一层遍历的时候，算到累加值上，进行求和即可 push到res数组里
+
+        时间复杂度：O(n)
+        空间复杂度: O(n)
+        
+        */
+        var averageOfLevels = function (root) {
+            //二叉树的层序遍历
+            let res = [], queue = [];
+            queue.push(root);
+            if (root === null) {
+                return res;
+            }
+            while (queue.length !== 0) {
+                // 记录当前层级节点数 length 是上一次for循环 push进入queue里面的节点的个数
+                let length = queue.length;
+                // 每一个节点的求和
+                let levelSum = 0
+                for (let i = 0; i < length; i++) {
+                    // 在length的限制下 不会把下一层的也打印出来 length值必须固定
+                    let node = queue.shift();
+                    levelSum += node.value
+                    // 存放当前层下一层的节点
+                    // 同时不会改变length的值的情况
+                    // 左节点和右节点 放到queue
+                    // 先左 再 push 右 到时候shift从顶部拿，就是从左到右打印
+                    node.left && queue.push(node.left);
+                    node.right && queue.push(node.right);
+                }
+                //把每一层的结果放到结果数组
+                let average = levelSum / length
+                res.push(average);
+            }
+            return res;
+        };
+        console.log(levelOrder(a));
+        console.log(levelOrder(aa));
+    </script>
+</body>
+
+</html>

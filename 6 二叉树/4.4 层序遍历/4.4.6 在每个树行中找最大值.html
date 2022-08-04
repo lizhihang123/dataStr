@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 找出每一层的最大值 最后输出到一个数组里面
+        // BFS队列法
+        var levelOrder = function (root) {
+            //二叉树的层序遍历
+            let res = [], queue = [];
+            queue.push(root);
+            if (root === null) {
+                return res;
+            }
+            while (queue.length !== 0) {
+                debugger
+                // 记录当前层级节点数 length 是上一次for循环 push进入queue里面的节点的个数
+                let length = queue.length;
+                //存放每一层的节点 每次都要更新
+                let curLevel = [];
+                for (let i = 0; i < length; i++) {
+                    // 在length的限制下 不会把下一层的也打印出来 length值必须固定
+                    let node = queue.shift();
+                    curLevel.push(node.val);
+                    // 存放当前层下一层的节点
+                    // 同时不会改变length的值的情况
+                    // 左节点和右节点 放到queue
+                    // 先左 再 push 右 到时候shift从顶部拿，就是从左到右打印
+                    node.left && queue.push(node.left);
+                    node.right && queue.push(node.right);
+                }
+                //把每一层的结果放到结果数组
+                //每一层的结果都是一个数组
+                let max = curLevel[0]
+                for (let i = 1; i < curLevel.length; i++) {
+                    if (curLevel[i] > max) {
+                        max = curLevel[i]
+                    }
+                }
+                res.push(max);
+            }
+            return res;
+        };
+
+
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        // 递归法
+        var levelOrder = function (root) {
+            const res = []
+            // 调用递归函数
+            set(root, 0, res)
+            return res
+        };
+        function set(TreeNode, level, res) {
+            // 如果节点不存在 就要return
+            if (!TreeNode) return
+            // 如果res数组里面的值，不是数组 就要创建一个数组 用二维的方式
+            // if (!Array.isArray(res[level])) {
+            //     res[level] = []
+            // }
+            debugger
+            // 打印节点 数组push进去
+            if (TreeNode.val > res[level] || res[level] === undefined) {
+                res[level] = TreeNode.val
+            }
+            // debugger
+            // 如果存在左节点 就调用递归 存在右节点 也递归
+            TreeNode.left && set(TreeNode.left, level + 1, res)
+            // debugger
+            TreeNode.right && set(TreeNode.right, level + 1, res)
+            // debugger
+        }
+        console.log(levelOrder(a));
+    </script>
+</body>
+
+</html>

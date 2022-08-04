@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // https://leetcode.cn/problems/median-of-two-sorted-arrays/
+        // 1. 找出这两个正序数组的中位数
+        // 解法1：直接合并，然后sort排序[这样使用了api,不好]，然后进行求余判断
+        // 奇数：arr[Math.floor(len / 2)]
+        // 偶数：(arr[len / 2 - 1] + arr[len / 2]) / 2
+        /**
+        * @param {number[]} nums1
+        * @param {number[]} nums2
+        * @return {number}
+        */
+        var findMedianSortedArrays = function(nums1, nums2) {
+            const arr = nums1.concat(nums2)
+            // 这个排序一定要准确 里面必须要写回调函数
+            arr.sort((a, b) => {
+                return a - b
+            })
+            let len = arr.length
+            if (len % 2 === 0) {
+                // 注意是 len / 2 - 1 和 len / 2
+                return (arr[len / 2 - 1] + arr[len / 2]) / 2
+            } else {
+                // 答案应该是2 结果是3 为什么 因为这里索引错了 应该是  Math.floor
+                return arr[Math.floor(len / 2)]
+            }
+        };
+        // console.log(findMedianSortedArrays([1, 2, 3, 9], [4, 5, 6]));
+        // console.log(findMedianSortedArrays([1, 2, 3], [4, 5, 6]));
+        // console.log(findMedianSortedArrays([1, 3], [2]));
+        // console.log(findMedianSortedArrays([1, 2], [3, 4]));
+        // console.log(findMedianSortedArrays([3], [-2, -1]));
+
+        // 2. 解法2：
+        // 时间复杂度 O(n + m)
+        // 双指针 去遍历两个数组
+        // index_1 index_2 两个指针去记录遍历的位置
+        // index表示当前移动的距离 如果等于(m+n-1)/2 或者 (m+n)/2 就记录当前位置的值
+        // 奇数 (m+n-1)/2 和 (m+n)/2的值是一样的
+        // 断点调试一下
+        var findMedianSortedArrays2 = function(nums1, nums2) {
+            let index = -1, 
+            index_1 = 0, 
+            index_2 = 0, 
+            tmp = 0
+            let target1 = Math.floor((nums1.length + nums2.length - 1) / 2)
+            let target2 = Math.floor((nums1.length + nums2.length) / 2)
+            let nums = [0, 0]
+            let len1 = nums1.length, 
+            len2 = nums2.length
+            while (index_1 < len1 || index_2 < len2) {
+                if (index_1 < len1 && index_2 < len2) {
+                    tmp = nums1[index_1] <= nums2[index_2] ? nums1[index_1++] : nums2[index_2++]
+                } else if (index_1 < len1) {
+                    // 如果第二个数组遍历完了，第一个还没有 就走这里
+                    tmp = nums1[index_1++]
+                } else {
+                    // 如果第一个数组遍历完了，第二个还没有 就走这里
+                    tmp = nums2[index_2++]
+                }
+                index++
+                if (index == target1) {
+                    // target1 和 target2不相同的情况 存在于偶数，如果是奇数，target1 = target2
+                    nums[0] = tmp
+                } 
+                if (index == target2) {
+                    nums[1] = tmp
+                    // 这里是break 假如数组的第二项赋值了，那么也就该跳出去了
+                    break
+                }
+            }
+            return (nums[0] + nums[1]) / 2
+        }
+        // console.log(findMedianSortedArrays2([1, 2, 3, 4], [5]));
+        // console.log(findMedianSortedArrays2([1, 8, 3, 4], [5]));
+        console.log(findMedianSortedArrays2([1,3,4,8,9], [5]));
+
+
+        // 3. 解法3
+        let findMedianSortedArrays3 = function (nums1, nums2) {
+            let n = nums1.length
+            let m = nums2.length
+            let left = Math.floor((n + m + 1) / 2),
+            right = Math.floor((n + m + 2) / 2)
+            return (getKth(nums1, 0, n - 1, nums2, 0, m - 1, left) + getKth(nums1, 0, n - 1,nums2, 0, m - 1, right)) / 2
+        }
+
+        let getKth = (nums1, start1, end1, nums2, start2, end2, k) => {
+            let len1 = end1 - start1 + 1
+            let len2 = end2 - start2 + 1
+
+            // 第一个数组是短的
+            if (len1 > len2) {
+                return getKth(nums2, start2, end2, nums1, start1, end1, k)
+            }
+            // 如果第一个数组的长度是0 直接返回第二个数组的长度
+            if (len1 === 0) {
+                return nums2[start2 + k - 1]
+            }
+            // 如果长度是1 直接返回两个数组里面的最小数字
+            if (k === 1) {
+                return Math.min(nums1[start1], nums2[start2])
+            }
+            // 获取 k / 2 的位置
+            let i = start1 + Math.min(len1, Math.floor(k / 2)) - 1
+            let j = start2 + Math.min(len2, Math.floor(k / 2)) - 1
+
+            if (nums1[i] > nums2[j]) {
+                return getKth(nums1, start1, end1, nums2, j + 1, end2, k - (j - start2 + 1))
+            } else {
+                return getKth(nums1, i + 1, end1, nums2, start2, end2, k - (i - start1 + 1))
+            }
+        }
+        console.log(findMedianSortedArrays3([1,3,4,8,9], [5]));
+    </script>
+</body>
+</html>

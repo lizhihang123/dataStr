@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 递归写法
+        /* 
+            核心：1 递归函数 判断二叉树1的左节点和二叉树2的左节点是否相等 相等，就继续递归他们的子树
+
+            // 时间O(n) 节点的个数
+            // 空间O(n) 栈的深度 有可能是链式的结构
+        */
+        var isSameTree = function(p, q) {
+            if (p === null && q === null) {
+                return true
+            }
+            return compose(p, q)
+        }
+        function compose(node1, node2) {
+            // 递归的终止条件
+            if (node1 === null && node2 === null){
+                return true
+            }
+            // 每一层递归要干的事情 
+            if (node1 !== null && node2 === null) {
+                return false
+            } else if (node1 === null && node2 !== null) {
+                return false
+            } else if (node1.val !== node2.val) {
+                return false
+            }
+
+            // 递归传入参数和返回值 node1.left, node2.left node1.right, node2.right
+            let isSame = compose(node1.left, node2.left) && compose(node1.right, node2.right) 
+            return isSame
+        }
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(3)
+        var d = new Node(1)
+        var e = new Node(2)
+        var f = new Node(4)
+        // var g = new Node(3)
+        a.left = b
+        a.right = c
+        d.left = e
+        d.right = f
+        console.log(isSameTree(a, d));
+    </script>
+</body>
+</html>

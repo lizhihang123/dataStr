@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // trie树的节点
+        class TrieNode {
+            constructor() {
+                // 存储字母的容器
+                this.next = new Array(26).fill(null)
+                //  代表当前节点处于第几层
+                this.path = 0
+                // 当前节点的结束位置
+                this.end = 0
+            }
+        }
+        // 声明一个trie树
+        const Trie = function()  {
+            this.root = new TrieNode()
+        }
+        // trie 插入值
+        Trie.prototype.insert = function(word) {
+            if(!word) {
+                return 
+            }
+            // node为当前的trie节点 单个节点
+            let node = this.root
+            for (let i = 0; i < word.length; i++) {
+                // 获取字符先对应的索引
+                // 为什么这么获取 ? 节点都是字母 能够通过节点字母的Unicode编码的值
+                // a是72
+                let index = word[i].charCodeAt() - 'a'.charCodeAt()
+                // 如果字符对应没有值 就创建一个值
+                if (!node.next[index]) {
+                    node.next[index] = new TrieNode()
+                    // debugger
+                }
+                // 创建一个值 层级要+1
+                node.path +=1
+                // node要往前进1
+                node = node.next[index]
+            }
+            // 结束位标记要+1
+            node.end +=1
+        }
+
+        // trie搜索值
+        Trie.prototype.search = function(word) {
+            if(!word) {
+                return 
+            }
+            let node = this.root
+            for (let i = 0; i < word.length; i++) {
+                // 获取字符先对应的索引
+                let index = word[i].charCodeAt() - 'a'.charCodeAt()
+                // 如果字符对应没有值 就创建一个值
+                if (!node.next[index]) {
+                    return false // 这是搜索方法的改变 表示 找不到值 直接false
+                }
+                // node.path +=1 // 这里不需要加path path只有在新增插入的时候用到 层级已经标记好了
+                node = node.next[index] // 表示查找下一层 
+            }
+            // node.end +=1
+            return node.end // 修改 表示直接返回结束的标记位 具体值的设定在新增 // 如果没有end 表示没有值了
+        }
+
+        Trie.prototype.startsWith = function(word) {
+            if(!word) {
+                return 
+            }
+            let node = this.root
+            for (let i = 0; i < word.length; i++) {
+                // 获取字符先对应的索引
+                let index = word[i].charCodeAt() - 'a'.charCodeAt()
+                // 如果字符对应没有值 就创建一个值
+                if (!node.next[index]) {
+                    return false // 这是搜索方法的改变 表示 找不到值 直接false
+                }
+                // node.path +=1 // 这里不需要加path path只有在新增插入的时候用到
+                node = node.next[index] // 表示查找下一层 
+            }
+            // node.end +=1
+            // return end // 修改 表示直接返回结束的标记位 具体值的设定在新增
+            return true // 如果能够走到这一层 表示模糊查询成功了
+            // 为什么呢？模糊查询和完全查询的区别是什么？
+            // 模糊查询的只查询前缀 
+        }
+
+        // 补充
+        // 1. 自动补全的功能
+        // 2. 空间换时间的思想 内存占用很大
+        var trie = new Trie()
+        trie.insert('a')
+        trie.insert('aa')
+        trie.insert('ab')
+        trie.insert('c')
+        trie.insert('cd')
+        trie.insert('cde')
+        trie.insert('d')
+        trie.insert('de')
+        trie.insert('def')
+        console.log(trie);
+        console.log(trie.search('a')); // true
+        console.log(trie.search('ab')); // true 
+        console.log(trie.search('c')); // false
+        console.log(trie.search('cd')); // false
+        console.log(trie.search('d')); // false
+        console.log(trie.search('de')); // false
+        console.log(trie.startsWith('a')); // true 
+        console.log(trie.startsWith('ab')); // true 
+    </script>
+</body>
+</html>

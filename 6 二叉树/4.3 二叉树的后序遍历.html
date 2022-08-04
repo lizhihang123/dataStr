@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 后续 递归
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        // 打印二叉树
+        // console.log(a)
+
+        // 时间复杂度：O(n) n为节点的个数
+        // 空间复杂度：O(n) n为数组的长度
+        var postorderTraversal1 = function (root) {
+            const result = []
+            set(root, result)
+            return result
+        }
+        function set(tree, result) {
+            if (tree === null) return
+            // 左
+            tree.left && set(tree.left, result)
+            // 右
+            tree.right && set(tree.right, result)
+            // 中
+            result.push(tree.value)
+        }
+        console.log(postorderTraversal1(a));
+
+
+
+        // 迭代的写法
+        // 时间复杂度:O(n + n) =》O(n) 因为reverse()的方法也是O(n) 看下个文件
+        // 空间复杂度:O(n) n为数组的长度
+        var postorderTraversal2 = function (root) {
+            let res = []
+            let stack = []
+            root && stack.push(root)
+            let current
+            while (stack.length > 0) {
+                current = stack.pop()
+                // 中
+                res.push(current.value)
+                // 左(先入栈 后出栈)
+                current.left && stack.push(current.left)
+                // 右(先出)
+                current.right && stack.push(current.right)
+            }
+            // res => 中 右 左
+            // res.reverse() =》 左右中
+            return res.reverse()
+        };
+        console.log(postorderTraversal2(a));
+
+        // 迭代的写法2：
+        /* 
+        1 时间复杂度: 
+        2 空间复杂度: 
+        */
+        var postorderTraversal3 = function (root) {
+            if (!root) return []
+            let res = []
+            let stack = []
+            // 当前遍历节点
+            let current = root
+            while (stack.length !== 0 || current !== null) {
+                debugger
+                // 第一次压入根节点
+                // 遍历左子树，压入栈中
+                while (current) {
+                    stack.push([current, 0])
+                    current = current.left
+                }
+                let [node, flag] = stack.pop()
+                if (!flag) {
+                    // 如果当前没有遍历过右子树
+                    // 重新压回栈中，并遍历右子树
+                    stack.push([node, 1])
+                    current = node.right
+                } else {
+                    // flag 为 1，则第三次访问到该节点，后序遍历输出
+                    res.push(node.value)
+                }
+            }
+            return res
+        };
+        console.log(postorderTraversal3(a));
+
+    </script>
+</body>
+
+</html>

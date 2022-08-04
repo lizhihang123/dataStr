@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function sortArray(nums) {
+            // 1 求数组的最大值和最小值
+            let max = nums[0]
+            let min = nums[0]
+            for (let i = 0; i < nums.length; i++) {
+                if (max < nums[i]) {
+                    max = nums[i]
+                }
+                if (min > nums[i]) {
+                    min = nums[i]
+                }
+            }
+            // 2.1 根据数组的最大值和最小值 求数组的长度
+            let d = max - min
+            let countArray = new Array(d + 1).fill(0)
+            // 2.2 遍历数列 求出统计数组
+            for (let i = 0; i < nums.length; i++) {
+                countArray[nums[i] - min]++
+            }
+            // 往前连续累加一位的目的 -> 兼容 出现重复的数字 -> 排序能够区分开来  
+            for (let i = 1; i < countArray.length; i++) {
+                countArray[i] = countArray[i] + countArray[i - 1]
+            }
+            // 4 倒序遍历原始的数组 从统计数组中找到正确的位置 输出到结果数组
+            let index = 0
+            let sortedArray = new Array(nums.length)
+            for (let i = nums.length - 1; i >= 0; i--) {
+                debugger
+                let position = countArray[nums[i] - min]
+                // position表示你在所有的数字中的排序的位置 -> 排序第四，但是应该放在索引为3的位置 -> 因此应该 - 1
+                sortedArray[position - 1] = nums[i]
+                // 为什么要自减 -> 假如90的数量有两个，下一个90的位置就应该往前移动一位
+                countArray[nums[i] - min]--
+            }
+            return sortedArray
+        }
+        console.log(sortArray([95, 94, 91, 98, 99, 90, 99, 93, 91, 92]));
+    </script>
+</body>
+
+</html>

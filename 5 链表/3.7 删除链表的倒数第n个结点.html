@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // var removeNthFromEnd = function(head, n) {
+        //     const temp = head
+        //     let i = 0
+        //     while (head && head.next) {
+        //         if(size - i !== n) {
+        //             head = head.next
+        //         }
+        //     }
+        //     head.next = head.next.next
+        //     return temp
+        // };
+
+        var removeNthFromEnd2 = function(head, n) {
+            // 1. 创建虚拟头结点
+            let dummy = new LinkNode(0, head),
+            // 2. 快慢指针都指向虚拟头结点
+            slow = dummy,
+            fast = dummy
+            // 3. 让fast先走n步，
+            while (n--) {
+                fast = fast.next
+            }
+            // 4. 如果fast不是最后一个节点 next不为null 就让快慢指针再往前走
+            while (fast.next !== null) {
+                fast = fast.next
+                slow = slow.next
+            }
+            // 5. 快指针走到最后一个节点了 slow的next直接绕过下一个节点
+            slow.next = slow.next.next
+            return dummy.next
+        }
+
+        var removeNthFromEnd1 = function(head, n) {
+            // 1. 创建虚拟头结点
+            let dummy = new LinkNode(0, head),
+            // 2. 快慢指针都指向虚拟头结点
+            slow = dummy,
+            fast = dummy
+            while (n-- && fast !== null) {
+                fast = fast.next
+            }
+            // 也就是fast向前移动 n+1 步时，再和slow一起移动，知道fast为null就停止
+            fast = fast.next
+            while (fast !== null) {
+                fast = fast.next
+                slow = slow.next
+            }
+            // 此时跳过的就是那个要删除的节点
+            slow.next = slow.next.next
+            return dummy.next
+        }
+    </script>
+</body>
+</html>

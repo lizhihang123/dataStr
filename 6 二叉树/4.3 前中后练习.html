@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+
+        /* 
+        前序 递归
+        
+        */
+        function preorderTraversal1(root) {
+            let res = []
+            set3(root, res)
+            return res
+        }
+
+        function set3(root, res) {
+            // 中
+            res.push(root.value)
+            // 左
+            root.left && set3(root.left, res)
+            // 右
+            root.right && set3(root.right, res)
+        }
+        console.log('递归前序', preorderTraversal1(a));
+
+
+        /* 
+        前序 迭代
+        */
+
+
+        function preorderTraversal2(root) {
+            let res = []
+            let stack = []
+            // 0 根节点先入栈
+            root && stack.push(root)
+            while (stack.length > 0) {
+                // 1 节点弹出栈
+                let cur = stack.pop()
+                // 2 先放入res数组
+                res.push(cur.value)
+                // 3 右节点 先入栈
+                cur.right && stack.push(cur.right)
+                // 4 左节点后入栈
+                cur.left && stack.push(cur.left)
+            }
+            return res
+        }
+        console.log('迭代前序', preorderTraversal2(a));
+
+
+
+
+        /* 
+        中序 递归
+        
+        */
+        function inorderTraversal1(root) {
+            let res = []
+            set2(root, res)
+            return res
+        }
+
+        function set2(root, res) {
+            // 左
+            root.left && set2(root.left, res)
+            // 中
+            res.push(root.value)
+            // 右
+            root.right && set2(root.right, res)
+        }
+        console.log('递归中序', inorderTraversal1(a));
+
+
+        /* 
+        中序 迭代
+        */
+
+        function inorderTraversal2(root) {
+            let res = []
+            let stack = []
+            // 0 根节点先给游标
+            let current = root
+            while (stack.length > 0 || current !== null) {
+                // 1 游标有值 入栈
+                while (current) {
+                    stack.push(current)
+                    // 2 查看有无左节点 左枝的左节点 先入栈
+                    current = current.left
+                }
+                // 3 出栈
+                current = stack.pop()
+                // 4 放入结果数组
+                res.push(current.value)
+                // 5 查看有无右节点
+                current = current.right
+            }
+            return res
+        }
+        console.log('迭代中序', inorderTraversal2(a));
+
+
+        /* 
+        后续 递归
+        */
+        function postorderTraversal2(root) {
+            let res = []
+            set(root, res)
+            return res
+        }
+
+        function set(root, res) {
+            // 左
+            root.left && set(root.left, res)
+            // 右
+            root.right && set(root.right, res)
+            // 中
+            res.push(root.value)
+        }
+        console.log('递归后序', postorderTraversal2(a));
+
+        // 后序 迭代1 先中 - 右 - 左 =》再左 - 中 - 右
+        function postorderTraversal3(root) {
+            let res = []
+            let stack = []
+            let current
+            stack.push(root)
+            while (stack.length > 0) {
+                current = stack.pop()
+                // 中
+                res.push(current.value)
+                // 左
+                current.left && stack.push(current.left)
+                // 右
+                current.right && stack.push(current.right)
+            }
+            // 反过来就是 左 - 中 -右
+            return res.reverse()
+        }
+        console.log('迭代后续1', postorderTraversal3(a));
+
+
+        // 后续 迭代2
+        // 直接是左 右 中
+        function postorderTraversal4(root) {
+            let res = []
+            let stack = []
+            let current = root
+            while (stack.length !== 0 || current !== null) {
+                while (current) {
+                    // 还是递归左节点 给一个flag值0 如果是0 会被重复压入栈中
+                    stack.push([current, 0])
+                    current = current.left
+                }
+                // 弹出 解构出node和flag值 如果flag是0 再次入栈；如果是1，就push到结果数组
+                let [node, flag] = stack.pop()
+                if (flag === 0) {
+                    stack.push([node, 1])
+                    // 要判断有无右节点 有的话 会比中节点后入栈 这样就能先出栈
+                    current = node.right
+                } else {
+                    res.push(node.value)
+                }
+            }
+            return res
+        }
+        console.log('迭代后续2', postorderTraversal4(a));
+    </script>
+</body>
+
+</html>

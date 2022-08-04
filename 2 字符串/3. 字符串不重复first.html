@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // // 1. 内置方法
+        // var firstUniqChar = function(s) {
+        //     var n = s.length;
+        //     // for(var i = 0; i < n; i++) {
+        //     //     let count = 0;
+        //     //     for(var j = i + 1; j < n; j++) {
+        //     //         if(s[i] === s[j]) {
+        //     //             count++
+        //     //         }
+        //     //     }
+        //     //     if(count === 0) {
+        //     //         return s[i]
+        //     //     } 
+        //     // }
+        //     // 上面写有bug 如果是'abccabd' 索引为4的第5个字符是a 往后 也没有重复的 但是前面有重复的 a会被输出
+        //     for(var i = 0; i < n; i++) {
+        //         if(s.indexOf(s[i]) === s.lastIndexOf(s[i])) {
+        //             return i
+        //         }
+                
+        //     }
+        //     return -1
+        // };
+        // console.log(firstUniqChar('abcbcad')); // 6
+        // console.log(firstUniqChar('abcdabc')); // 3
+        // console.log(firstUniqChar('aabbc')); // 4
+
+        // 2. 对象法
+        // var firstUniqChar = function(s) {
+        //     var obj = {}
+        //     var n = s.length
+        //     for(var i = 0; i < n; i++) {
+        //         obj[s[i]]++
+        //     }
+        //     for(var k in obj) {
+        //         if(obj[k] === 1) {
+        //             for(var i = 0; i < n; i++) {
+        //                 if(s[i] === k) {
+        //                     return i
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // 上面的写法错误点在于 对象里面没有这个值 一开始是未定义的 undefined 
+        // undefined++ 就是NaN
+        // var firstUniqChar = function(s) {
+        //     let len =  s.length;
+        //     let isRepeat = {};
+        //     debugger
+        //     for(let item of s) {
+        //         // 如果没有这个值 就让他为false
+        //         if( isRepeat[item] === undefined) { // 这段代码是判断是否有这个值 
+        //             isRepeat[item] = false; // 这段代码是赋值
+        //         }else {
+        //             // 如果有这个值 就让他为true
+        //             isRepeat[item] = true;
+        //         }
+        //     }
+        //     for(let i = 0;i < len;i++) {
+        //         if(isRepeat[s[i]] === false) {
+        //             return i;
+        //         }
+        //     }
+        //     return -1;
+        // }
+
+        // console.log(firstUniqChar('abcbcad')); // 6
+        // console.log(firstUniqChar('abcdabc')); // 3
+        // console.log(firstUniqChar('aabbc')); // 4、
+
+        // 3. 暴力解法
+        // 可以输出 但时间复杂度很高 超出时间限制
+        // 易错：添加 i !== j 这个判断条件
+        // 时间复杂度 竟然超时
+        // var firstUniqChar = function(s) {
+            // var n = s.length;
+            // for(var i = 0; i < n; i++) {
+            //     let count = 0;
+            //     for(var j = 0; j < n; j++) {
+            //         if(i !== j && s[i] === s[j]) {
+            //             count++
+            //         }
+            //     }
+            //     if(count === 0) {
+            //         return i
+            //     }
+            // }
+            // return -1
+        // }
+        // console.log(firstUniqChar('abcbcad')); // 6
+        // console.log(firstUniqChar('abcdabc')); // 3
+        // console.log(firstUniqChar('aabbc')); // 4
+        // console.log(firstUniqChar('aabb')); // 4
+
+        // 4. map解法
+        // 和上面类似
+        // 关键 map.get()
+        // map.set()
+        // var map = new Map()
+        // 时间复杂度ok
+        var firstUniqChar = function(s) {
+            var map = new Map()
+            var n = s.length 
+            for(let item of s) {
+                if(map.get(item) === undefined) {
+                    map.set(item, false)
+                } else {
+                    map.set(item, true)
+                }
+            }
+            for(var i = 0; i < n; i++) {
+                if(map.get(s[i]) === false) {
+                    return i
+                }
+            }
+            return -1
+        }
+        console.log(firstUniqChar('abcbcad')); // 6
+        console.log(firstUniqChar('abcdabc')); // 3
+        console.log(firstUniqChar('aabbc')); // 4
+        console.log(firstUniqChar('aabb')); // 4
+    </script>
+</body>
+</html>

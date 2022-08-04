@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 不同路径 - 用图论
+        // m 行 n 列 无论如何都会有 m + n - 2步要走 省去两个格子
+        // 从 m + n - 2个中 选出 m - 1个 为什么是m - 1个，因为第一行不用走了 
+        // 是排列组合问题C(m - 1, m + n - 2)
+
+        /* 
+           2. 时间复杂度O(m) 为什么? 
+              虽然里面有两层while循环
+              但是里面的while循环是这样的
+                假设此时m = 3, n = 7 
+                求排列组合C(m - 1, m + n - 2) = C(2, 8) = A(2, 8) / A(2, 2) = 8 * 7 / 2 * 1
+                里面实际执行顺序是 8 % 2 如果等于0，就 8 / 2 = 4 
+                再判断 4 % 2 === 0 ? 等于 4 /2 
+                如此类推，分母最终--等于0，跳出内层循环，就只会执行外层的循环了
+                因为循环其实是O(n)，次数很少
+
+              空间复杂度O(1)
+        
+        */
+        function uniquePaths2(m, n) {
+            let numerator = 1
+            let denumerator = m - 1
+            let count = m - 1
+            let t = m + n - 2
+
+            while (count--) {
+                // 分子
+                numerator *= (t--)
+                while (denumerator !== 0 && numerator % denumerator === 0) {
+                    debugger
+                    numerator /= denumerator
+                    // 分母
+                    denumerator--
+                }
+            }
+            return numerator
+        }
+        console.log(uniquePaths2(3, 7));
+        // console.log(uniquePaths2(5, 4));
+        // console.log(uniquePaths2(4, 4));
+    </script>
+</body>
+
+</html>

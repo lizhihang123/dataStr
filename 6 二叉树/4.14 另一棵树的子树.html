@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        1 递归法：
+          时间复杂度O(n)
+          空间O(n)
+        2 思路：递归函数内部逻辑，还是依次比较头结点的val，相等，比较子节点左右是否相等，必须都满足，左右子节点要递归调用，
+          如果不相等 return false
+          重新传参“主子树的left 和 右子树的上一个节点进去 ” 右子树的头结点 碰到相等的之前是不变的
+          再不行 传递主子树的right 有一个是true就可以成功
+        */
+        var isSubtree = function (s, t) {
+            // 根据题目范围来看，一定是有节点的
+            // 但是中间可能出现 s = [1, 2, 3, null] t = [1, 2, 4, 1, 2, 3] 只要s有null就return false 进行下一波
+            if (isSameTree(s, t)) {
+                return true;
+            }
+            return isSubtree(s.left, t) || isSubtree(s.right, t); // 有一个true就true
+        };
+        function isSameTree(s, t) { // 100题
+            if (s === null && t === null) {
+                return true;
+            };
+            if (s === null || t === null) {
+                return false;
+            }
+            return s.val === t.val && isSameTree(s.left, t.left) && isSameTree(s.right, t.right);
+        }
+
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(3)
+        var d = new Node(2)
+        var e = new Node(1)
+        var f = new Node(2)
+        var g = new Node(3)
+        // var g = new Node(3)
+        a.left = b
+        a.right = c
+        d.left = e
+        e.left = f
+        e.right = g
+        console.log(a);
+        console.log(d);
+        console.log(isSubtree(d, e));
+    </script>
+</body>
+
+</html>

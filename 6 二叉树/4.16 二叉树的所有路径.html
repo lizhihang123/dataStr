@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        console.log(a);
+
+
+        /* 
+        1 迭代法：中 左 右 前序遍历进行迭代
+        2 一个数组存取栈节点 一个数组存取路径节点信息 就是具体的值 要记得拼接 '->'
+          问：何时要去拼接 '->'呢？
+              当存在右/左节点的时候进行拼接
+        3 时间O(n) 节点的个数
+          空间O(n) 节点 + 路径 + 结果的信息
+        */
+        var binaryTreePaths = function (root) {
+            if (root === null) {
+                return root
+            }
+
+            let treeSt = []
+            // 一个栈保存遍历的节点
+            treeSt.push(root)
+            // 再来一个栈 保存遍历的路径的节点
+            let pathSt = []
+            pathSt.push(String(root.val))
+            // 来一个res 保存 最终的路径集合 转化为字符串
+            let res = []
+            while (treeSt.length > 0) {
+                debugger
+                // 节点
+                let node = treeSt.pop()
+                // 取出该节点 对应的路径
+                let path = pathSt.pop()
+                // 遇到叶子节点的情况
+                if (node.left === null && node.right === null) {
+                    res.push(path)
+                }
+
+                if (node.right) {
+                    // 右
+                    treeSt.push(node.right)
+                    pathSt.push(path + '->' + String(node.right.val))
+                }
+                // 左
+                if (node.left) {
+                    treeSt.push(node.left)
+                    pathSt.push(path + '->' + String(node.left.val))
+                }
+            }
+            return res
+        }
+        console.log(binaryTreePaths(a));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!--
+ * @Date: 2022-01-19 10:10:12
+ * @LastEditTime: 2022-01-19 10:30:29
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 利用set结构写法
+      // 时间复杂度还可以
+      //   var containsDuplicate = function (nums) {
+      //     let set = new Set(nums)
+      //     return set.size === nums.length ? false : true
+      //   }
+      //   console.log(containsDuplicate([1, 3, 5, 4]))
+      //   console.log(containsDuplicate([1, 3, 5, 4, 4]))
+
+      // 2. set第二种写法
+      // 时间复杂度非常好
+      // 创建空set let …… of 遍历数组内容 如果set结构里面有这个元素了，表示数组里面有重复的值。前提1：set里面的元素的内容不重复，意味着之前已经把数组里面的同样的元素放进去过一次，表示重复了。
+      var containsDuplicate = function (nums) {
+        let set = new Set()
+        for (let i of nums) {
+          if (set.has(i)) {
+            return true
+          }
+          set.add(i)
+        }
+        return false
+      }
+      console.log(containsDuplicate([1, 2, 3, 4]))
+      console.log(containsDuplicate([1, 2, 3, 4, 4]))
+
+      // 2. 写法1: 先对数组进行排序 nums.sort() js内置方法 a-b是升序 然后进行隔行比较是否重复 如果没有 最后再返回false
+      // 时间复杂度 164ms 不够
+      //   var containsDuplicate = function (nums) {
+      //     nums.sort(function (a, b) {
+      //       return a - b
+      //     })
+      //     for (var i = 0; i < nums.length - 1; i++) {
+      //       if (nums[i] === nums[i + 1]) {
+      //         return true
+      //       }
+      //     }
+      //     return false // 注意这个位置
+      //   }
+      //   console.log(containsDuplicate([1, 2, 2, 3, 4, 6]))
+
+      // 3. 写法2 双重for循环 相当于两个指针进行遍历
+      // 时间复杂度太高了 984ms
+      //   var containsDuplicate = function (nums) {
+      //     for (var i = 0; i < nums.length - 1; i++) {
+      //       for (var j = i + 1; j < nums.length; j++) {
+      //         if (nums[i] === nums[j]) {
+      //           return true
+      //         }
+      //       }
+      //     }
+      //     return false
+      //   }
+      //   console.log(containsDuplicate([1, 2, 2, 3, 3, 5]))
+      //   console.log(containsDuplicate([1, 5]))
+      //
+    </script>
+  </body>
+</html>

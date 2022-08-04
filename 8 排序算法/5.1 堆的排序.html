@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function swap (arr, index1, index2) {
+            let temp = arr[index1] 
+            arr[index1] = arr[index2] 
+            arr[index2] = temp
+        }
+        class Heap {
+            constructor() {
+                // 为什么要设置一个null?
+                //     和堆的索引 第一个从1开始有关系
+                // 为什么堆的索引要从1开始?
+                // 和我们判断父节点 子节点有关系
+                //     如果索引从1开始 每个节点的父节点就是parseInt(i / 2)
+                //     每个节点的左子节点的索引就是 i * 2
+                //     右子节点的索引就是 i * 2 + 1
+                this.data = [null]
+            }
+
+            getData () {
+                console.log(this.data)
+                return this.data
+            }
+
+            // 添加
+            insert (num) {
+                // 最底部添加元素
+                this.data.push(num)
+                // 维护顶部的状态
+                this.shiftUp(this.data.length - 1)
+            }
+
+            // 维持堆顶状态 插入的元素要往上调整时
+            shiftUp (currentIndex) {
+                    // 递归 while循环 子元素 比父元素小 就交换
+                    // currentIndex > 1 是为了避免第一个元素和null交换
+                while (this.data[currentIndex] > this.data[parseInt(currentIndex / 2 )] 
+                && currentIndex > 1) {
+                    swap(this.data, currentIndex, parseInt(currentIndex / 2))
+                    // 改变当前指针的索引 为父元素
+                    currentIndex = parseInt(currentIndex / 2)
+                }
+            }
+
+
+            // 删除
+            // 不能任意删除 将顶部和最后一个元素进行交换
+                // 最后一个元素此时要进行和子元素比较 和较大的那个进行交换
+            // 再删除最后一个元素
+            extractMax () {
+                swap(this.data, 1, this.data.length - 1)
+                let result = this.data.pop()
+                this.shiftDown(1)
+                return result
+            }
+
+            // 维护顶层的元素
+            shiftDown (currentIndex) {
+                while (
+                    // 需要 currentIndex的值 小于 左 或者 右子节点
+                    this.data[currentIndex] < this.data[currentIndex * 2] ||
+                    this.data[currentIndex] < this.data[currentIndex * 2 + 1]
+                ) {
+                    // 如果右子节点 小于 左子节点
+                    if (this.data[currentIndex * 2 + 1]  <  this.data[currentIndex * 2]) {
+                        swap(this.data, currentIndex, currentIndex * 2)
+                        currentIndex = currentIndex * 2
+                    } else if (this.data[currentIndex * 2 + 1] > this.data[currentIndex * 2]) {
+                        swap(this.data, currentIndex, currentIndex * 2 + 1)
+                        currentIndex = currentIndex * 2 + 1
+                    }
+                }
+            }
+        }
+        let initArr = [1, 2, 99, 10, 12, 87]
+        function HeapSort (arr) {
+            // 1. 堆的数据结构 
+            // 2. 不断的把传入的数组里面的值放入堆
+            //    借此生成了最大堆
+            //    堆顶都是最大的元素
+            // 3. 调用删除 取出最大堆的值
+            //    unshift放入数组的前面部分
+            //    输出这个值
+            let heapData = new Heap()
+            let resultArr = []
+            arr.forEach(item => {
+                heapData.insert(item)
+            })
+            for (let i = 0; i < arr.length; i++) {
+                let result = heapData.extractMax()
+                resultArr.unshift(result)
+            }
+            return resultArr
+        }
+        console.log(HeapSort(initArr));
+    </script>
+</body>
+</html>

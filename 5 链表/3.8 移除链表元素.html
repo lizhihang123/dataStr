@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class LinkNode {
+            // 卡壳1 这个地方写错了
+            constructor(val, next) {
+                this.val = val
+                this.next = next
+            }
+        }
+        // 2. 
+        let MyLinkedList = function () {
+            // 卡壳2：不知道这个节点里面写什么
+            this._size = 0
+            this._head = null
+            this._tail = null
+        }
+        // 3.1 获取指定位置节点的值
+        MyLinkedList.prototype.getNode = function(index) {
+            // 范围
+            // 卡壳3：index >= this._size等于不能少，return null 而不是-1
+            if (index < 0 || index >= this._size) return null
+            // 正式查找 + 虚拟头结点
+            let cur = new LinkNode(0, this._head)
+            while(index-- >= 0) {
+                cur = cur.next
+            }
+            return cur
+        }
+        // 3.2 get方法
+        MyLinkedList.prototype.get = function (index) {
+            if (index < 0 || index >= this._size) return -1
+            // 卡壳4：这个方法的下面部分都卡壳了
+            // if (index === this._size - 1) {
+            // }
+            // 其实下面只有这句，不要自己吓自己啦
+            console.log(this.getNode(index).val);
+            return this.getNode(index).val
+        }
+
+        // 3.3 addAtHead
+        MyLinkedList.prototype.addAtHead = function(val) {
+            const node = new LinkNode(val, this._head)
+            this._head = node
+            // 落了一句代码
+            this._size++
+            if (!this._tail) {
+                this._tail = node
+            }
+            // 卡壳5：上面四句自己写的，接下来怎么写呢?
+        }
+
+        // 3.4 addAtTail
+        MyLinkedList.prototype.addAtTail = function (val) {
+            // const node = new LinkNode(val, null)
+            // this._tail.next = node
+            // this._tail = node
+            // // 卡壳6：下面接着处理头部节点为空的情况？
+
+            // 错误错误 应该先判断是否有尾巴节点 再来进行尾巴节点的赋值
+            const node = new LinkNode(val, null)
+            // 再次忘记
+            this._size++
+            if (this._tail) {
+                this._tail.next = node
+                this._tail = node
+                return 
+                // 后续不进行下去
+            }
+            // 如果尾巴为null，证明头也为null
+            this._head = node
+            this._tail = node
+        }
+
+        // 3.5 addAtIndex(index,val)
+        // 参数的顺序 切记搞反哈
+        MyLinkedList.prototype.addAtIndex = function(index, val) {
+            // 排除条件很多
+            // 范围超出【大于链表长度 出错】
+            if (index > this._size) {
+                return
+            }
+            // 尾巴 等于长度【出错】【可以取到this._size的原因是正好是在尾巴部分呗，特殊情况】
+            if (index === this._size) {
+                this.addAtTail(val)
+                return
+            }
+            // 头部前面
+            if (index <= 0) {
+                this.addAtHead(val)
+                return
+            }
+            // 既不是超过index 也不是正好等于长度 也不是小于等于0 走下面
+            // 获取上一个节点的值
+            const node = this.getNode(index - 1)
+            node.next = new LinkNode(val, node.next)
+            this._size++
+            // 卡壳7：写到这里 不知如何进行下去 其实写好啦 自信些
+        }
+
+        // 3.6 deleteAtIndex
+        MyLinkedList.prototype.deleteAtIndex = function (index) {
+            if (index < 0 || index >= this._size) {
+                return
+            }
+            // 卡壳8：严重卡壳 - index === 0 这个情况完全忽视了
+            if (index === 0) {
+                this._head = this._head.next
+                if (index === this.size - 1) {
+                    // 原本只有一个元素 删掉 一个都没了 头和尾巴都是null
+                    this._tail = this._head
+                }
+                // 长度都需要--的
+                this._size--
+                // 这句return不能少
+                return
+            }
+            // 卡壳9：严重卡壳，不管是不是删最后一个节点 都是先 node.next = node.next.next
+            // 如果是最后一个 再给this._tail赋值就好
+            const node = this.getNode(index - 1) 
+            node.next = node.next.next
+            // 最后一个节点删除 倒数第二个节点next -> null
+            if (index === this._size - 1) {
+                this._tail = node
+            }
+            // 中间节点删除 next -> 原本的next的还要next
+            this._size--
+            return
+        }
+        obj = new MyLinkedList()
+        obj.addAtHead(1)
+        obj.addAtTail(2)
+        obj.addAtIndex(2, 6)
+        obj.addAtIndex(3, 3)
+        obj.addAtIndex(4, 4)
+        obj.addAtIndex(5, 5)
+        obj.addAtIndex(6, 6)
+        const head = obj.get(0)
+        var removeElements = function(head, val) {
+        // 1. 要有虚拟头结点
+        // 2. 要区分中间元素 和 末尾元素
+        let cur = new LinkNode(0, head)
+            while(cur) {
+                // 3. 如果cur.next
+                if (cur.next === val) {
+                    cur.next === cur.next.next
+                }
+                cur = cur.next
+            }
+            return head
+        };
+        console.log(removeElements(head, 6));
+    </script>
+</body>
+</html>

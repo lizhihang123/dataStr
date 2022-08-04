@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function initArr(m, n) {
+            // 第一种写法 最终arr 全部都是1
+            let arr = new Array(m).fill([])
+            // 第二种写法 最终arr 只有第一行和第一列是1
+            // let arr = new Array(m).fill().map(item => new Array(n))
+            for (let i = 0; i < m; i++) {
+                arr[i][0] = 1
+            }
+            for (let j = 0; j < n; j++) {
+                arr[0][j] = 1
+            }
+            console.log(arr);
+        }
+        console.log(initArr(3, 7));
+
+
+        let arr = Array.from({ length: 3 }, (item, index) => {
+            // if (index === 0) {
+            //     return new Array(3).fill(1)
+            // } else {
+            //     return new Array(3).fill(1)
+            // }
+            return new Array(3).fill(0)
+        })
+        for (let i = 0; i < arr.length; i++) {
+            arr[i][0] = 1
+        }
+        for (let j = 0; j < arr.length; j++) {
+            arr[0][j] = 1
+        }
+        console.log(arr);
+
+
+        let arr2 = new Array(3).fill([])
+        for (let i = 0; i < arr2.length; i++) {
+            if (i === 0) {
+                arr2[i] = new Array(3).fill(1)
+                // debugger
+            } else {
+                debugger
+                arr2[i] = new Array(3).fill(3)
+                arr2[i][0] = 1
+            }
+        }
+        console.log(arr2);
+    </script>
+</body>
+
+</html>

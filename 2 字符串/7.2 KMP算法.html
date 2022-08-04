@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // 纯净无注释代码 下面有 “注释版代码”
+        var strStr = function (haystack, needle) {
+            if (needle.length === 0)
+                return 0;
+
+            const getNext = (needle) => {
+                let next = [];
+                let j = 0;
+                next.push(j);
+
+                for (let i = 1; i < needle.length; ++i) {
+                    while (j > 0 && needle[i] !== needle[j])
+                        j = next[j - 1];
+                    if (needle[i] === needle[j])
+                        j++;
+                    next.push(j);
+                }
+
+                return next;
+            }
+
+            let next = getNext(needle);
+            let j = 0;
+            for (let i = 0; i < haystack.length; ++i) {
+                while (j > 0 && haystack[i] !== needle[j])
+                    j = next[j - 1];
+                if (haystack[i] === needle[j])
+                    j++;
+                if (j === needle.length)
+                    return (i - needle.length + 1);
+            }
+
+            return -1;
+        };
+
+        // 注释版本代码
+        var strStr = function (haystack, needle) {
+            if (needle.length === 0)
+                return 0;
+            const getNext = (needle) => {
+                // 1. 初始化 next数组 用needle子串生成next数组
+                let next = [];
+                // 2. 初始化 j指针 
+                // 求最长相等前缀和后缀的长度
+                // j => 前缀末尾 / 也代表 i【包括i】之前的子串的最长相等前后缀的长度
+                // i => 后缀末尾 for循环初始化
+                let j = 0;
+                // j初始化为0
+                next.push(j);
+                // next数组的每一位的值 都是记录当前字符之前的子串的最长相等前后缀的长度
+                // a =》next[0]
+                // aa =》next[0,1]
+                // aab =》next[0,1,0] 此时最长先等前后缀长度是0 a和b不同
+                // aaba =》next[0,1,0,1]
+                // aabaa =》next[0,1,0,1,2]
+                // aabaaa =》next[0,1,0,1,2,1]
+                for (let i = 1; i < needle.length; ++i) {
+                    while (j > 0 && needle[i] !== needle[j])
+                        // 0. 这里用while循环是关键 因为j的回退不是只回退一次 而是很多次
+                        // 1. j从0开始移动，i从1开始移动 
+                        // 2. 一旦指针指的值不同 ，j要回退，回退到哪里是关键
+                        // 3. next[j - 1]比如是0，j就回退到索引0的位置
+                        // 4. next[j - 1]比如是1，j就回退到索引1的位置 因此如下赋值
+                        j = next[j - 1];
+                    if (needle[i] === needle[j])
+                        // 5. 如果相同
+                        // j++ i++ i是for循环自增 
+                        j++;
+                    next.push(j);
+                    // 6. next.push(j) 必须放到末尾是关键 不管是冲突还是相等， 都应该往next数组里面push值
+                }
+
+                return next;
+            }
+
+            let next = getNext(needle);
+            // 上面的next数组生成好了 比如是[0, 1, 0, 1, 2, 0]
+            let j = 0;
+            for (let i = 0; i < haystack.length; ++i) {
+                // 这里是i和j意义不同
+                // i遍历主串
+                // j遍历模式串
+                while (j > 0 && haystack[i] !== needle[j])
+                    // 这里看似代码类似，但实际是匹配主串和模式串
+                    // 如果不等就让j回退到一个位置，前一个j-1对应next数组的值，比如next[j - 1] 是 3 就回退到索引3
+                    // 如果下面相等 就++
+                    j = next[j - 1];
+                if (haystack[i] === needle[j])
+                    j++;
+                // 如果j到头了，就返回
+                if (j === needle.length)
+                    return (i - needle.length + 1);
+                    // 这里return i - needle.length + 1是我没想到的
+                    // 但是仔细一对比 画个图就可以看出来了
+            }
+
+            return -1;
+        };
+        console.log(strStr('aabaabaaf', 'aabaaf')); // 3
+        console.log(strStr('aabaabaafdaabaafg', 'aabaafg')); // 10
+
+
+
+
+    </script>
+</body>
+</html>

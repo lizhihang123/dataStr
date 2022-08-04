@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        // 1 时间复杂度：O(n)
+        //   空间复杂度：O(n) 最坏
+        var invertTree = function (root) {
+            // 递归的终止条件
+            if (root === null) {
+                return root
+            }
+            // 单层递归的逻辑
+            const left = root.left,
+                right = root.right;
+            root.left = invertTree(right);
+            root.right = invertTree(left);
+            // 递归的参数和返回值
+            return root
+        }
+        console.log(invertTree(a));
+    </script>
+</body>
+
+</html>

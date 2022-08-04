@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 法一 map方法
+        var isAnagram = function(s, t) {
+            if (s.length !== t.length) {
+                return false
+            }
+            // 0. 一上来直接判断长度 长度不等直接false
+            // 1. map结构 遍历字符串s 存储字符串s里面字符出现的次数
+            // 2. 遍历字符串t has方法判断map里面是否有遍历的字符 如果有 就 set方法 --
+            // 2.1 如果没有 return false
+            // 3. 漏掉的测试用例
+            // 3.1 'ab' 'a'如果第二个字符遍历完 就return 出去了 就是false
+            // 3.2 第二个测试用例
+            // 3.3 'aacc' 'ccac'
+            // ! 原来写的判断条件是 map.has(val) 这样即便是 -1 也能够通过 所以换成 map.get(val) > 0 更加壮硕一些
+            let map = new Map()
+            for (const str of s) {
+                // 原来下面这样写是错的
+                // !map.set(str, (map.get(str)++ || 1))
+                map.set(str, (map.get(str) || 0) + 1)
+            }
+            for (const val of t) {
+                // ! 原来写的判断条件是 map.has(val) 这样即便是 -1 也能够通过 所以换成 map.get(val) > 0 更加壮硕一些
+                if (map.get(val) > 0) {
+                    map.set(val, map.get(val) - 1)
+                } else {
+                    return false
+                }
+            }
+            return true
+        };
+        // console.log(isAnagram('abc', 'bcd'));
+        // console.log(isAnagram('ddd', 'ddd'));
+        console.log(isAnagram('aacc', 'ccac'));
+
+        // 2. 法二 暴力解法双指针
+        // 原本想法 直接双重for循环 如果里面有单个字符相等 就return true 但是这样不是很合理 因为肯定会有相同的字符的
+        // 所以改一下，如果一旦出现不同的字符，就return false 但是这样也有问题 因为有可能只是顺序不一样 还是不行
+        // 所以暴力解法 必须得排序 要算入排序的时间复杂度
+        // 但是下面的写法使用了 sort和 join的api 还使用了延展运算符 不妥当
+        // !原来有疑惑 字符转化为数组 能否直接进行排序？是能的，但是学习了一个新的思路 - 
+        // s.split('').sort((a,b) => {return a.charCodeAt() - b.charCodeAt()})
+        // 如果某一时刻 无法直接进行排序 能够打印出这个字符的unicode值 进而排序
+        let isAnagram2 = (s, t) => {
+            let a = [...s].sort()
+            let b = [...t].sort()
+            console.log(a);
+            console.log(b);
+            if (a.length === b.length && a === b) {
+                return true
+            }
+            return false
+        }
+        console.log(isAnagram2('acbd', 'bcad')); // true
+        // console.log(isAnagram2('bbcc', 'ccdd')); // false
+
+
+        // 3. 记录字符串出现的次数
+        // s = 'abc'
+        // 'a'.codePointAt(0) 是 97
+        // s.codePointAt(0) 也是 97 而 s.codePointAt(0) - 'a'.codePointAt(0) 就是 0
+        // s.codePointAt(1) 也是 98 而 s.codePointAt(0) - 'a'.codePointAt(1) 就是 1
+        // s.codePointAt(2) 也是 99 而 s.codePointAt(0) - 'a'.codePointAt(2) 就是 2
+        // s.codePointAt(i) - 'a'.codePointAt(0)
+        let isAnagram3 = function (s, t) {
+            if (s.length !== t.length) {
+                return false
+            }
+            // table数组来存储
+            let table = new Array(26).fill(null)
+            for (let i = 0; i < s.length; i++) {
+                table[s.codePointAt(i) - 'a'.codePointAt(0)]++
+            }
+
+            for (let j = 0; j < t.length; j++) {
+                table[t.codePointAt(j) - 'a'.codePointAt(0)]--
+                if (table[t.codePointAt(j) - 'a'.codePointAt(0)] < 0) {
+                    return false
+                }
+            }
+            return true
+        }
+    </script>
+</body>
+</html>

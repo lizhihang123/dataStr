@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        /* 
+        时间复杂度：O(n) n为二叉树的节点个数 这里不是递归 而是深度优先遍历 DFS 不一定等于递归
+        空间复杂度：O(n) n为二叉树的节点个数 最坏情况是链式的树
+        思路：1. 用前序遍历 + 交换值 能够实现翻转 2 前序reverse 其实就是后序
+        */
+        var invertTree = function (root) {
+            let stack = []
+            if (!root) {
+                return root
+            }
+            stack.push(root)
+            while (stack.length > 0) {
+                // 出栈 尾节点
+                debugger
+                let cur = stack.pop()
+                let temp = cur.left
+                cur.left = cur.right
+                cur.right = temp
+
+                cur.left && stack.push(cur.left)
+                cur.right && stack.push(cur.right)
+            }
+            return root
+        }
+        console.log(invertTree(a));
+
+    </script>
+</body>
+
+</html>

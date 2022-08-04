@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        时间复杂度是O(n) 因为折半了，整体要除就是log,但是n具体是多少呢？应该是2^n次因为会求很多遍重复的。所以是log2^N => O(n)
+        */
+        function fn3(x, n) {
+            debugger
+            // console.log(1);
+            if (n < 1) {
+                return 1
+            }
+            if (n % 2 === 1) {
+                return fn3(x, Math.floor(n / 2)) * fn3(x, Math.floor(n / 2)) * x
+            }
+            return fn3(x, n / 2) * fn3(x, n / 2)
+        }
+        // console.log(fn3(2, 16));
+        console.log(fn3(2, 3));
+
+        // console.time('16');
+        // console.log(fn3(2, 16));
+        // console.timeEnd('16')
+
+        // console.time('256');
+        // console.log(fn3(2, 256));
+        // console.timeEnd('256')
+
+        // 11s
+        // console.time('65356');
+        // console.log(fn3(2, 65356));
+        // console.timeEnd('65356')
+
+
+        // 因为递归抽离到了要给t，所以只执行了t这个地方 所以时间复杂度是logn
+        function fn4(x, n) {
+            console.log(1);
+            if (n < 1) {
+                return 1
+            }
+            let t = fn4(x, n / 2)
+            if (n % 2 === 1) {
+                return t * t * x
+            }
+            return t * t
+        }
+        // console.time('4');
+        // console.log(fn4(2, 4));
+        // console.timeEnd('4')
+
+
+        // console.time('16');
+        // console.log(fn4(2, 16));
+        // console.timeEnd('16')
+
+        // console.time('256');
+        // console.log(fn4(2, 256));
+        // console.timeEnd('256')
+
+
+
+        // 4s
+        // console.time('65356');
+        // console.log(fn4(2, 65356));
+        // console.timeEnd('65356')
+    </script>
+</body>
+
+</html>

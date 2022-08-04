@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        /* 
+        1 时间 O(N) N是节点的个数
+          空间 O(N) N是最坏情况 树 -》链式的结构
+        2 思路 层序迭代的 队列里面弹出节点 进行节点内容的交换
+        */
+        var invertTree = function (root) {
+            //二叉树的层序遍历
+            let queue = [];
+            queue.push(root);
+            if (root === null) {
+                return root;
+            }
+            while (queue.length !== 0) {
+                debugger
+                let length = queue.length;
+                //存放每一层的节点 每次都要更新
+                for (let i = 0; i < length; i++) {
+                    let node = queue.shift();
+                    /* 
+                    在这里进行节点的交换
+                    */
+                    let temp = node.left
+                    node.left = node.right
+                    node.right = temp
+
+                    node.left && queue.push(node.left);
+                    node.right && queue.push(node.right);
+                }
+                // //把每一层的结果放到结果数组
+                // //每一层的结果都是一个数组
+                // res.push(curLevel);
+            }
+            return root;
+        };
+        console.log(invertTree(a));
+    </script>
+</body>
+
+</html>

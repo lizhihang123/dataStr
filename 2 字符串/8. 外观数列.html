@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 观察看看 时间复杂度是多少？
+        // 2. 有递归 就是递归的深度 O(n)
+        var countAndSay = function (n) {
+            if(n === 1) return '1'
+            const s = countAndSay(n - 1) 
+            let count = 1
+            let item = s[0]
+            let string = ''
+            for(let i = 1; i < s.length; i++) {
+                if(s[i] === item) {
+                    count++
+                    // 如果第二个数和第一个数比较，相等， count++
+                    // 同时i自增 =》第三个数和第一个数比较，如果不同，走else
+                } else {
+                    string += `${count}${item}`
+                    count = 1
+                    item = s[i] // 意味着和这个数进行比较
+                }
+            }
+            return string += `${count}${item}`
+            // 最后这句代码很关键 必须return 没有return 报错
+            // 其次 必须拼接 比如1211 最后的两个都是1 item都是1 没有变化 count++
+            // 最后这里能够输出有几个1
+        }
+        console.log(countAndSay(4));
+    </script>
+</body>
+</html>

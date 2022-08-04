@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 判断 如果n是1，就直接输出1
+        // str => 读取的第一个字符串 '1'
+        // 2. 执行一个函数fun(s)
+        // 2. m => 计数用的; c => 拼接字符串用的
+        // 4. for循环 遍历s 这个s一般都是前一个字符，比如输入的n = 5 
+        // s遍历的就是第4项的字符串
+        // 5. 如果相等,就 m++ ; 如果不相等, 拼接 c字符串 =》m = 1
+        // 6. for循环外 n--，再次执行fun(c)
+
+        // 效率蛮高 很第一种写法类似的
+        var countAndSay = function(n) {
+            if(n === 1) {
+                return '1'
+            } 
+            let str = '1' // 第一个使用的字符串
+            return fun(str) // 这里是啥意思？使用下面的函数
+            // 为什么上面的参数是str ? 
+            function fun(s) {
+                let m = 1
+                let c = ''
+                for(let i = 0; i < s.length; i++) {
+                    if(s[i] === s[i + 1]) {
+                        m++
+                        debugger
+                    } else {
+                        // console.log(s[i] , s[i + 1]); // 两次递归两次都是 1 undefined => 1 undefined 因此拼接的都是 =》最后一个数，找不到数拼接 就会走else
+                        c += m + s[i]
+                        m = 1
+                    }
+                } 
+                n--
+                return n < 2 ? c : fun(c) 
+            }
+        }
+        // 输入n = 3
+        // 第一次执行 str = 1  =>  走else =》c = 11 =》fun(11)
+        // 第二次递归 s = 11 =>走if =》m=2 =》第二次for循环遍历 =》走else [1, undefined] 比较 不同 因此拼接 m + s[i] => 2 + 1
+        console.log(countAndSay(3));
+        console.log(countAndSay(6));
+    </script>
+</body>
+</html>

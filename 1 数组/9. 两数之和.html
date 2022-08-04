@@ -1,0 +1,62 @@
+<!--
+ * @Date: 2022-01-26 15:24:44
+ * @LastEditTime: 2022-01-26 16:38:30
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 法一：实质是两次for循环。双指针，第一个指针固定不动，target目标值 减去 nums[i] 的值 ，和第二个指针 nums[j]进行比较，如果相等，就return出索引
+      // 尽管能通过 但是时间复杂度很高。这个写法和 双指针 nums[i] + nums[j]是否等于target的判断一致
+      //   var twoSum = function (nums, target) {
+      //     for (var i = 0; i < nums.length; i++) {
+      //       let com = target - nums[i]
+      //       for (j = i + 1; j < nums.length; j++) {
+      //         if (nums[j] === com) {
+      //           return [i, j]
+      //         }
+      //       }
+      //     }
+      //     return null
+      //   }
+      //   console.log(twoSum([1, 2, 3, 4], 5))
+      //   console.log(twoSum([1, 2, 3, 4, 4], 8))
+
+      // 2. 法二
+      // 双指针遍历 时间复杂度很高
+      //   var twoSum = function (nums, target) {
+      //     for (var i = 0; i < nums.length; i++) {
+      //       for (j = i + 1; j < nums.length; j++) {
+      //         if (nums[i] + nums[j] === target) {
+      //           return [i, j]
+      //         }
+      //       }
+      //     }
+      //     return null
+      //   }
+      //   console.log(twoSum([8, 8, 1, 2, 3, 9], 17))
+
+      // 3. 哈希表的解法1
+      // 逻辑：target - nums[i] 的结果 与 i的索引绑定，存到对象里面，
+      // 如果后面的num[i]有这个值，说明 表示 nums[i] + target - nums[i] = target 正中下怀 取到此时的i 和 当时的索引在obj对象里面查找，就是当前 的obj[nums[i]]键对应的值
+      var twoSum = function (nums, target) {
+        var obj = {}
+        for (var i = 0; i < nums.length; i++) {
+          if (typeof obj[nums[i]] !== "undefined") {
+            return [obj[nums[i]], i]
+          }
+          obj[target - nums[i]] = i
+        }
+      }
+      console.log(twoSum([1, 2, 3, 4, 6], 7))
+
+      // 4. 使用map结构 ？
+    </script>
+  </body>
+</html>

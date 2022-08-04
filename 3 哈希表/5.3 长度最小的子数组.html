@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // https://leetcode.cn/problems/minimum-size-subarray-sum/submissions/
+        // 1. 暴力解法
+        var minSubArrayLen = function(target, nums) {
+            let result = Number.MAX_VALUE // 最终的结果
+            let sum = 0 // 子数组的元素之和
+            let sublength = 0 // 子数组的长度
+            for (let i = 0; i < nums.length; i++) {
+                sum = 0
+                for (let j = i; j < nums.length; j++) {
+                    sum += nums[j]
+                    if (sum >= target) {
+                        sublength = j - i + 1
+                        result = result < sublength ? result : sublength
+                        break
+                    }
+                }
+            }
+            return result === Number.MAX_VALUE ? 0 : result
+        };
+        console.log(minSubArrayLen(4, [1, 2, 3, 4, 5]));
+
+        // 时间复杂度 O(n) 空间复杂度O(1)
+        var minSubArrayLen2 = function(target, nums) {
+            let result = Number.MAX_VALUE
+            let sum = 0
+            let i = 0
+            let sublength
+            for(let j = 0; j < nums.length; j++) {
+                sum += nums[j]
+                while(sum >= target) {
+                    sublength = j - i + 1
+                    result = result < sublength ? result : sublength
+                    sum -= nums[i++]
+                }
+            }
+            return result === Number.MAX_VALUE ? 0 : result
+        };
+        console.log(minSubArrayLen2(4, [1, 2, 3, 4, 5]));
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!--
+ * @Date: 2022-01-21 08:51:10
+ * @LastEditTime: 2022-01-22 22:36:58
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 逻辑：先对数组进行排序 排序后 双指针 事件复杂度很ok
+      // 1.1 如果两个数相等 就把这个数放到交集的数组
+      // 1.2 如果两个数不相等 指向 大的数 的指针 不动；指向小的数的指针计数器+1，继续往后，
+      // var intersect = function (nums1, nums2) {
+      //   nums1.sort((a, b) => {
+      //     return a - b
+      //   })
+      //   nums2.sort((a, b) => {
+      //     return a - b
+      //   })
+      //   let len1 = nums1.length
+      //   let len2 = nums2.length
+      //   let ans = []
+      //   let k = 0,
+      //     i = 0,
+      //     j = 0
+      //   if (len1 === 0 && len2 == 0) {
+      //     return null
+      //   }
+      //   while (i < len1 && j < len2) {
+      //     if (nums1[i] === nums2[j]) {
+      //       ans[k] = nums1[i]
+      //       i++
+      //       j++
+      //       k++
+      //     } else if (nums1[i] > nums2[j]) {
+      //       j++
+      //     } else {
+      //       i++
+      //     }
+      //   }
+      //   return ans
+      // }
+      // console.log(intersect([4, 9, 5], [9, 4, 9, 8, 4]))
+
+      // 2. 哈希表的做法
+      // 先把第一个数组，的所有数据 放到map表中，记录每个元素出现的次数
+      // 遍历第二个数组，判断map里面是否有这个数据，有的话，要把对应的数放到数组arr里面去，并且map里面对应元素的value【个数】要减-
+      // 第二个逻辑什么意思呢？如果第二个数组里面对照出现了map里面的同样元素，表示有要给交集，那么nums2对应的元素应该放到交集数组里面去 而map结构里面的值应该-1【如果不减一，假设nums2有两个2，而nums1只有要给1，岂不是也会造成了nums2和nums1有两个交集的假象】
+      var intersect = function (nums1, nums2) {
+        const map = {}
+        arr = []
+        for (const i of nums1) {
+          // console.log(map)
+          // console.log(typeof map) // 对象
+          if (map[i]) {
+            map[i]++
+          } else {
+            map[i] = 1
+          }
+        }
+        // console.log(map) // 这里打印map是正常的
+        for (const j of nums2) {
+          const num = map[j]
+          if (num > 0) {
+            arr.push(j)
+            map[j]--
+            console.log(map)
+          }
+        }
+        return arr
+      }
+      console.log(intersect([1, 2, 2, 3], [2, 2, 4]))
+
+      var intersection = function (nums1, nums2) {
+        const map = new Map()
+        nums1.forEach((n) => {
+          map.set(n, true)
+        })
+
+        const res = []
+        nums2.forEach((n) => {
+          if (map.get(n)) {
+            res.push(n)
+            map.delete(n)
+          }
+        })
+        return res
+      }
+      // https://juejin.cn/post/6844903926467133447
+    </script>
+  </body>
+</html>

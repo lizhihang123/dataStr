@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1 给定整数 将其拆分为 至少两个正整数的和 并使这些正整数的乘积最大化
+    // 2 返回你可以获得的最大正整数
+
+    // 2
+    // 1 + 1 =》1
+    // 2 + 0 =》0
+
+    // 10
+    // 1 + 9 9
+    // 2 + 8 16
+    // 3 + 7 21
+    // 4 + 6 24
+    // 5 + 5 25
+
+    // 3 + 3 + 4 =》36
+    function integerBreak(n) {
+      // n是10，但是需要11位的数组，因为索引的缘故
+      let memo = new Array(n + 1).fill(-1)
+      // 注意return的值
+      return breakInt(n, memo)
+    }
+    function breakInt(n, memo) {
+      if (n == 1 || n === 0) {
+        return 0
+      }
+      let res = -1
+      if (memo[n] !== -1) {
+        return memo[n]
+      }
+      for (let i = 1; i <= n - 1; i++) {
+        res = Math.max(res, i * (n - i), i * breakInt((n - i), memo))
+        /* 
+        n = 10
+          i = 1; i * breakInt((n - 1), memo) 
+          n - i = 9
+        n = 9
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 8
+        n = 8
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 7
+        n = 7
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 6
+        n = 6
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 5
+        n = 5
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 4
+        n = 4
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 3
+        n = 3
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 2   
+        n = 2
+          i = 1; i * breakInt((n - 1), memo)
+          n - i = 1   
+        -----
+        当走到这里时 再往上 一个个弹出 执行递归
+        n = 1;return 0
+        n = 3;  i = 1, 1 * breakInt((3 - 1), memo)         
+                i = 2, 2 * breakInt((3 - 2), memo)
+        n = 4;  i = 1, 1 * breakInt((4 - 1), memo)         
+                i = 2, 2 * breakInt((4 - 2), memo)   
+                i = 3, 2 * breakInt((4 - 3), memo)          
+        */
+        memo[n] = res
+      }
+      return res
+    }
+    console.log(integerBreak(10))
+  </script>
+</body>
+
+</html>

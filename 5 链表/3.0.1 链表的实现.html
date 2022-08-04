@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // 1. 修改bug1：getNode里面的while要--时，>= 等号少了，找到的节点就是错的
+        // 2. 修改bug2：check 这里的越界判断有问题
+        // 3. 未解决bug3：get()方法力扣，get(node).val是错的 说val是null
+        
+        class LinkNode {
+            constructor(val, next) {
+                this.val = val
+                this.next = next
+            }
+        }
+        // 2. 单链表 存储头尾节点 和 节点数量
+        let MyLinkedList = function() {
+            this._size = 0
+            this._tail = null
+            this._head = null
+        }
+        // 4.1 找到上一个节点
+        MyLinkedList.prototype.getNode = function (index) {
+            if(index < 0 || index >= this._size) return null
+            let cur = new LinkNode(0, this._head)
+            while (index-- >= 0) {
+                cur = cur.next
+            }
+            return cur
+        }
+        // 4.2 找到上一个节点的的值
+        MyLinkedList.prototype.get = function(index) {
+            if(index < 0 || index >= this._size) return -1;
+            const value = this.getNode(index).val
+            return value
+        }
+
+
+        // 5. 增加一个节点 在头部位置
+        MyLinkedList.prototype.addAtHead = function(val) {
+            const node = new LinkNode(val, this._head)
+            this._head = node 
+            this._size++
+            if(!this._tail) {
+                this._tail = node 
+            }
+        }
+        // 6. 在尾巴位置 新增加一个节点
+        MyLinkedList.prototype.addAtTail = function(val) {
+            const node = new LinkNode(val, null)
+            this._size++
+            if (this._tail) {
+                this._tail.next = node
+                this._tail = node
+                return
+            }
+            this._tail = node
+            this._head = node
+        }
+
+        // 7. 在对应的索引位置增加一个节点
+        MyLinkedList.prototype.addAtIndex = function(index, val) {
+            if (index > this._size) {
+                return 
+            }
+            if (index <= 0) {
+                this.addAtHead(val)
+                return  
+            }
+            if(index === this._size) {
+                this.addAtTail(val)
+                return 
+            }
+            const node = this.getNode(index - 1)
+            node.next = new LinkNode(val, node.next)
+            this._size++
+        }
+
+        // 8. 删除节点
+        MyLinkedList.prototype.deleteAtIndex = function (index) {
+            if(index < 0 || index >= this._size) return;
+            if (index === 0) {
+                this._head = this._head.next
+                if(index === this._size - 1) {  
+                    this._tail = this._head
+                }
+                this._size--
+                return
+            }
+            const node = this.getNode(index - 1)
+            node.next = node.next.next
+            if (index === this._size - 1) {
+                this._tail = node
+            }
+            this._size--
+        }
+        var obj = new MyLinkedList()
+        obj.addAtHead(1)
+        obj.addAtTail(3)
+        obj.addAtIndex(1, 2)
+        obj.get(1)
+        obj.deleteAtIndex(1)
+        obj.get(1)
+    </script>
+</body>
+</html>

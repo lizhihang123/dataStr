@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 路径总和II 113
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(5)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+
+
+
+        /* 
+        1 时间O(n)
+          空间O(n) n是栈递归的次数 不超过二叉树的节点
+        2 思路 采用前序遍历 每个节点要入栈并求和 如果求和等于目标值 就把栈里面的元素组成数组 放到结果数组 如果碰到叶子节点 需要一层层的回退
+        单层递归 值入栈+求和+判断是不是叶子节点
+        递归退出条件 如果为叶子节点 并且求和等于目标值 return true
+        递归参数：左节点和右节点 目标值 栈 求和值 结果数组
+                 node targetNum stack sum res
+        */
+        const pathSum = (root, targetNum) => {
+            if (root === null) {
+                return []
+            }
+            // stack 存储每个路径的值 注意是值
+            let stack = []
+            // res是结果数组
+            let res = []
+            backTree(root, targetNum, stack, 0, res)
+            return res
+        }
+
+
+        const backTree = (node, targetNum, stack, sum, res) => {
+            debugger
+            // 值要入栈 栈在最后弹出
+            stack.push(node.val)
+            // 要求和
+            sum += node.val
+            // 叶子节点 node.left和node.right都为空 就是叶子节点 且 路径和要等于目标值
+            if (!node.left && !node.right && sum === targetNum) {
+                // 必须是...stack 这样才不会拷贝地址而是值
+                res.push([...stack])
+            }
+            // stack和sum都是修改后再递归
+            // sum求和的值怎么处理呢？每一层递归占用一块空间 都会存储对应路径的sum值 而不是一直累加 通过debugger 你能够发现sum值会发生变化
+            node.left && backTree(node.left, targetNum, stack, sum, res)
+            node.right && backTree(node.right, targetNum, stack, sum, res)
+            // 走到叶子节点无法继续走下去 就会一层一层回退 换另外一棵树
+            stack.pop()
+        }
+        console.log(pathSum(a, 8));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(4)
+        var g = new Node(5)
+        var aa = new Node(1)
+        var bb = new Node(2)
+        var cc = new Node(3)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        aa.left = bb
+        aa.right = cc
+        // 结果
+
+        let pathSum = (root, targetNum) => {
+            // 判空
+            if (root === null) {
+                return result
+            }
+
+            let result = []
+            // 每条路径的值
+            let path = []
+            path.push(root.val)
+
+
+            let traversal = (cur, count) => {
+                // 叶子节点 且路径的值的和等于目标值 放入结果数组
+                if (!cur.left && !cur.right && count === 0) {
+                    result.push([...path])
+                    return
+                }
+                // 叶子结点 但是不等于目标值 啥也不干
+                if (!cur.left && !cur.right) {
+                    return
+                }
+
+                // 左节点
+
+                if (cur.left) {
+                    path.push(cur.left.val)
+                    count -= cur.left.val
+                    traversal(cur.left, count)
+                    count += cur.left.val
+                    path.pop()
+                }
+
+                // 右节点
+                if (cur.right) {
+                    path.push(cur.right.val)
+                    count -= cur.right.val
+                    traversal(cur.right, count)
+                    count += cur.right.val
+                    path.pop()
+                }
+                return
+            }
+            traversal(root, targetNum - root.val)
+            return result
+        }
+
+        console.log(pathSum(a, 7));
+        console.log(aa);
+        console.log(pathSum(aa, 5));
+    </script>
+</body>
+
+</html>

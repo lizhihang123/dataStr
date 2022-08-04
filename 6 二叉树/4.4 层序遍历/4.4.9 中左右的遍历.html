@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /* 
+        1 核心思路 利用 中-左-右 从上往下去遍历查找
+        2 时间：O(n)
+          空间: O(n)
+        
+        */
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        // b.right = e
+        c.left = f
+        c.right = g
+        let result
+        function getDepth(node, depth) {
+            debugger
+            // result = result > depth ? result : depth // 中
+
+            // 中
+            if (result > depth) {
+                result = result
+            } else {
+                result = depth
+            }
+
+            // 判空
+            if (node.left === null & node.right === null) {
+                return
+            }
+
+
+            // 左
+            if (node.left) {
+                // ++是因为要进入下一层
+                depth++
+                getDepth(node.left, depth)
+                // --是因为回退了 要去遍历一个右节点 这里叫回溯
+                depth--
+            }
+            // 右
+            if (node.right) {
+                depth++
+                getDepth(node.right, depth)
+                depth--
+            }
+
+            return
+        }
+
+        function maxDepth(root) {
+            debugger
+            result = 0
+            // 判空
+            if (root === null) {
+                return root
+            }
+            getDepth(root, 1)
+            return result
+        }
+        console.log(maxDepth(a));
+    </script>
+</body>
+
+</html>

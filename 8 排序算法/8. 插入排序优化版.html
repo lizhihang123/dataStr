@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间复杂度：最坏情况为O(n ^ 2) 为什么？因为外层循环次数为n，内层循环次数每一轮 在最坏的情况下都是 1 2 3 4 直到 n - 1
+        // 空间复杂度：是O(1) 是原地排序 没有借助第三方的空间
+
+        // 1 核心思路 原本是每个 无序区的元素要回过头去和有序区的元素 一一比较，这样可能每个元素会被比较两次 => 不交换 用一个临时变量存储当前的值，把有序区的元素 从前向后逐步的往后复制 直到碰到了那个比自己小的值索引是j - 1，就把temp的值给到索引是j的地方
+        function insertSort(nums) {
+            // 1 如果 j-1 的值 本身就小于j 的值 直接不动 continue 退出一层循环
+            // 2 如果 j-1 的值 大于 j的值 用temp 存储j的值
+            // 倒着去判断
+            // 3 后面的值是否等于undefined[不能用!来进行判断 不然0会无法通过，坑] => 是 就赋值为temp
+            // 4 后面的值是否小于temp的值 => 是 就赋值为temp
+            // 5 如果都不是 就把 j - 1的值 赋值为 j的值
+
+            for (let i = 0; i < nums.length; i++) {
+                let iIndex = i
+                let moveIndex = i - 1
+                let temp = nums[i]
+                if (nums[moveIndex] < nums[iIndex]) {
+                    continue
+                }
+                for (let j = i; j > -1; j--) {
+                    if (nums[j - 1] < temp) {
+                        nums[j] = temp
+                        break
+                    }
+
+                    if (nums[j - 1] === undefined) {
+                        nums[j] = temp
+                        break
+                    }
+
+                    nums[j] = nums[j - 1]
+
+                }
+            }
+            return nums
+        }
+        console.log(insertSort([5, 2, 3, 1]));
+        console.log(insertSort([-4, 0, 7, 4, 9, -5, -1, 0, -7, -1])); // 这个测试用例无法通过
+    </script>
+</body>
+
+</html>

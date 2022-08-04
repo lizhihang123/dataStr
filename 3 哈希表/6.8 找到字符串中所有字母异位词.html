@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 输入: s = "cbaebabacd", p = "abc"
+        // 输出: [0,6]
+        // 解释:
+        // 起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+        // 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
+
+        // 输入: s = "abab", p = "ab"
+        // 输出: [0,1,2]
+        // 解释:
+        // 起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
+        // 起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
+        // 起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+
+
+        var isAnagram = function(s, t) {
+            let map = new Map() 
+            // 比较两个字符串的长度是否相等的空间复杂度是O(n)
+            if(s.length !== t.length) {
+                return false
+            }
+            // 遍历s字符串 时间O(n)
+            for(let i of s) {
+                if(map.has(i)) {
+                    map.set(i, map.get(i) + 1)
+                } else {
+                    map.set(i, 1)
+                }
+            }   
+            // 遍历t字符串 时间O(n)
+            for(let i of t) {
+                // 首先判断 map里面有这个i属性，其次有加判断条件 map.get(i) > 0 后者直接限制 小于0的清空
+                if(map.has(i) && map.get(i) > 0) {
+                    map.set(i, map.get(i) - 1)
+                } else {
+                    return false
+                }
+            }
+
+            // 下面写法 map遍历有问题 map如何进行遍历? 易错点 注意
+            // for(let i in map) {
+            //     if (map[i] !== 0) {
+            //         return false
+            //     }
+            // }
+            return true
+        };
+
+        var findAnagrams = function(s, p) {
+            // https://juejin.cn/post/7112617802476814350
+            
+            // cbaebabacd -> abc
+            // 感觉这里是有一个滑动窗口的思想在
+            // 两个指针 变动两个指针的位置
+
+            // 至少通过了28个测试用例
+            let left = 0
+            let len = p.length
+            let right = left + len
+            // 返回的索引数组
+            let indexArr = []
+            while (right <= s.length) {
+                // !犯过的错误 s[0, 1] 或者 s[0, 2] 永远只能截取到一个字符
+                // s.slice(0, 2)能够截取到两个字符
+                // !犯过的错误2 s.slice(0, 2) 因为末尾取不到 因此right要加一位
+                // !思考 这里用slice去截取字符串 是否恰当？去查看之前的滑动窗口是怎么操作的
+                // !翻过的错误3 right指针 可以为3 就是正好是长度
+                // 但是这里超时了，尽管逻辑上是行得通的
+                let str = s.slice(left, right)
+                debugger
+                if(isAnagram(str, p)) {
+                    indexArr.push(left)
+                }
+                left++
+                right++
+            }
+            return indexArr
+        };
+        // console.log(findAnagrams('cbaebabacd', 'abc'));
+        console.log(findAnagrams("abab", 'ab'));
+    </script>
+</body>
+</html>

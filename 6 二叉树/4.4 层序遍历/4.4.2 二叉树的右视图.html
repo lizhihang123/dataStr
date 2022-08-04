@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        var aa = new Node(1)
+        var bb = new Node(null)
+        var cc = new Node(2)
+        var dd = new Node(3)
+        var ee = new Node(4)
+        var ff = new Node(5)
+        var gg = new Node(6)
+        var hh = new Node(7)
+        var ii = new Node(8)
+        var jj = new Node(9)
+        var kk = new Node(10)
+        var ll = new Node(11)
+        var mm = new Node(12)
+        var nn = new Node(13)
+        var oo = new Node(14)
+        aa.left = bb
+        aa.right = cc
+        bb.left = dd
+        bb.right = ee
+        cc.left = ff
+        cc.right = gg
+        dd.left = hh
+        dd.right = ii
+        ee.left = jj
+        ee.right = kk
+        ff.left = ll
+        ff.right = mm
+        gg.left = nn
+        gg.right = oo
+        console.log(aa);
+
+        /* 
+        时间复杂度：O(n) =》层序遍历也是O(n)
+        空间复杂度：O(n)
+        */
+        var rightSideView = function (root) {
+            let res = []
+            let queue = []
+            queue.push(root)
+            if (!root) {
+                return []
+            }
+            while (queue.length > 0) {
+                // 存放每一层的最右边的数据
+                res.push(queue[0].value)
+                let length = queue.length
+                for (let i = 0; i < length; i++) {
+                    let node = queue.shift()
+                    // 注意 先右进入队列 再左边进入队列
+                    node.right && queue.push(node.right)
+                    node.left && queue.push(node.left)
+                }
+            }
+            return res
+        };
+
+
+        console.time('1')
+        console.log(rightSideView(a));
+        console.timeEnd('1')
+        console.time('2')
+        console.log(rightSideView(aa));
+        console.timeEnd('2')
+    </script>
+</body>
+
+</html>

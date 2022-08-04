@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var isAnagram = function(s, t) {
+            let map = new Map() 
+            // 比较两个字符串的长度是否相等的空间复杂度是O(n)
+            if(s.length !== t.length) {
+                return false
+            }
+            // 遍历s字符串 时间O(n)
+            for(let i of s) {
+                if(map.has(i)) {
+                    map.set(i, map.get(i) + 1)
+                } else {
+                    map.set(i, 1)
+                }
+            }   
+            // 遍历t字符串 时间O(n)
+            for(let i of t) {
+                // 首先判断 map里面有这个i属性，其次有加判断条件 map.get(i) > 0 后者直接限制 小于0的清空
+                if(map.has(i) && map.get(i) > 0) {
+                    map.set(i, map.get(i) - 1)
+                } else {
+                    return false
+                }
+            }
+
+            // 下面写法 map遍历有问题 map如何进行遍历? 易错点 注意
+            // for(let i in map) {
+            //     if (map[i] !== 0) {
+            //         return false
+            //     }
+            // }
+            return true
+        };
+
+        // 1. 我的思路是什么？
+        // 判断两个字符串是不是字母异位词的方法有了！ 3个字母异位词也能够进行判断
+        // 声明一个数组 push进去就好了
+        var groupAnagrams = function(strs) {
+            const anArr = []
+            for(let i = 0; i < strs.length; i++) {
+                for (let j = i + 1; j < strs.length; j++) {
+                    if (isAnagram(strs[i], strs[j])) {
+                        anArr.push([strs[i], strs[j]])
+                    }
+                }
+            }
+            return anArr
+        };
+        // console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
+
+        // 2. 利用hash的思路
+        let groupAnagrams2 = function (strs) {
+            let n = strs.length
+            let ans = new Map()
+            const prime = [2, 3, 5, 7, 9, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 89, 97, 101, 103]
+            let mod = 1e9 + 7
+            for (let i = 0; i < n; i++) {
+                let hash = 1
+                for (let j = 0; j < strs[i].length; j++) {
+                    let num = strs[i].charCodeAt(j) - 97
+                    hash = ((hash % mod) * (prime[num] % mod)) % mod
+                }
+                if (!ans.get(hash)) ans.set(hash, [])
+                ans.get(hash).push(strs[i])
+            }
+            return [...ans.values()]
+        }
+        
+
+        // 3. 第三种解法 使用api
+        let groupAnagrams3 = function (strs) {
+            let result = [], // 结果数组
+            compareArr = [] // 用以比较的字符串数组
+            strs.forEach(item => {
+                // 获取当前字符串 => 按字母升序配列后的字符串
+                let cur = item.split('').sort((a, b) => a.localeCompare(b)).join(''),
+                // 获取在比较字符串数组中的索引
+                index = compareArr.indexOf(cur)
+                if (index === -1) { // 从未出现过
+                    compareArr.push(cur)
+                    // 这里很巧妙 直接把值 -> 数组 再push进去
+                    result.push([item])
+                } else {
+                    // 这里很巧妙直接找到对应的数组 再push进去
+                    result[index].push(item)
+                }
+            })
+            return result
+        }
+        console.log(groupAnagrams3(["eat","tea","tan","ate","nat","bat"]));
+
+        // 4. 使用api
+        /* 
+        Array.from() -> 能够把伪数组 转化为 真数组
+        比如map.values()是一个伪数组
+        能够Array.from(map.values())
+        --
+        也能够 let arr2 = ['abc', 'bcd']
+        Array.from(arr2[1])
+        -> ['b', 'c', 'd']
+        */
+        let groupAnagrams4 = function (strs) {
+            const map = new Map()
+            for (let i in strs) {
+                // i - 数组索引
+                // strs[i] 数组中的某个字符
+                // Array.from 把字符串拆分，转化为数组 'aet' -> ['a', 'e', 't']
+                let arr = Array.from(strs[i])
+                debugger
+                // 排序字符串
+                arr.sort()
+                // ['a', 'e', 't'] -> 'a,e,t'
+                let arrString = arr.toString()
+                // 判断map里面是否有'a,e,t' 没有就创建一个[] 有就拿出那个数组
+                let res = map.has(arrString) ? map.get(arrString) : new Array()
+                // 把指定字符放进那个数组里去
+                res.push(strs[i])
+                // map里面更新res
+                /* 
+                {
+                    'a,e,t' => Array(3) 后面可以更新为4 更新为5
+                }
+                */
+                map.set(arrString, res)
+            }
+            return Array.from(map.values())
+        }
+        // console.log(groupAnagrams4(["eat","tea","tan","ate","nat","bat"]));
+    </script>
+</body>
+</html>

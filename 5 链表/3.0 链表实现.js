@@ -1,0 +1,122 @@
+// 1. 定义类
+// 2. throw 错误
+
+// 1. 定义一个节点
+class Node {
+    // 1.1 每一个链表的节点，存储当前值，和下一个的地址
+    constructor(v, next) {
+        this.value = v;
+        this.next = next;
+    }
+}
+
+// 1. 定义一个链表类 增删改查
+
+class LinkList {
+    constructor() {
+        // 1.1 链表的长度 类比数组length
+        this.size = 0;
+        // 1.2 初始化一个节点 因为链表必须有一个头 头的值和下一个地址都是空
+        this.initNode = new Node(null, null);
+    }
+
+
+    /**
+     * @name: 查找上一个节点
+     * @msg: 
+     * @param {*} header 初始化头节点，并且会往下指，发生变化
+     * @param {*} index 要查找的节点值的索引
+     * @param {*} currentIndex 游标，会发生变化
+     * @return {*}
+     */
+
+    _find(header, index, currentIndex) {
+        // 查找上一个节点
+        if (index === currentIndex) return header;
+        return this._find(header.next, index, currentIndex + 1);
+    }
+
+    _checkIndex(index) {
+        // 判断值的索引的合法性 如果索引不在范围 就抛出错误
+        if (index < 0 || index > this.size) throw new Error("节点超出范围");
+    }
+
+    // 2. 插入节点
+    /**
+     * @name:  插入节点
+     * @msg: 
+     * @param {*} v 节点值
+     * @param {*} index 插入节点的位置
+     * @return {*}
+     */
+    insertNode(v, index) {
+        // 检测节点是否存在
+        this._checkIndex(index);
+        // 查找上一个节点 参数： 初始化的头节点 当前节点的索引 游标
+        let prev = this._find(this.initNode, index, 0);
+
+        // 当我们要往链表的结尾插入节点时 prev.next为空
+        // 其它情况 我们插入的节点的next 为 prev.next
+        // 赋值 从右往左
+        // 1. 右边新的节点的next指向 prev.next 上一个节点的next[此时prev.next没有改变]
+        // 2. 设置prev.next的值 上一个节点的next指向新增的节点
+        prev.next = new Node(v, prev.next);
+        // 链表的数量+1
+        this.size++;
+        // 返回 我们要插入的节点
+        return prev.next;
+    }
+
+    /**
+     * @name: 删除节点
+     * @msg: 
+     * @param {*} index 插入节点的位置
+     * @return {*}
+     */
+    removeNode(index) {
+        this._checkIndex(index);
+        // 查到当前的节点 先找到当前节点的上一个节点
+        let prev = this._find(this.initNode, index, 0);
+        // 当前节点 就是上一个节点的下一个指向
+        let node = prev.next;
+        // 上一个节点的next改到  当前节点的next
+        prev.next = node.next;
+        // 当前的节点改为null 让他消失
+        node.next = null;
+        // 数组的长度减1 因为删除了一个元素
+        this.size--;
+        return node;
+    }
+
+    /**
+    * @name: 查 查找当前的节点
+    * @msg: 
+    * @param {*} index 插入节点的位置
+    * @return {*}
+    */
+    // 查
+    getNode(index) {
+        // 判断数据 合法
+        this._checkIndex(index);
+        // 数据的长度判断 如果不合法 无须查
+        if (this.isEmpty()) return;
+        // 跟上面find类似 当前节点的 上一个节点的 next 
+        // 查找当前的节点
+        return (this._find(this.initNode, index, 0)).next;
+
+    }
+
+
+    // 判空
+    isEmpty() {
+        return this.size === 0;
+    }
+
+    // 长度
+    getSize() {
+        return this.size;
+        // 为什么不能直接通过类的this.size访问到长度，而要声明这样一个方法，因为通过方法返回一个值，比起直接访问类的长度要更加严谨
+    }
+}
+
+export default LinkList;

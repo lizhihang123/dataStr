@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            计数排序
+            1 时间复杂度 O(n + k) 看作是桶排序的一种 0 - 900分 分为901个桶，分数相同的考生放进同一个桶里面去 无需排序  看不出来
+            2 空间复杂度 O(n) n是数组的长度
+
+            思路：
+            1 一个数列[1 2 2 3 5 4 ] 创建一个新的数列 一开始不知道要多大，因此需要借助最大值和最小值 如果只有最大值，那么99 和 1同时出现就会浪费空间
+            把1的数量 存在该数列的1的位置 2 存到该数列的索引2的位置 如果还有一个2 就再加+1
+            2 后续输出 依次遍历刚刚的存储的数列[难点]
+                两个for循环 第一个遍历n次
+                第二层 遍历次数
+            3 计数排序 不适合【最大值和最小值差距过大的】
+                不适合【小数情况】
+
+            // 是不是原地排序数组? 不是 因为占用了额外的数组来存储
+            // 排序是否是稳定的? 不理解。不改变相同元素之间 原本相对的顺序 是稳定的算法
+            // 时间复杂度和空间复杂度
+
+        */
+        function sortArray(nums) {
+            // 求数组的最大值
+            let max = nums[0]
+            let len = nums.length
+            for (let i = 1; i < len; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                }
+            }
+            // 根据最大值 求统计数组的长度
+            // 数组的长度必须是最大值 + 1
+            let countArray = new Array(max + 1).fill(0)
+            // 遍历数列 填充统计数组
+            for (let i = 0; i < len; i++) {
+                // 怎么样把 [1, 2, 3] => 1 个 0; 2个1; 3个2输出出来
+                countArray[nums[i]]++
+            }
+            let index = 0
+            // 排序后的数组 长度和nums的一致
+            let sortedArray = new Array(nums.length)
+
+            // i 表示值是几
+            // j 表示有几次循环 值出现了几次
+            for (let i = 0; i < countArray.length; i++) {
+                // for (let j = 0; j < countArray[i]; j++) {
+                //     sortedArray[index++] = i
+                // }
+                let cur = countArray[i] // cur代表i出现的次数
+                while (cur) {
+                    sortArray.push(i)
+                    cur--//次数-1 如果是0就不push  i了
+                }
+
+
+            }
+            return sortedArray
+        }
+        console.log(sortArray([2, 2, 3, 3, 5, 4, 1]));
+    </script>
+</body>
+
+</html>

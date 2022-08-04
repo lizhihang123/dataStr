@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 打了断点 好像有点懂了 只是offset为啥每次是减去2 有点不懂
+        var generateMatrix = function(n) {
+            let startX = startY = 0 // 起始位置
+            let loop = Math.floor(n / 2) // 旋转圈数
+            let mid = Math.floor(n / 2) // 中间位置
+            let offset = 1 // 控制每一层填充的元素个数
+            let count = 1 // 更新填充的数字
+            let res = new Array(n).fill(0).map(() => new Array().fill(0))
+            // new Array(n).fill(0) -> [0, 0, 0]
+            // new Array().fill(0) -> 就是[]
+            // 最终res = [[], [], []]
+            // console.log(res);
+            
+            while (loop--) {
+                let row = startX, col = startY
+                // 上行 从左到右 左闭右开
+                for (; col < startY + n - offset; col++) {
+                    res[row][col] = count++
+                }
+
+                // 右列 从上到下 左闭右开
+                for (; row < startX + n - offset; row++) {
+                    res[row][col] = count++
+                }
+
+                // 下行 从右到左 左闭右开
+                for (; col > startY;  col--) {
+                    res[row][col] = count++
+                }
+
+
+                // 左列 从下到上 左闭右开
+                for (; row > startX; row--) {
+                    res[row][col] = count++
+                }
+
+                // 更新起始位置
+                startX++
+                startY++
+
+                // 更新offset
+                offset +=2
+            }
+            // 如果n为奇数的话，需要单独给矩阵最中间的位置赋值
+            if (n % 2 === 1) {
+                res[mid][mid] = count
+            }
+            return res
+        }
+        console.log(generateMatrix(5));
+    </script>
+</body>
+</html>

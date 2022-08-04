@@ -1,0 +1,79 @@
+<!--
+ * @Date: 2022-01-05 22:20:37
+ * @LastEditTime: 2022-04-16 09:46:42
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+    var s = '123'
+    var isValid = function(s) {
+        const stack = new Stack()
+        const map = {
+            '{': '}',
+            '[': ']',
+            '(': ')'
+        }
+        for(let i = 0 ; i < s.length; i++) {
+            if(map[s[i]]) {
+                // 如果是左括号 入栈
+                stack.push(s[i])
+            } else {
+                // 如果是右括号
+                // stack.pop() 取出来一定是左括号 根据这个左括号 去map里面找到右括号 再和s里面的右括号进行比较
+                const last = map[stack.pop()]
+                if(last !== s[i]) {
+                    return false
+                }
+            }
+        }
+        // 为什么要做这一步？
+        // 因为'{}('有可能出现这样的情况，而最终(进入了循环，但是没有被弹出 pop 长度就不是0 这样的括号不是有效的
+        if(stack.getSize() !== 0) {
+                return false
+        }
+        return true
+    };     
+        
+    class Stack {
+        // 定义一个数组
+        constructor() {
+            this.stack = [];
+        }
+        // 记得下面的方法都return了
+        // 1. 增加栈的数据
+        push(item) {
+            return this.stack.push(item);
+        }
+        // 2. 删除栈的数据 切记 取出数据，直接把最后一个数据踢出去，不用加参数
+        pop() {
+            return this.stack.pop();
+        }
+        // 3. 读取栈的数据
+        peek() {
+            // 只能查到最后一个 因此是getSize() 长度 - 1
+            return this.stack[getSize() - 1]
+        }
+        // 4. 获取栈的数据有几个
+        getSize() {
+            return this.stack.length;
+        }
+        // 5. 判断栈的长度是否为空
+        isEmpty() {
+            return this.stack.length === 0;
+        }
+    }
+
+    console.log(isValid('()'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        a.left = b
+        a.right = c
+        b.left = d
+        // 1. 法一
+        // https://leetcode-cn.com/problems/binary-tree-preorder-traversal/
+        var preorderTraversal = function (root) {
+            // root在OJ上面模拟成了一个树
+            const result = []
+            set(root, result)
+            return result
+        };
+        /* 
+        1 递归函数 set函数
+        2 set参数：push到result数组的节点值 + result存储数组
+        3 终止条件：传入进来的值是null 
+        4 单层递归的逻辑：先处理中间节点，再处理左节点和右节点
+        */
+        function set(tree, result) {
+            if (tree === null) return
+            // 中
+            result.push(tree.value)
+            // 左
+            tree.left && set(tree.left, result)
+            tree.right && set(tree.right, result)
+        }
+        console.log(preorderTraversal(a));
+
+
+
+        // 2. 用循环 为什么呢？
+        class Stack {
+            // 定义一个数组
+            constructor() {
+                this.stack = [];
+            }
+            // 记得下面的方法都return了
+            // 1. 增加栈的数据
+            push(item) {
+                return this.stack.push(item);
+            }
+            // 2. 删除栈的数据 切记 取出数据，直接把最后一个数据踢出去，不用加参数
+            pop() {
+                return this.stack.pop();
+            }
+            // 3. 读取栈的数据
+            peek() {
+                // 只能查到最后一个 因此是getSize() 长度 - 1
+                return this.stack[getSize() - 1]
+            }
+            // 4. 获取栈的数据有几个
+            getSize() {
+                return this.stack.length;
+            }
+            // 5. 判断栈的长度是否为空
+            isEmpty() {
+                return this.stack.length === 0;
+            }
+        }
+        //    遍历1，能够获得2和3，遍历2，能够获得4和5，就是用的循环
+
+        // 时间复杂度: O(n)
+        var preorderTraversal2 = function (root) {
+            const stack = []
+            const res = []
+            // 先把根节点放进去 root不能为null
+            root && stack.push(root)
+            debugger
+            while (stack.length > 0) {
+                debugger
+                // 根节点会先弹出
+                let cur = stack.pop()
+                // 弹出的值存到res数组里面去 右节点
+                res.push(cur.value)
+                // 右节点先入栈
+                cur.right && stack.push(cur.right)
+                // 左节点存在 就后入栈 但是能够先弹出
+                cur.left && stack.push(cur.left)
+            }
+            return res
+        }
+        console.log(preorderTraversal2(a));
+
+
+
+    </script>
+</body>
+
+</html>

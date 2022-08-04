@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class disJointSet {
+            // 1. 创建一个并查集
+            constructor(count) {
+                // 初始化节点 每个节点的父亲都是自己
+                this.parent = new Array(count)
+                // 用于记录树的层级 用于按秩合并
+                this.rank = new Array(count)
+                for(let i = 0; i < count; i++) {
+                    this.parent[i] = i
+                    this.rank[i] = 1
+                }
+            }
+
+            // 2. 查找的算法流程
+            // 目标: 找到目标节点的根节点 find(3) > 0
+            // 1. 循环判定 当前节点的值是否等于自己 如果不等于自己 表示还没有找到
+            // 2. 当前节点重新进行赋值 赋的值等于以数组项为索引的值
+            // 3. 重新赋值以后 继续进行循环判定
+            // 4. 直到当前节点的值等于自己  返回当前节点的值
+            find (p) {
+                // 如果p和this.parent[p]不相等 说明有父节点
+                while(p != this.parent[p]) {
+                    this.parent[p] = this.parent[this.parent[p]]
+                    p = this.parent[p]
+                }
+                return p
+            }
+            // 3. 合并的算法流程
+            // 目标: 合并两个节点 会根据树的层级的大小判定合并的策略
+            // 1. 首先寻找两个数字节点的父节点 0 <- 1   2 <-3 要合并3与1 其实就是合并0与2
+            // 2. 如果两个数字相等 直接退出
+            // 3. 判定两棵树的层级 层级小的加到层级大的树下面
+            // 4. 如果两颗树的层级相等 就随意合并
+            union (p, q) {
+                let i = this.find(p)
+                let j = this.find(q)
+                if(i === j) {
+                    // 如果两个根节点是相等的 就直接退出 说明父亲是一样的 不需要合并了
+                    return
+                }
+                // 如果i的作为根节点 层级大于j 就让j合并到i下面
+                if (this.rank[i] > this.rank[j]) {
+                    this.parent[j] = i
+                } else if (this.rank[i] < this.rank[j]) {
+                // 如果j的作为根节点 层级大于i 就让i合并到j下面
+                    this.parent[i] = j
+                } else {
+                // 如果相等 就随意合并 合并到i上面了 
+                // 只有两个的根节点是一样的，才要进行rank+1
+                    this.parent[j] = i
+                    this.rank[i] += 1
+                }
+            }
+        }
+        const d = new disJointSet(6)
+        d.union(4, 5) // 断点从这里开始断
+        d.union(2, 4)
+        d.union(1, 3)
+        d.union(0, 1)
+        d.union(3, 2)
+    </script>
+</body>
+</html>

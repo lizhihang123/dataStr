@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            计数排序
+        */
+        function sortArray(nums) {
+            // 1 求数组的最大值 最小值
+            let max = nums[0]
+            let min = nums[0]
+            let len = nums.length
+            for (let i = 1; i < len; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                }
+                if (nums[i] < min) {
+                    min = nums[i]
+                }
+            }
+            for (let i = 1; i < len; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                }
+            }
+            let d = max - min
+            debugger
+            // 2 根据最大值最小值 求统计数组的长度
+            // 数组的长度必须是最大值 + 1
+            let countArray = new Array(d + 1).fill(0)
+            // 遍历数列 填充统计数组
+            for (let i = 0; i < len; i++) {
+                // 怎么样把 [1, 2, 3] => 1 个 0; 2个1; 3个2输出出来
+                countArray[nums[i] - min]++
+            }
+            debugger
+            // 3 统计数组做变形 后面的元素等于前面的元素之和
+            for (let i = 1; i < countArray.length; i++) {
+                debugger
+                countArray[i] += countArray[i - 1]
+            }
+            let index = 0
+            debugger
+            // 排序后的数组 长度和nums的一致
+            // 4 倒序遍历原始的数组 从统计数组中找到正确的位置 输出到结果数组
+            let sortedArray = new Array(nums.length)
+            for (let i = nums.length - 1; i >= 0; i--) {
+                debugger
+                // countArray 统计数组 -> 给的是位置
+                let num = countArray[nums[i] - min]
+                // nums原始数组 -> 给的是值[我觉得这行代码很难理解 为什么 num要减-1]
+                sortedArray[num - 1] = nums[i]
+                // countArray 统计数组对应位置的值要减减 表示数量减少一个
+                countArray[nums[i] - min]--
+            }
+            return sortedArray
+        }
+        console.log(sortArray([95, 94, 91, 98, 99, 90, 99, 93, 91, 92]));
+    </script>
+</body>
+
+</html>

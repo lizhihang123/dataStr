@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Node(data, left, right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+
+        Node.prototype = {
+            show: function () {
+                console.log(this.data);
+            }
+        }
+
+        function Tree() {
+            this.root = null;
+        }
+
+        Tree.prototype = {
+            insert: function (data) {
+                var node = new Node(data, null, null);
+                if (!this.root) {
+                    this.root = node;
+                    return;
+                }
+                var current = this.root;
+                var parent = null;
+                while (current) {
+                    parent = current;
+                    if (data < parent.data) {
+                        current = current.left;
+                        if (!current) {
+                            parent.left = node;
+                            return;
+                        }
+                    } else {
+                        current = current.right;
+                        if (!current) {
+                            parent.right = node;
+                            return;
+                        }
+                    }
+
+                }
+            },
+            preOrder: function (node) {
+                if (node) {
+                    node.show();
+                    this.preOrder(node.left);
+                    this.preOrder(node.right);
+                }
+            },
+            middleOrder: function (node) {
+                if (node) {
+                    this.middleOrder(node.left);
+                    node.show();
+                    this.middleOrder(node.right);
+                }
+            },
+            laterOrder: function (node) {
+                if (node) {
+                    this.laterOrder(node.left);
+                    this.laterOrder(node.right);
+                    node.show();
+                }
+            },
+            getMin: function () {
+                var current = this.root;
+                while(current){
+                    if(!current.left){
+                        return current;
+                    }
+                    current = current.left;
+                }
+            },
+            getMax: function () {
+                var current = this.root;
+                while(current){
+                    if(!current.right){
+                        return current;
+                    }
+                    current = current.right;
+                }
+            },
+            getDeep: function (node,deep) {
+                deep = deep || 0;
+                if(node == null){
+                    return deep;
+                }
+                deep++;
+                var dleft = this.getDeep(node.left,deep);
+                var dright = this.getDeep(node.right,deep);
+                return Math.max(dleft,dright);
+            }
+        }
+        let tree = new Tree()
+        tree.insert(3)
+        console.log(tree);
+        tree.insert(4)
+        tree.insert(2)
+        tree.insert(9)
+        tree.insert(8)
+        console.log(tree);
+    </script>
+</body>
+</html>

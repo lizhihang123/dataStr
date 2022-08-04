@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        1 大问题 -》小问题
+          比较整棵树 -》只比较两颗树的根节点 -》根节点的左节点 + 根节点的右节点
+        2 核心思路：利用队列 或者 栈 或者数组 都可以 因为左右的顺序谁先都没关系
+                   比较两个节点 排除其中一个是null或者都是null的情况
+                   如果节点相等 -》子节点放入queue 进行下一轮 while循环比较
+        3 时间 O(N)
+          空间 O(N)
+        */
+        var isSameTree = function(p, q) {
+            // 两个节点都是null 就是对称的
+            if (p === null && q === null) {
+                return true
+            }
+            let queue1 = []
+            let queue2 = []
+            queue1.push(p)
+            queue2.push(q)
+            while (queue1.length > 0 && queue2.length > 0) {
+                // 用pop 用shift可不可以呢
+                let node1 = queue1.shift()
+                let node2 = queue2.shift()
+                // 直接比较是不是等于null 可以直接拿节点比
+                if (node1 === null && node2 === null) {
+                    // 两个都是null就不放入数组 这样queue才会有值
+                    continue
+                } 
+                // 不等的情况
+                if (node1 === null && node2 !== null) {
+                    return false
+                } else if (node1 !== null && node2 === null) {
+                    return false
+                    // 这里必须得比较值
+                } else if (node1.val !== node2.val) {
+                    return false
+                }
+                // 这里顺序有疑惑 -> 顺序没关系 只要两棵树 的顺序一致就可以
+                queue1.push(node1.left)
+                queue1.push(node1.right)
+                queue2.push(node2.left)
+                queue2.push(node2.right)
+            }
+            return true
+        };
+
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(3)
+        var d = new Node(1)
+        var e = new Node(2)
+        var f = new Node(3)
+        // var g = new Node(3)
+        a.left = b
+        a.right = c
+        d.left = e
+        d.right = f
+        console.log(isSameTree(a, d));
+    </script>
+</body>
+</html>

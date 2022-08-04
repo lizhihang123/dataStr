@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 使用map来判断是否有重复的值 注意getNum函数 循环求一个数的平方的算法
+        // 2. 时间复杂度 既有外层的while循环 也有内层的getNum的递归【取决于递归的深度】？
+        // 3. 空间复杂度 O(n) n是map对象的长度
+        var isHappy = function(n) {
+            // !map这里声明 只声明一次
+            let map = new Map()
+            // 1.getNum()方法 返回求和的数
+            const getNum = (n) => {
+                // !sum 每次递归调用getNum都要清零
+                // let sum = 0 一定是=0 不能直接 let num 否则求和是NaN
+                let sum = 0
+                while (n) {
+                    // ! 如何循环的去求一个数字的平方和 关键
+                    sum += (n % 10) ** 2
+                    n = Math.floor(n / 10)
+                }
+                // !返回return的是sum 切记
+                return sum
+            }
+            // 2. !while循环 用于判断是否重复 快乐数重新赋值
+            while (true) {
+                    if (map.has(n)) return false
+                    if (n === 1) return true
+                    // 存入map
+                    map.set(n, 1)
+                    // 递归 下一次的计算
+                    n = getNum(n)
+            }
+        };
+        // console.log(isHappy(19));
+
+
+        // 法二：更加简洁：
+        // ! set更加简洁 但是超时输出了
+        var getSum2 = function (n) {
+            // 19
+            // sum += 9 ** 2
+            // n -> 1 通过 Math.floor(n / 10)
+            let sum = 0
+            while (n) {
+                sum += (n % 10) ** 2
+                n = Math.floor(n / 10)
+            }
+            return sum
+            // ! 卡住 纠结是否要这里return 出去
+        }
+
+        var isHappy2 = function(n) {
+            let set = new Set()
+            while (n) {
+                if (set.has(n)) {
+                    return false
+                }
+                if (n !== 1) {
+                    // ! set.add(n, 1) // 这个写法是错的
+                    set.add(n)
+                    n = getSum2(n)
+                    console.log(n);
+                } else {
+                    return true
+                }
+            }
+            // 原来写的是这个逻辑 你看 如果set里面有n才进入这个if循环那么while就会一直走 一直走 即便没能够走进if里面去 只有n为0 才会跳出while循环
+            // while (n) {
+            //     if (n !== 1 && set.has(n)) {
+            //         set.add(n)
+            //         n = getNum(n)
+            //     }
+            // }
+            // return n === 1
+        }
+        // console.log(isHappy2(19));
+        // console.log(isHappy2(21));
+        // console.log(isHappy2(33));
+        // console.log(isHappy2(34));
+        // console.log(isHappy2(45));
+        console.log(isHappy2(378));
+
+        // 3. 使用链表有环的思想
+        // 说实话 这种思想还没能够理解透彻 有点困难
+        const getN = (n) => {
+            let sum = 0
+            while (n) {
+                sum += (n % 10) ** 2
+                n = Math.floor(n / 10)
+            }
+            return sum
+        }
+        var isHappy3 = function(n) {
+            if (getN(n) == 1) return true;
+            debugger
+            let a = getN(n), b = getN(getN(n));
+            debugger
+            // 如果 a === b 
+            while (b !== 1 && getN(b) !== 1 && a !== b) {
+                a = getN(a);
+                b = getN(getN(b));
+                debugger
+            }
+            debugger
+            return b === 1 || getN(b) === 1 ;
+        };
+        // console.log(isHappy3(19));
+        // console.log(isHappy3(2));
+
+        // 4. 使用reduce 和 set结合 利用数组的split方法 和 ''+ 的方式 转化数字为字符串
+        let isHappy4 = function (n) {
+            let set = new Set()
+            let totalCount
+            // ! 等于1 跳出循环
+            while (totalCount !== 1) {
+                let arr = ('' + (totalCount || n)).split('')
+                // reduce求和
+                totalCount = arr.reduce((total, num) => {
+                    total += num * num
+                    return total
+                } , 0)
+                if (set.has(totalCount)) {
+                    return false
+                } else {
+                    set.add(totalCount)
+                }
+            }
+            return true
+        }
+        // console.log(isHappy4(19));
+
+
+        
+
+        
+    </script>
+</body>
+</html>

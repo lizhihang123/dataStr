@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+            /************节点*************/
+        function Node(element) {
+            this.element = element;//当前节点的数据
+            this.next = null;//下一个节点数据
+        }
+            /*************************链表*****************************/
+            function LList() {
+            this.head = new Node("head");//头节点
+            this.head.next=this.head;//注意这里
+        }
+        LList.prototype={
+            //查找某一节点
+            find:function (item) {
+                var currNode = this.head;
+                while (currNode.element != item) {
+                    currNode = currNode.next;
+                    if (currNode==this.head)return null;
+                }
+                return currNode;
+            },
+            //查找尾节点
+            findLast:function(){
+                var currNode = this.head;
+                while (!(currNode.next == this.head)) {
+                    currNode = currNode.next;
+                }
+                return currNode;
+            },
+            //向某一元素后面插入新节点
+            insert:function(newElement,item){
+                var newNode = new Node(newElement);
+                var current = this.find(item)||this.findLast();//默认插入到尾部
+                newNode.next = current.next;
+                current.next = newNode;
+            },
+            //查找某一节点的前一个节点(前驱)
+            findPrevious:function(item){
+                var currNode = this.head;
+                while (!(currNode.next == this.head) &&(currNode.next.element != item)) {
+                    currNode = currNode.next;
+                }
+                return currNode;
+            },
+            //删除某一个节点
+            remove:function(item){
+                var prevNode = this.findPrevious(item);
+                if (!(prevNode.next == this.head)) {//不能删除头
+                    prevNode.next = prevNode.next.next;
+                }
+            },
+            //修改某一节点的数据
+            edit:function(item,newItem){
+                var element=this.find(item);
+                element.element=newItem;
+            },
+            //在控制台打印出所有节点(为了方便预览)
+            display:function(){
+                var currNode = this.head;
+                while (!(currNode.next == this.head)) {
+                    console.log(currNode.next.element);
+                    currNode = currNode.next;
+                }
+            }
+        }
+        // 测试
+        // 插入四个节点
+        var lkk= new LList();
+        lkk.insert("likek");
+        lkk.insert("zhangsan");
+        lkk.insert("lisi","zhangsan");//指定插入位置
+        lkk.insert("haha");
+        // 查看当前所有节点的情况
+        lkk.display();
+        /*likek
+        zhangsan
+        lisi
+        haha*/
+        // 删除节点
+        lkk.remove("zhangsan");
+        lkk.display();
+        /*likek
+        lisi
+        haha*/
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+        // 思路：采用后续遍历的方式 左 - 右 - 中 
+        // 先递归遍历左边的最大值
+        // 再递归遍历右边的最大值
+        // 再取上面两个的最大值 + 1 算上中间的最大值
+        /* 
+        1 时间O(n)
+        2 空间O(n)
+        */
+        var maxDepth = function (root) {
+            return getDepth(root)
+        }
+        function getDepth(node) {
+            if (node === null) {
+                return false
+            }
+            debugger
+            // 先取左边的最大值
+            let leftDepth = getDepth(node.left)
+            // 再取右边的最大值
+            let rightDepth = getDepth(node.right)
+            // 再算上中间的最大值 +1表示算上中间
+            let depth = 1 + Math.max(leftDepth, rightDepth)
+            return depth
+        }
+        console.log(maxDepth(a));
+    </script>
+</body>
+
+</html>

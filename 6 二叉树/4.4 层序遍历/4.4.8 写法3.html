@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.next = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+
+        // 时间复杂度O(N) 因为我们无法避免的要去遍历每一个节点的值
+        // 空间复杂度O(1)
+        let last = null, nextStart = null;
+        const handle = (p) => {
+            if (last !== null) {
+                // 每一行的节点值 改变next指向 last是上一个节点值 p是新传进来右边的节点值
+                last.next = p;
+            }
+            if (nextStart === null) {
+                // 每一行的起始值
+                nextStart = p;
+            }
+            last = p;
+        }
+        var connect = function (root) {
+            if (root === null) {
+                return null;
+            }
+            let start = root;
+            while (start != null) {
+                last = null;
+                nextStart = null;
+                for (let p = start; p !== null; p = p.next) {
+                    if (p.left !== null) {
+                        handle(p.left);
+                    }
+                    if (p.right !== null) {
+                        handle(p.right);
+                    }
+                }
+                start = nextStart;
+            }
+            return root;
+        };
+        console.log(connect(a));
+    </script>
+</body>
+
+</html>

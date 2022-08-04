@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <script>
+       // 1. 移除元素 双指针法 时间 - O(n^2)
+       // 2. 存在问题 - 移出元素后数组的长度会发生改变
+       var removeElement = (nums, val) => {
+            // 这样做也可以 但是直接删除 有点不规范
+            // 法一：最初的解法 - 直接删除元素 有点不规范 但是len和i能够--，使得最后也能够通过
+            // 时间复杂度O(n^2) 空间O(1)
+            // let len = nums.length
+            // for(let i = 0; i < len; i++) {
+            //     if(nums[i] === val) {
+            //         nums.splice(i, 1)
+            //         len--
+            //         i--
+            //     }
+            // }
+            // console.log(nums);
+            // return nums.length
+            
+            // 法二：暴力解法 - 时间复杂度O(n^2) - 空间复杂度O(1)
+            let len = nums.length
+            for(let i = 0; i < len; i++) {
+                if(nums[i] === val) { 
+                    for(j = i + 1; j < len; j++) {
+                        nums[j - 1] = nums[j]
+                    }
+                    i--
+                    len--
+                }
+            }
+            return len
+       }
+    // len = 6
+    // i = 0, nums[0] = 1, val = 4
+    // i = 1, nums[1] = 2, val = 4
+    // i = 2, nums[2] = 2, val = 4
+    // i = 3, nums[3] = 3, val = 4
+    // i = 4, nums[4] = 4, val = 4
+        // j = 5, nums[j - 1] = 4; nums[j] = 5; nums[j - 1] = 5
+        // i-- 3
+        // len-- 5
+    console.log(removeElement([1,2,2,3,4,5], 4));
+    // i = 0 x
+    // i = 1 x
+    // i = 2 j = 3 nums[2] = nums[3] -> [1, 2, 4, 4]
+    // i = 1, len = 3 i = 2 j = 3 第二层for循环没进去 i-- len -- i = 1 len = 2
+    // i = 2 for循环跳出 len = 2
+    // 如果是4,4 结尾这样 输出的数组是[1, 2 ,4 ,4]好像没变化 但是len变化了 len是独立的一个变量
+    console.log(removeElement([1,2,4,4], 4));
+    // i = 0,
+    // i = 1,
+    // i = 2 j = 3 nums[2] = num[3] num[3] = num[4] num[4] = num[5] -> [1, 2, 5, 4, 5, 5]
+    // i-- len-- i = 1 len = 5 i++ i = 2
+    // i = 2 
+    // i = 3 j = 4 num[3] = num[4] -> [1, 2, 5, 5, 5, 5]
+    console.log(removeElement2([1,2,4,5,4,5], 4)); // 输出的长度是4 打印的数组是[1,2,5,5,5,5,5,5]
+
+
+
+    // 2. 相向双指针法
+    // 时间复杂度O(n) = O(n) + O(n) = O(2n) = O(n)
+    // 空间复杂度O(1)
+    const removeElement2 = (nums, val) => {
+        let slowIndex = 0
+        for (let fastIndex = 0; fastIndex < nums.length; fastIndex++) {
+            // 这个地方 相等还是不相等 完全就是两个不同的概念 如果是不相等 最后移除的就是等于4的值，如果是相等，最后移除的就是不等于4的值
+            if (val !== nums[fastIndex]) {
+                nums[slowIndex++] = nums[fastIndex]
+            }
+        }
+        console.log(nums);
+        return slowIndex
+    }
+    // val = 4
+    // fastIndex = 0, nums[fastIndex] = 1, nums[slowIndex++] = nums[fastIndex] => nums[0] = nums[0] slowIndex = 1
+    // fastIndex = 1, nums[fastIndex] = 2, nums[slowIndex++] = nums[fastIndex] => nums[1] = nums[1] = 2, slowIndex = 2
+    // fastIndex = 2, nums[fastIndex] = 2, nums[slowIndex++] = nums[fastIndex] => nums[2] = nums[2] = 2, slowIndex = 3
+    // fastIndex = 3, nums[fastIndex] = 3, nums[slowIndex++] = nums[fastIndex] => nums[3] = nums[3] = 3, slowIndex = 4
+    // fastIndex = 4, nums[fastIndex] = 4,
+    // fastIndex = 5, nums[fastIndex] = 5, nums[slowIndex++] = nums[fastIndex] => nums[4] = nums[5] = 5, slowIndex = 5
+    // => slowIndex = 5
+
+    console.log(removeElement2([1,2,2,3,4,5], 4));
+   </script> 
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 时间复杂度O(2^N)为啥？
+    // 因为每一个n都会列表为两个递归
+    function Feibo(n) {
+      if (n === 0) {
+        return 0
+      }
+      if (n === 1) {
+        return 1
+      }
+      return Feibo(n - 1) + Feibo(n - 2)
+    }
+    // console.time('10')
+    // Feibo(10)
+    // console.timeEnd('10')
+
+    // console.time('20')
+    // Feibo(20)
+    // console.timeEnd('20')
+
+    // console.time('40')
+    // Feibo(40)
+    // console.timeEnd('40')
+
+    // 时间复杂度O(n)
+    let memo = {}
+    const mod = Math.pow(10, 9) + 7
+    function Feibo2(n) {
+      if (n === 0) {
+        return 0
+      }
+      if (n === 1) {
+        return 1
+      }
+      // 如果存在memo[n] 就直接返回这个值 不重复递归
+      if (memo[n]) {
+        return memo[n]
+      }
+      memo[n] = Feibo2(n - 1) + Feibo2(n - 2)
+      return (memo[n] % mod)
+    }
+    // console.time('10')
+    // Feibo2(10)
+    // console.timeEnd('10')
+
+    // console.time('20')
+    // Feibo2(20)
+    // console.timeEnd('20')
+
+    // console.time('40')
+    // Feibo2(40)
+    // console.timeEnd('40')
+
+    let res = Feibo2(2)
+    console.log(res);
+
+  </script>
+</body>
+
+</html>

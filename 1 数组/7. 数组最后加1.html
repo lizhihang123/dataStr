@@ -1,0 +1,46 @@
+<!--
+ * @Date: 2022-01-23 20:46:31
+ * @LastEditTime: 2022-01-25 11:56:38
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 法一：数组的数字直接找到 考虑逢九进一
+      var plusOne = function (digits) {
+        // for (let i = digits.length - 1; i >= 0; i--) {
+        //   digits[i] = digits[i] + 1 // 最后一个数+1
+        //   digits[i] = digits[i] % 10 // 和10 求余
+        //   if (digits[i] !== 0) {
+        //     // 如果余数不为0，就return 如果余数为0，下一位数要加1
+        //     return digits
+        //   }
+        // }
+        // // 除非这个数组全部都是9 否则不会走到下面这一步
+        // digits.unshift(1)
+        // return digits
+        // 用while写 时间复杂度更低一些
+        // let i = digits.length - 1
+        // while (i >= 0) {
+        //   digits[i] = digits[i] + 1 // 最后一个数+1
+        //   digits[i] = digits[i] % 10 // 和10 求余
+        //   if (digits[i] !== 0) {
+        //     // 如果余数不为0，就return 如果余数为0，下一位数要加1
+        //     return digits
+        //   }
+        //   i--
+        // }
+        // digits.unshift(1)
+        // return digits
+      }
+      console.log(plusOne([2, 8, 9]))
+      console.log(plusOne([9, 9, 9]))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 四数相加
+        // 时间复杂度 - O(n ^ 2)
+        // 空间复杂度 - O(n ^ 2)
+        // 使用map哈希法
+        // 关键是：num1 + num2 的合并先记录到map里面去
+        // 再去遍历 temp = num3 + num4 因为相加是0 就判断 0 - temp是否存在于 map里面
+        var fourSumCount = function(nums1, nums2, nums3, nums4) {
+            // 1. 声明一个 map 键是num1的元素 + num2元素的值；值是出现的次数；进行遍历
+            // 2. 遍历第三和第四个数组 求和，如果减去这个的和在map中出现过 就让count++
+            // 3. 这里报错 有空记得排查哈
+            let map = new Map()
+            let count = 0
+            for (const n1 of nums1) {
+                for (const n2 of nums2) {
+                    let sum1 = n1 + n2
+                    // 如果原来有次数 就拿那个次数 如果没有 就是0 开始
+                    let value
+                    if (map.get(sum1)) {
+                        value = map.get(sum1) + 1
+                    } else {
+                        value = 1
+                    }
+                    map.set(sum1, value)
+                }
+            }
+            for (const n3 of nums3) {
+                for (const n4 of nums4) {
+                    let sum2 = n3 + n4
+                    let temp = 0 - sum2
+                    if (map.has(temp)) {
+                        // !这里只能走四次 count++是有问题的
+                        // count++ 原来写的是这个
+                        // 如果map里面 0 => 2 有两个，对上temp的一个，就有两个组合，count就应该加上2
+                        count += (map.get(temp) || 0)
+                    }
+                }
+            }
+            return count
+        };
+        // 这个测试用例应该有6个通过 实际只有3个
+        let num1 = [-1,-1]
+        let num2 = [-1,1]
+        let num3 = [-1,1]
+        let num4 = [1,-1]
+        console.log(fourSumCount(num1, num2, num3, num4));
+    </script>
+</body>
+</html>

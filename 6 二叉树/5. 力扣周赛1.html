@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+
+        // 
+        var minimumOperations = function (nums) {
+            if (nums[0] === 0 && nums.length === 1) {
+                return 0
+            }
+            if (nums.every(item => item === 0)) {
+                return 0
+            }
+            // 1. 取出min值
+            // 2. 所有数 - min值
+            // 3. 迭代 如果min等于0 returncount
+            let count = 0
+            let flag = true
+            while (flag) {
+                let min
+                for (let i = 0; i < nums.length; i++) {
+                    if (nums[i] !== 0) {
+                        min = nums[i]
+                        break
+                    }
+                }
+                debugger
+                for (let i = 1; i < nums.length; i++) {
+                    debugger
+                    if (nums[i] !== 0 && nums[i] < min) {
+                        min = nums[i]
+                    }
+                }
+                for (let i = 0; i < nums.length; i++) {
+                    debugger
+                    if (nums[i] !== 0) {
+                        nums[i] -= min
+                    }
+                }
+                flag = !nums.every(item => item === 0)
+                count++
+            }
+
+            return count
+        };
+        console.log(minimumOperations([1, 5, 0, 3, 5]));
+    </script>
+</body>
+
+</html>

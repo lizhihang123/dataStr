@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 中序的递归
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        var inorderTraversal2 = function (root) {
+            const result = []
+            set(root, result)
+            return result
+        }
+        function set(tree, result) {
+            if (tree === null) return
+            // 左 先递归
+            tree.left && set(tree.left, result)
+            // 中
+            result.push(tree.value)
+            tree.right && set(tree.right, result)
+        }
+        console.log(inorderTraversal2(a));
+
+        // 2. 栈 循环的写法
+        class Stack {
+            // 定义一个数组
+            constructor() {
+                this.stack = [];
+            }
+            // 记得下面的方法都return了
+            // 1. 增加栈的数据
+            push(item) {
+                return this.stack.push(item);
+            }
+            // 2. 删除栈的数据 切记 取出数据，直接把最后一个数据踢出去，不用加参数
+            pop() {
+                return this.stack.pop();
+            }
+            // 3. 读取栈的数据
+            peek() {
+                // 只能查到最后一个 因此是getSize() 长度 - 1
+                return this.stack[getSize() - 1]
+            }
+            // 4. 获取栈的数据有几个
+            getSize() {
+                return this.stack.length;
+            }
+            // 5. 判断栈的长度是否为空
+            isEmpty() {
+                return this.stack.length === 0;
+            }
+        }
+        // https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
+
+        // 空间复杂度:O(n) 就是while循环的次数
+        // 时间复杂度:O(n)
+        var inorderTraversal = function (root) {
+            // 中转数组
+            const stack = new Stack()
+            // 最终的结果
+            const res = []
+            // current 游标节点
+            let current = root
+            // 当current为空 但是stack里面有值的时候 一般是current=current.right这里right节点为空时起作用滴
+            while (current || stack.getSize() > 0) {
+                debugger
+                while (current) {
+                    debugger
+                    stack.push(current)
+                    current = current.left
+                }
+                current = stack.pop()
+                res.push(current.value)
+                current = current.right
+            }
+            return res
+        };
+        console.log(inorderTraversal(a));
+
+
+    </script>
+</body>
+
+</html>

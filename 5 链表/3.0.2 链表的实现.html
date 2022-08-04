@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 定义 节点类
+        class LinkNode {
+            constructor(val, next) {
+                this.val = val
+                this.next = next
+            }
+        }
+        // 2. 定义 链表类
+        let MyLinkedList = function () {
+            this._head = null
+            this._tail = null
+            // !this._size 是0 而不是null
+            this._size = 0
+        }
+        // 3. 找到上一个节点
+        MyLinkedList.prototype.getNode = function(index) {
+            if (index < 0 || index >= this._size) {
+                return null
+            }
+            // !创建虚拟头结点 next -> 原先头结点
+            let cur = new LinkNode(0, this._head)
+            // !index-- >= 0 而不是 index-- > 0
+            // index === 0 也可以进入
+            // cur = cur.next => 这个函数是找到节点
+            // 假设 A -> B -> C getNode(2)
+            // 变成 0 -> A -> B -> C [2, 1, 0] => 可以进入三次while循环 找到节点C
+            while(index-- >= 0) {
+                cur = cur.next
+            }
+            return cur
+        }
+        // 4. 找到上一个节点的值
+        MyLinkedList.prototype.get = function (index) {
+            if (index < 0 || index >= this._size) {
+                return -1
+            }
+            // ! 如果报错null 90%是getNode里面的排除条件错了
+            // 找到目标节点的值.val
+            // getNode找到的是一个完整的节点 get找到的是一个val值
+            return this.getNode(index).val
+        }
+        // 5. 在头部增加一个节点
+        MyLinkedList.prototype.addAtHead = function (val) {
+            // A -> B -> C
+            // val -> A -> B -> C
+            const node = new LinkNode(val, this._head)
+            // val -> A
+            this._head = node
+            this._size++
+            if(!this._tail) {
+                // !this._tail是null 表明链表完全为空
+                this._tail = node
+            }
+        }
+        // 6. 在尾部增加一个节点
+        MyLinkedList.prototype.addAtTail = function (val) {
+            // A -> B -> C
+            const node = new LinkNode(val, null)
+            // A -> B -> C -> val -> null
+            this._size++
+            if(this._tail) {
+                // C -> val
+                this._tail.next = node // 注意！
+                // val改为this._tail
+                this._tail = node
+                return
+            }
+            this._tail = node
+            this._head = node
+        } 
+        // 7. 指定位置索引插入值
+        MyLinkedList.prototype.addAtIndex = function (index, val) {
+            // 报错node.next 是null值 90%的概率是前面的排除条件写错了
+            if (index > this._size) {
+                return 
+            }
+            // index <= 0 而不是 index < 0
+            // 一般是在index为0时，进入
+            if (index <= 0) {
+                this.addAtHead(val)
+                return 
+            }
+            // !this._size 而不是 this._size - 1
+            // A -> B -> C
+            // addAtIndex(3) 就是在结尾
+            if (index === this._size) {
+                this.addAtTail(val)
+                return
+            }
+            // 中间 就 找到上一个节点
+            const node = this.getNode(index - 1)
+            // A -> B -> C -> D
+            // addAtIndex(2)
+            // getNode(1)
+            // 找到B 且 B.next -> val 而 val.next -> C
+            node.next = new LinkNode(val, node.next)
+            this._size++
+        }
+        // 8. 删除指定链表的节点
+        MyLinkedList.prototype.deleteAtIndex  = function (index) {
+            // ! index >= this._size 而不是 index > this._size
+            if (index < 0 || index >= this._size) {
+                return 
+            }
+            if (index === 0) {
+                // A -> B -> C
+                // this._head 改为B
+                this._head = this._head.next
+                // 如果链表是 单单的 A
+                // A.next -> null
+                // this._head是null
+                // this._tail是null
+                if (index === this._size - 1) {
+                    this._tail = this._head
+                }
+                // !漏掉
+                this._size--
+                return 
+            }
+            // 不是开头
+            // A -> B -> C
+            // deleteAtIndex(2)
+            // getNode(1)
+            // node为B
+            // B.next -> B.next.next = null
+            // B.next -> null
+            const node = this.getNode(index - 1)
+            node.next = node.next.next
+            // !漏掉
+            // this._tail = B节点
+            if (index === this._size - 1) {
+                this._tail = node
+            }
+            this._size--
+        }
+        var obj = new MyLinkedList()
+        obj.addAtHead(1)
+        obj.addAtTail(3)
+        obj.addAtIndex(2, 1)
+        obj.get(1)
+        obj.deleteAtIndex(1)
+        obj.get(1)
+    </script>
+</body>
+</html>
