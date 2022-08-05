@@ -10,7 +10,7 @@
 
 <body>
     <script>
-        // 路径总和II 113
+        // 从路径总和II改到这里来的
 
         function Node(val) {
             this.val = val;
@@ -20,7 +20,7 @@
         var a = new Node(1)
         var b = new Node(null)
         var c = new Node(2)
-        var d = new Node(3)
+        var d = new Node(7)
         var e = new Node(4)
         var f = new Node(5)
         var g = new Node(5)
@@ -47,36 +47,30 @@
             if (root === null) {
                 return 0
             }
-            // stack 存储每个路径的值 注意是值
-            let stack = []
-            // res是结果数组
-            let res = []
-            let curNode = backTree(root, targetNum, stack, 0, res)
-            let leftNode = backTree(root.left, targetNum, stack, 0, res)
-            let rightNode = backTree(root.right, targetNum, stack, 0, res)
-            return curNode.length + leftNode.length + rightNode.length
+            // let res = [] // 不需要res数组了
+            const curNode = backTree(root, targetNum,)
+            const leftNode = pathSum(root.left, targetNum)
+            const rightNode = pathSum(root.right, targetNum)
+            return curNode + leftNode + rightNode
         }
 
 
-        const backTree = (node, targetNum, stack, sum, res) => {
+        const backTree = (node, targetNum) => {
+            // 如果节点为0 直接return 0
             if (!node) {
                 return 0
             }
-            // 值要入栈 栈在最后弹出
-            stack.push(node.val)
-            // 求和
-            sum += node.val
+            // res初始值为0
+            let res = 0
             // 叶子节点 node.left和node.right都为空 就是叶子节点 且 路径和要等于目标值
-            if (!node.left && !node.right && sum === targetNum) {
+            if (node.val === targetNum) {
                 // 必须是...stack 这样才不会拷贝地址而是值
-                res.push([...stack])
+                res++
             }
             // stack和sum都是修改后再递归
             // sum求和的值怎么处理呢？每一层递归占用一块空间 都会存储对应路径的sum值 而不是一直累加 通过debugger 你能够发现sum值会发生变化
-            node.left && backTree(node.left, targetNum, stack, sum, res)
-            node.right && backTree(node.right, targetNum, stack, sum, res)
-            // 走到叶子节点无法继续走下去 就会一层一层回退 换另外一棵树
-            stack.pop()
+            res += node.left && backTree(node.left, targetNum - node.val)
+            res += node.right && backTree(node.right, targetNum - node.val)
             return res
         }
         console.log(pathSum(a, 8));
