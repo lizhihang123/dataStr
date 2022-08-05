@@ -60,7 +60,7 @@
             debugger
             // 值要入栈 栈在最后弹出
             stack.push(node.val)
-            // 要求和
+            // 求和
             sum += node.val
             // 叶子节点 node.left和node.right都为空 就是叶子节点 且 路径和要等于目标值
             if (!node.left && !node.right && sum === targetNum) {
