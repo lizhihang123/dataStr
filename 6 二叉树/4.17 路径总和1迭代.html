@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(5)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        /* 
+        1 时间O(n) n为节点个数 
+          空间为O(n) 是栈数组空间的使用 最坏是每个节点都走了一遍
+        2 核心思路: 
+          1 需要一个栈 里面存储【节点，值且这个值是累加后的】
+          2 while循环遍历 栈弹出值 判断是不是叶子节点 且累加的值是否和目标值是一致的，如果一致 直接return true
+          3 如果不是叶子节点 要把左右节点的信息再次push到栈，同时pathSum要做好累加
+        */
+        var hasPathSum = function (root, targetSum) {
+            if (root === null) {
+                return false
+            }
+            let stack = []
+            stack.push([root, root.val])
+            while (stack.length > 0) {
+                // debugger
+                // 中
+                const [node, pathSum] = stack.pop()
+                if (node.left === null && node.right === null && pathSum === targetSum) {
+                    return true
+                }
+                // 右
+                node.right && stack.push([node.right, pathSum + node.right.val])
+                // 左
+                node.left && stack.push([node.left, pathSum + node.left.val])
+            }
+            return false
+        }
+        // console.log(hasPathSum(a, 8));
+
+
+
+        /* 
+        下面这种迭代和上面那种迭代的区别：
+        1. 单独把值的累加结果拎出来，放到一个数组里面去，下一次拿出来使用，说实话，我觉得对我来说，上面那张更好理解一些，直接一个stack里面存节点和每次的累加值
+        2. 但是注意，上面的写法容易写错，stack里面是一个个数组，每个数组包含节点信息和求和的信息        
+        */
+        var hasPathSum2 = function (root, targetSum) {
+            if (root === null) {
+                return false
+            }
+            let stack = [root]
+            let curStack = [0]
+            debugger
+            while (stack.length > 0) {
+                debugger
+                // 中
+                let node = stack.pop()
+                let curValue = curStack.pop()
+                curValue += node.val
+                if (node.left === null && node.right === null && curValue === targetSum) {
+                    return true
+                }
+                // 右
+                if (node.right) {
+                    stack.push(node.right)
+                    curStack.push(curValue)
+                }
+                // 左
+                if (node.left) {
+                    stack.push(node.left)
+                    curStack.push(curValue)
+                }
+            }
+            return false
+        }
+        console.log(hasPathSum2(a, 8));
+    </script>
+</body>
+
+</html>

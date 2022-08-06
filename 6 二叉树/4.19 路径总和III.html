@@ -37,18 +37,30 @@
         /* 
         1 时间O(n)
           空间O(n) n是栈递归的次数 不超过二叉树的节点
-        2 思路 采用前序遍历 每个节点要入栈并求和 如果求和等于目标值 就把栈里面的元素组成数组 放到结果数组 如果碰到叶子节点 需要一层层的回退
-        单层递归 值入栈+求和+判断是不是叶子节点
-        递归退出条件 如果为叶子节点 并且求和等于目标值 return true
-        递归参数：左节点和右节点 目标值 栈 求和值 结果数组
-                 node targetNum stack sum res
+        2 思路
         */
         const pathSum = (root, targetNum) => {
+            debugger
             if (root === null) {
+                /* 
+                注意点1
+                如果某个节点是空的，就返回0，而不是一个空数组 
+                不然下面return curNode + leftNode + rightNode 加下来就是NaN
+                */
                 return 0
             }
             // let res = [] // 不需要res数组了
-            const curNode = backTree(root, targetNum,)
+
+            /* 
+            注意点2：
+            第一次调用递归函数
+            第二次调用pathSum和第三次调用pathSum是什么意思呢？
+                意思是左节点开始计算下面的路径有没有相加等于目标值的，是重新递归
+                右节点也是一个道理。
+                因此这里递归用的是pathSum而不是backTree
+            
+            */
+            const curNode = backTree(root, targetNum)
             const leftNode = pathSum(root.left, targetNum)
             const rightNode = pathSum(root.right, targetNum)
             return curNode + leftNode + rightNode
@@ -56,19 +68,31 @@
 
 
         const backTree = (node, targetNum) => {
+            debugger
             // 如果节点为0 直接return 0
             if (!node) {
+                /* 
+                返回0
+                */
                 return 0
             }
             // res初始值为0
+
+            /* 
+            思考：
+                为什么是每次都让res = 0？
+                    因为父亲节点有左右两个子节点，每个子节点的res值单独累加到父亲节点身上，做一个求和。
+                    所以最后需要return res 需要对res进行处理
+            */
             let res = 0
-            // 叶子节点 node.left和node.right都为空 就是叶子节点 且 路径和要等于目标值
+            // 碰到目标值 res++
             if (node.val === targetNum) {
-                // 必须是...stack 这样才不会拷贝地址而是值
+                /* 
+                为什么这里是等于targetNum 而不是等于0呢？
+                    我认为这个是和路径总和II很大的区别所在
+                */
                 res++
             }
-            // stack和sum都是修改后再递归
-            // sum求和的值怎么处理呢？每一层递归占用一块空间 都会存储对应路径的sum值 而不是一直累加 通过debugger 你能够发现sum值会发生变化
             res += node.left && backTree(node.left, targetNum - node.val)
             res += node.right && backTree(node.right, targetNum - node.val)
             return res

@@ -51,10 +51,8 @@
             let stack = []
             // res是结果数组
             let res = []
-            let curNode = backTree(root, targetNum, stack, 0, res)
-            let leftNode = backTree(root.left, targetNum, stack, 0, res)
-            let rightNode = backTree(root.right, targetNum, stack, 0, res)
-            return curNode.length + leftNode.length + rightNode.length
+            backTree(root, targetNum, stack, 0, res)
+            return res
         }
 
 
@@ -68,7 +66,7 @@
             sum += node.val
             // 叶子节点 node.left和node.right都为空 就是叶子节点 且 路径和要等于目标值
             if (!node.left && !node.right && sum === targetNum) {
-                // 必须是...stack 这样才不会拷贝地址而是值
+                // 必须是[...stack] 这样才不会拷贝地址而是值
                 res.push([...stack])
             }
             // stack和sum都是修改后再递归
@@ -77,7 +75,6 @@
             node.right && backTree(node.right, targetNum, stack, sum, res)
             // 走到叶子节点无法继续走下去 就会一层一层回退 换另外一棵树
             stack.pop()
-            return res
         }
         console.log(pathSum(a, 8));
     </script>

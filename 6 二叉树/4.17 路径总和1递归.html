@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(null)
+        var c = new Node(2)
+        var d = new Node(3)
+        var e = new Node(4)
+        var f = new Node(5)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+
+
+        /* 
+        时间：O(n) 递归的次数 就是节点的个数
+        空间：O(n) 递归栈的占用空间 就是节点的个数
+        1 从根节点出发 需要一个递归函数 参数是传入的节点和计数器cnx，计数器从目标值开始倒着减去每个节点的值 cnt如果是0就找到了路径
+        2 递归函数要判断是否是叶子节点，如果是叶子结点+cnt为0，就找到了路径 return true
+          如果是叶子节点 但是cnt不为0，就return fasle
+          如果不是叶子节点 再继续递归
+        3 递归 先左后右或者先右后左都没有关系 因为中节点没有操作的逻辑
+          递归时，计数器 记得减去当前的节点的值 才走到下一层
+        */
+        var hasPathSum3 = (root, targetSum) => {
+            if (!root) {
+                return false
+            }
+            debugger
+            return traversal2(root, targetSum - root.val)
+        }
+        var traversal2 = (node, cnt) => {
+            debugger
+            // 叶子节点
+            if (!node.left && !node.right && cnt === 0) {
+                return true
+            }
+            // 叶子节点 不是目标的
+            if (!node.left && !node.right) {
+                return false
+            }
+
+            /* 
+            下面这段 里面隐藏着回溯 只是不是很明显 你可以发现 每次回到上一层的递归的时候，cnt又会恢复会去
+            */
+            // // 左
+            // if (node.left) {
+            //     if (traversal2(node.left, cnt - node.left.val)) {
+            //         return true
+            //     }
+            // }
+            // // 右
+            // if (node.right) {
+            //     if (traversal2(node.right, cnt - node.right.val)) {
+            //         return true
+            //     }
+            // }
+
+            /* 
+            下面这段 回溯比较明显 我觉得更加好理解一些
+            */
+            if (node.left) {
+                cnt -= node.left.val
+                if (traversal2(node.left, cnt)) {
+                    return true
+                }
+                cnt += node.left.val // 回溯的体现
+            }
+            // 右
+            if (node.right) {
+                cnt -= node.right.val
+                if (traversal2(node.right, cnt)) {
+                    return true
+                }
+                cnt += node.right.val // 回溯的体现
+            }
+
+            // 都不是目标路径 退出当前的循环
+            return false
+        }
+        console.log(hasPathSum3(a, 8));
+    </script>
+</body>
+
+</html>

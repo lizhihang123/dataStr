@@ -16,11 +16,11 @@
             this.right = null;
         }
         var a = new Node(1)
-        var b = new Node(2)
+        var b = new Node(null)
         var c = new Node(2)
         var d = new Node(3)
         var e = new Node(4)
-        var f = new Node(4)
+        var f = new Node(5)
         var g = new Node(5)
         var aa = new Node(1)
         var bb = new Node(2)
@@ -36,20 +36,21 @@
         // 结果
 
         let pathSum = (root, targetNum) => {
+            let result = []
             // 判空
             if (root === null) {
                 return result
             }
-
-            let result = []
             // 每条路径的值
             let path = []
-            path.push(root.val)
+            path.push(root.val) // 根节点放进路径
 
-
+            debugger
             let traversal = (cur, count) => {
+                debugger
                 // 叶子节点 且路径的值的和等于目标值 放入结果数组
-                if (!cur.left && !cur.right && count === 0) {
+                if (!cur.left && !cur.right && count === cur.val) {
+                    debugger
                     result.push([...path])
                     return
                 }
@@ -59,22 +60,17 @@
                 }
 
                 // 左节点
-
                 if (cur.left) {
                     path.push(cur.left.val)
-                    count -= cur.left.val
-                    traversal(cur.left, count)
-                    count += cur.left.val
-                    path.pop()
+                    traversal(cur.left, count - cur.left.val)
+                    path.pop() // 回溯操作
                 }
 
                 // 右节点
                 if (cur.right) {
                     path.push(cur.right.val)
-                    count -= cur.right.val
-                    traversal(cur.right, count)
-                    count += cur.right.val
-                    path.pop()
+                    traversal(cur.right, count - cur.right.val)
+                    path.pop() // 回溯操作
                 }
                 return
             }
@@ -83,8 +79,8 @@
         }
 
         console.log(pathSum(a, 7));
-        console.log(aa);
-        console.log(pathSum(aa, 5));
+        // console.log(aa);
+        // console.log(pathSum(aa, 5));
     </script>
 </body>
 

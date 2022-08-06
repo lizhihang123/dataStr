@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(1)
+        var b = new Node(2)
+        var c = new Node(2)
+        var d = new Node(4)
+        var e = new Node(4)
+        var f = new Node(4)
+        var g = new Node(5)
+        var aa = new Node(1)
+        var bb = new Node(2)
+        var cc = new Node(3)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        aa.left = bb
+        aa.right = cc
+        // 结果
+
+        let pathSum = (root, targetNum) => {
+            // 判空
+            if (root === null) {
+                return 0
+            }
+            let traversal = (cur, count) => {
+                // 叶子节点 且路径的值的和等于目标值 放入结果数组
+                if (!cur.left && !cur.right && count === 0) {
+                    result++
+                    return result
+                }
+                // 叶子结点 但是不等于目标值 啥也不干
+                if (!cur.left && !cur.right) {
+                    return
+                }
+
+                // 左节点
+                if (cur.left) {
+                    path.push(cur.left.val)
+                    traversal(cur.left, count - cur.left.val)
+                    path.pop() // 回溯操作
+                }
+
+                // 右节点
+                if (cur.right) {
+                    path.push(cur.right.val)
+                    traversal(cur.right, count - cur.right.val)
+                    path.pop() // 回溯操作
+                }
+                return
+            }
+            let curNode = traversal(root, targetNum - root.val)
+            let leftNode = pathSum(root.left, targetNum)
+            let rightNode = pathSum(root.right, targetNum)
+            return result + leftNode + rightNode
+        }
+
+        console.log(pathSum(a, 7));
+    </script>
+</body>
+
+</html>

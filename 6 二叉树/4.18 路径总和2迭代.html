@@ -40,7 +40,6 @@
             debugger
             while (queue.length) {
                 let len = queue.length
-
                 for (let i = 0; i < len; i++) {
                     // path也是数组
                     const [node, path] = queue.pop()
@@ -54,8 +53,12 @@
 
                     // 左
                     if (node.left) {
+                        /* 
+                        [...path, node.left.val] 这个写法 之前很容易出错 如果是path.push(node.left.val) 那么 path和newPath将会共享一块地址
+                        */
                         let newPath = [...path, node.left.val]
                         // 注意这个先后顺序 先把值放入newPath【上面】 再去进行下面的累加
+                        // 因为累加后的结果是求和的结果 而累加前的node.left是每个节点的值 newPath 要的累加的结果值
                         node.left.val += node.val
                         queue.push([node.left, newPath])
                     }
