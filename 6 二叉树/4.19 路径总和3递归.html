@@ -41,6 +41,7 @@
                 return 0
             }
             let traversal = (cur, count) => {
+                let result = 0
                 // 叶子节点 且路径的值的和等于目标值 放入结果数组
                 if (!cur.left && !cur.right && count === 0) {
                     result++
@@ -53,25 +54,20 @@
 
                 // 左节点
                 if (cur.left) {
-                    path.push(cur.left.val)
                     traversal(cur.left, count - cur.left.val)
-                    path.pop() // 回溯操作
                 }
 
                 // 右节点
                 if (cur.right) {
-                    path.push(cur.right.val)
                     traversal(cur.right, count - cur.right.val)
-                    path.pop() // 回溯操作
                 }
                 return
             }
             let curNode = traversal(root, targetNum - root.val)
             let leftNode = pathSum(root.left, targetNum)
             let rightNode = pathSum(root.right, targetNum)
-            return result + leftNode + rightNode
+            return curNode + leftNode + rightNode
         }
-
         console.log(pathSum(a, 7));
     </script>
 </body>

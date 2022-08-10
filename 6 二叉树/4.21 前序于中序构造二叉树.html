@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            1. 以 前序数组第一个元素 作为作为切割点
+            2. 先切割中序元素 -> 根据中序元素 反过来切割后序元素
+            3. 每次前序数组第一个元素 就是节点元素
+            4. 找到 前序数组第一个元素 在中序数组里面的位置
+            5. 切割中序数组 -> 中序左数组 + 中序右数组 注意 前序数组第一个元素
+            6. 切割前序数组 -> 切成前序左数组和前序右数组 -> 此时最后一个元素在切割前已经没了
+            7. 递归处理左区间和右区间。
+            root的左节点根据【中序左数组+后序左数组 切割而成】
+            root的右节点根据【中序右数组+后序右数组 切割而成】
+
+            8. 找到前序第一个元素在中序中的位置，作为分割的节点，是中序切割的关键
+            9. 而根据中序里面(delimiterIndex - inorderBegin)，作为前序里面的起始点+ (delimiterIndex - inorderBegin)，是关键，
+        */
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var buildTree = function (preorder, inorder) {
+            // debugger
+            if (inorder.length === 0 || preorder.length === 0) {
+                return false
+            }
+            return traversal(inorder, 0, inorder.length, preorder, 0, preorder.length)
+        };
+
+        var traversal = function (inorder, inorderBegin, inorederEnd, preorder, preorderBegin, preorderEnd) {
+            debugger
+            // debugger
+            // 判空
+            if (preorderBegin === preorderEnd) {
+                return null
+            }
+            // 求根节点的值
+            // 用的是前序的第一个值 注意是 中 左 右 所以取第一个值
+            let rootValue = preorder[preorderBegin]
+            let root = new TreeNode(rootValue)
+            // 如果后一个索引减去前一个索引的结果为1，表示就是叶子节点了，debugger能够看得很清楚 preorderEnd和preorderBegin来自上一层递归里面order的截取的数组，如果结果为1，表示[~]里面就一个值 没有叶子节点
+            if ((preorderEnd - preorderBegin) === 1) {
+                return root
+            }
+
+            // 找到分界点
+            let delimiterIndex
+            // debugger
+            for (delimiterIndex = 0; delimiterIndex < preorder.length; delimiterIndex++) {
+                if (inorder[delimiterIndex] === rootValue) break
+            }
+            // 切割中序数组
+            // 中序左区间 左闭右开[leftInorderBegin, leftInorderEnd]
+            let leftInorderBegin = inorderBegin
+            let leftInorderEnd = delimiterIndex
+            // 中序右区间，左闭右开[rightInorderBegin, rightInorderEnd]
+            let rightInorderBegin = delimiterIndex + 1
+            let rightInorderEnd = inorederEnd
+
+            // 切割前序数组
+            // 前序左区间 左闭右开[leftPreorderBegin, leftPreorderEnd]
+            let leftPreorderBegin = preorderBegin + 1
+            /* 
+                为什么这里是 preorderBegin + 1 + delimiterIndex - inorderBegin
+                preorderBegin + 1就是要排除第一个值
+                delimiterIndex - inorderBegin看作一个整体 就是中序的首部距离临界点的位置
+            */
+            let leftPreorderEnd = preorderBegin + 1 + delimiterIndex - inorderBegin
+            console.log(delimiterIndex - inorderBegin);
+
+            // 前序右序数组 左闭右开 [rightPreorderBegin, rightPreorderEnd]
+            // 起始位置加上中序区间的长度
+            let rightPreorderBegin = preorderBegin + 1 + delimiterIndex - inorderBegin
+            let rightPreorderEnd = preorderEnd
+
+
+            root.left = traversal(inorder, leftInorderBegin, leftInorderEnd, preorder, leftPreorderBegin, leftPreorderEnd)
+            root.right = traversal(inorder, rightInorderBegin, rightInorderEnd, preorder, rightPreorderBegin, rightPreorderEnd)
+            return root
+        }
+        // console.log(buildTree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7]));
+        console.log(buildTree([2, 3, 6, 8, 9, 5], [6, 3, 8, 9, 2, 5]));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        1. 以最后一个元素作为切割点
+        2. 先切割中序元素 -> 根据中序元素 反过来切割后序元素
+        3. 每次后序数组的最后一个元素 就是节点元素
+        4. 找到后序数组的最后一个元素 在中序数组里面的位置
+        5. 切割中序数组 -> 中序左数组 + 中序右数组 注意 节点元素给忽略掉
+        6. 切割后序数组 -> 切成后序左数组和后序右数组 -> 此时最后一个元素在切割前已经没了
+        7. 递归处理左区间和右区间。
+           root的左节点根据【中序左数组+后序左数组 切割而成】
+           root的右节点根据【中序右数组+后序右数组 切割而成】
+        */
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var buildTree = function (inorder, postorder) {
+            debugger
+            // 第一步：判断空
+            if (postorder.length === 0 || inorder.length === 0) {
+                return null
+            }
+            // 第二步：后续遍历数组的最后一个元素，就是要构造二叉树的中间节点
+            let rootValue = postorder.pop()
+            // 构造根节点
+            let root = new TreeNode(rootValue)
+
+            // 第三步：查找切割点
+            let delimiterIndex;
+            for (delimiterIndex = 0; delimiterIndex < inorder.length; delimiterIndex++) {
+                if (inorder[delimiterIndex] === rootValue) {
+                    break
+                }
+            }
+            // let delimiterIndex =  inorder.indexOf(rootValue) // 找到根节点对应的值
+
+            // 第四步：切割中序数组，得到中序左数组和中序右数组
+            let leftInorder = inorder.slice(0, delimiterIndex)
+            let rightInorder = inorder.slice(delimiterIndex + 1)
+            // 第五步：切割后序数组，得到后序左数组和后序右数组
+            let leftPostorder = postorder.slice(0, delimiterIndex)
+            let rightPostorder = postorder.slice(delimiterIndex)
+            // 第六步：处理递归
+            root.left = buildTree(leftInorder, leftPostorder)
+            root.right = buildTree(rightInorder, rightPostorder)
+            return root
+        };
+        // let inorder = [9, 3, 15, 20, 7], postorder = [9, 15, 7, 20, 3]
+        let inorder = [3, null, 4, 1, 5, 2, 6], postorder = [3, 4, null, 5, 6, 2, 1]
+        console.log(buildTree(inorder, postorder));
+    </script>
+</body>
+
+</html>

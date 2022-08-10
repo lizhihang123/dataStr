@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        1. 以最后一个元素作为切割点
+        2. 先切割中序元素 -> 根据中序元素 反过来切割后序元素
+        3. 每次后序数组的最后一个元素 就是节点元素
+        4. 找到后序数组的最后一个元素 在中序数组里面的位置
+        5. 切割中序数组 -> 中序左数组 + 中序右数组 注意 节点元素给忽略掉
+        6. 切割后序数组 -> 切成后序左数组和后序右数组 -> 此时最后一个元素在切割前已经没了
+        7. 递归处理左区间和右区间。
+           root的左节点根据【中序左数组+后序左数组 切割而成】
+           root的右节点根据【中序右数组+后序右数组 切割而成】
+        */
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+
+
+        var buildTree = function (inorder, postorder) {
+            if (!inorder || !p)
+                return traversal(inorder, 0, inorder.length, postorder, 0, postorder.length)
+        };
+        var traversal = function (inorder, inorderBegin, inorderEnd, postorder, postorderBegin, postorderEnd) {
+            // 1 
+            if (postorderBegin === postorderEnd) {
+                return null
+            }
+            // 2 
+            let rootValue = postorder[postorderEnd - 1] // 拿值 还要删值
+            let root = new TreeNode(rootValue)
+
+            // 3 
+            // 切分数组
+            if ((postorderEnd - postorderBegin) === 1) {
+                return root
+            }
+
+            // 4 
+            let delimiterIndex
+            for (delimiterIndex = 0; delimiterIndex < inorderEnd; delimiterIndex++) {
+                if (inorder[delimiterIndex] === rootValue) {
+                    break
+                }
+            }
+
+            // 5 切分
+            // 切分中序数组
+            // 左中序区间 [leftInorderBegin, leftInorderEnd]
+            let leftInorderBegin = inorderBegin
+            let leftInorderEnd = delimiterIndex
+
+            // 右中序区间 [rightInorderBegin, rightInorderEnd]
+            /* 
+            delimiterIndex + 1 表示忽略了临界点的位置
+            */
+            let rightInorderBegin = delimiterIndex + 1
+            let rightInorderEnd = inorderEnd
+
+            // 切分后序数组
+            // 左后序区间 [leftPostorderBegin, leftPostorderEnd]
+            let leftPostorderBegin = postorderBegin
+            // 终止位置加上中序区间的长度
+            let leftPostorderEnd = delimiterIndex + (delimiterIndex - inorderBegin)
+
+            // 右后序区间 [rightPostorderBegin, rightPostorderEnd]
+            // 起始位置加上中序区间的长度
+            let rightPostorderBegin = postorderBegin + (delimiterIndex - inorderBegin)
+            let rightPostorderEnd = postorderEnd - 1 // 舍弃最后一个元素 已经作为节点了
+
+
+            // 6 
+            root.left = traversal(inorder, leftInorderBegin, leftInorderEnd, postorder, leftPostorderBegin, leftPostorderEnd)
+            root.left = traversal(inorder, rightInorderBegin, rightInorderEnd, postorder, rightPostorderBegin, rightPostorderEnd)
+        }
+        // let inorder = [9, 3, 15, 20, 7], postorder = [9, 15, 7, 20, 3]
+        let inorder = [3, null, 4, 1, 5, 2, 6], postorder = [3, 4, null, 5, 6, 2, 1]
+        console.log(buildTree(inorder,));
+    </script>
+</body>
+
+</html>
