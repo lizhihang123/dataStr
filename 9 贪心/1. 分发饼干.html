@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        O(nlogn) sort数据量较少的时候用二分插入排序，数据量大的时候用归并排序
+        O(1)
+            1. 核心思路：
+               - 先对两个数组做好排序 正序
+               - 只用一个for循环遍历，饼干的数组的遍历用index遍历进行控制
+               - 先从饼干体积最大，孩子胃口最大开始，如果不能满足胃口最大的孩子，就往下走一位，如果不能，再去看看下一个孩子。【因为如果体积最大的饼干无法满足当前孩子，前面体积小的就更别提了】
+               - 注意临界值 i >= 0 与 index >= 0 都是要有等于号的 索引为0可以比较
+
+              // sort 数据量小于22的时候，使用的是插入排序 数据量大于22的时候，用的是快速排序
+        
+        */
+        var findContentChildren = function (g, s) {
+            let result = 0
+            let index = s.length - 1
+            g.sort(function (a, b) {
+                return a - b
+            })
+            s.sort(function (a, b) {
+                return a - b
+            })
+            for (let i = g.length - 1; i >= 0; i--) {
+                if (index >= 0 && s[index] >= g[i]) {
+                    result++
+                    index--
+                }
+            }
+            return result
+        };
+        // console.log(findContentChildren([1, 2, 3], [1, 1]));
+        console.log(findContentChildren([1, 2, 3], [3]));
+    </script>
+</body>
+
+</html>

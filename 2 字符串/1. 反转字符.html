@@ -1,72 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // 1. 交换变量 借助 temp暂时变量
-        // 时间复杂度非常好
-        // var reverseString = function(s) {
+        // 时间 O(logn) 因为只for循环 n的长度的一半
+        // 空间 O(1) 只用到一个暂存变量
+        // 有明显的二分循环 才是O(logn)
+        // 思路：1. 让字符串的首部和尾部开始交换 从两边往中间靠近 只需要遍历循环长度的一半 - 1次 相当于两个指针
+        // var reverseString = function (s) {
+        //     debugger
         //     var temp = 0;
         //     var n = s.length;
-        //     for(var i = 0; i < n / 2; i++) {
+        //     for (var i = 0; i < n / 2; i++) {
         //         temp = s[i]
-        //         s[i] = s[n - i -1]
+        //         s[i] = s[n - i - 1]
         //         s[n - i - 1] = temp
         //     }
         //     return s;
         // };
-        // var arr = ['1','2','3','4'];
+        // var arr = ['1', '2', '3', '4'];
         // console.log(reverseString(arr));
 
         // 2. 交换变量 使用while
-        // 原理和上面类似
-        // var reverseString = function(s) {
-        //     var n = s.length;
-        //     var temp = 0,left = 0,right = n - 1;
-        //     while(left < right) {
-        //         swap(s,left++, right--);
+        // 时间O(n)
+        // 空间O(1)
+        // 思路：也是双指针 两个指针 从开头往内 开始交换 left<right为界限
+        // var reverseString = function (s) {
+        //     let len = s.length
+        //     let left = 0
+        //     let right = len - left - 1
+        //     while (left <= right) {
+        //         swap(s, left, right)
+        //         left++
+        //         right = len - left - 1
         //     }
-
-        //     function swap(arr,le,ri) {
-        //         temp = arr[le];
-        //         arr[le] = arr[ri]
-        //         arr[ri] = temp
-        //     }
-
         //     return s
+        // }
+        // function swap(str, left, right,) {
+        //     let temp = str[left]
+        //     str[left] = str[right]
+        //     str[right] = temp
         // }
         // console.log(reverseString(['1','2','3','4']));
 
         // 3. 递归方式实现
-        // 递归 时间复杂度还不错
-        // 易错1：第一个函数记得return;第二第三个函数可以不用return
-        // 易错2：调用函数 传参 前置递增还是后置递增 如果是后置 选运算后自增++，什么时候函数运算完毕？ -> 递归点结束才完毕 就一直是 0 4 所以必须是前置自增
-        // var reverseString = function(s) {
+        // 递归 O(n)
+        // 空间 O(n) n是递归栈的深度
+        // var reverseString = function (s) {
         //     let n = s.length
-        //     if(s === null || n === 0) {
-        //         return s
-        //     }
-        //     // 初始值 调用
-        //     reverseStringHelper(s, 0, n-1)
-        //     return s 
-        //     //这里必须 return s 即便下面 reverseStringHelper跳出循环 return了
+        //     reverseStringHelper(s, 0, n - 1)
+        //     return s
         // }
         // function reverseStringHelper(s, left, right) {
         //     console.log(left);
         //     console.log(right);
-        //     if(left >= right) {
+        //     if (left >= right) {
         //         return s
         //     }
-        //     // 如果相等 就不必交换
         //     swap(s, left, right);
-        //     //  这是栈溢出
-        //     reverseStringHelper(s,++left,--right)
-        //     // reverseStringHelper(s,++left,--right)
+        //     // 必须++left --right而不是 left++ right-- 因为会造成死循环，left永远不会变化
+        //    left+1 和 right-1也是可以的
+        //     reverseStringHelper(s, ++left, --right)
         // }
         // function swap(s, i, j) {
         //     var temp = s[i];
@@ -74,61 +76,30 @@
         //     s[j] = temp;
         // }
 
-        // // console.log(reverseString(['a','b','c']));
+        // console.log(reverseString(['a','b','c']));
         // console.log(reverseString(["h","e","l","l","o"]));
 
-        // 4. 第二种递归
-        // 
-        var reverseString = function(s) {
-            let n = s.length
-            if(s === null || n === 0) {
-                return s
-            }
-            // 初始值 调用
-            reverseStringHelper(s, 0, n-1)
-            return s 
-            //这里必须 return s 即便下面 reverseStringHelper跳出循环 return了
-        }
-        function reverseStringHelper(s, left, right) {
-            console.log(left);
-            console.log(right);
-            if(left >= right) {
-                return s
-            }
-            reverseStringHelper(s, left + 1, right - 1)
-            swap(s, left, right);
-            console.log(s);
-            // 相当于到最深层 2 2 时递归了一次 不交换
-            // 1 3 时递归了一次 交换
-            // 0 4 时递归了一次 交换
-        }
-        function swap(s, i, j) {
-            var temp = s[i];
-            s[i] = s[j];
-            s[j] = temp;
-        }
-
-        // console.log(reverseString(['a','b','c']));
-        console.log(reverseString(["h","e","l","l","o"]));
 
         // 5.  ^运算
-        // var reverseString = function(s) {
-        //     var n = s.length;
-        //     var temp = 0,left = 0,right = n - 1;
-        //     while(left < right) {
-        //         swap(s,left++, right--);
-        //     }
-
-        //     function swap(arr,le,ri) {
-        //         arr[le] ^= arr[ri]
-        //         arr[ri] ^= arr[le]
-        //         arr[le] ^= arr[ri]
-        //     }
-
-        //     return s
-        // }
-        // console.log(reverseString(['1','2','3','4']));
+        var reverseString = function (s) {
+            debugger
+            var n = s.length;
+            var temp = 0, left = 0, right = n - 1;
+            while (left < right) {
+                s = swap(s, left++, right--);
+                function swap(str, le, ri) {
+                    debugger
+                    str[le] ^= str[ri]
+                    str[ri] ^= str[le]
+                    str[le] ^= str[ri]
+                    return str
+                }
+            }
+            return s
+        }
+        console.log(reverseString('abcd'));
 
     </script>
 </body>
+
 </html>

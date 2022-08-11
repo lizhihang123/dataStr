@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var findContentChildren = function (g, s) {
+            /* 
+            思路是，饼干最小的，先看看能不能满足 胃口最小的孩子，如果不能，换下一个饼干
+            */
+            let index = 0
+            g.sort(function (a, b) {
+                return a - b
+            })
+            s.sort(function (a, b) {
+                return a - b
+            })
+            /* 
+            注意边界情况
+            g[index] <= s[i] 而不是 g[index] < s[i]
+            */
+            for (let i = 0; i < s.length; i++) {
+                if (g[index] <= s[i] && index < g.length) {
+                    index++
+                }
+            }
+            return index
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        let b = new TreeNode(3)
+        let c = new TreeNode(2)
+        let d = new TreeNode(5)
+        a.left = b
+        a.right = c
+        b.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+
+        /* 
+        时间O(n) 递归的次数/递归的深度
+        空间O(n) 递归栈用的空间
+        思路：
+        0 假设利用root1作为合并的节点。
+        1 每次递归时，两棵树 同一个位置，如果不为空，值就要相加。
+        2 如果有一个为空，值就是不为空的 那个节点。如果都为空，就是null
+        */
+        var mergeTrees = function (root1, root2) {
+            // 1 如果有一方位空 就返回另外一个节点的值 另外一个节点如果也没空 正好了 返回null
+            if (root1 === null) return root2
+            if (root2 === null) return root1
+            // 2 单层递归的逻辑 同一个位置 值相加
+            root1.val += root2.val
+            // 3 左节点的值 等于两棵树的节点值的相加的和
+            root1.left = mergeTrees(root1.left, root2.left)
+            root1.right = mergeTrees(root1.right, root2.right)
+            return root1
+        };
+        console.log(mergeTrees(a, aa));
+    </script>
+</body>
+
+</html>
