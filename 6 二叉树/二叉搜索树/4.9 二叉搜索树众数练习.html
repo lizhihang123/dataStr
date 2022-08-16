@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        let b = new TreeNode(3)
+        let c = new TreeNode(2)
+        let d = new TreeNode(5)
+        a.left = b
+        a.right = c
+        b.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        let ff = new TreeNode(1)
+        let gg = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+        ee.right = gg
+        bb.left = ff
+
+        let aaa = new TreeNode(1)
+        let bbb = new TreeNode(2)
+        aaa.right = bbb
+        /* 
+        时间O(n) n是最多递归的次数
+        空间O(n) n是result节点的占用
+        思路：递归：修改中序遍历，pre节点和当前节点比较，相等，count就++，count还要和一个最大值进行比较，如果相等，当前值就放入数组，如果大于max，就清空result数组，当前值再放进去
+        */
+        // 1. 声明变量
+        let pre
+        let count
+        let maxCount
+        let result
+        var findMode = function (root) {
+            debugger
+            // 2. 变量初始值
+            pre = null
+            count = 0
+            maxCount = 0
+            result = []
+            // 3. 调用递归
+            searchBST(root)
+            return result
+        };
+        function searchBST(node) {
+            debugger
+            // 4. 递归退出条件
+            if (node === null) {
+                return
+            }
+
+            // 5. 左边递归
+            searchBST(node.left)
+
+            // 6. 判断pre和当前值是否相等 分三种情况 更新计数器
+            if (pre === null) {
+                count = 1 // 根节点
+            } else if (pre.val === node.val) {
+                // 相同的值
+                count++
+            } else {
+                // 一旦不相同 计数器就中断了
+                count = 1
+            }
+
+            // 7. 更新上一个节点
+            pre = node
+
+            // 8. 判断count计数器和最大值谁的更大
+            if (count === maxCount) {
+                // [1, 2]表示有1和2的个数是一样的
+                result.push(node.val)
+            }
+            // 如果count大于max，就清空result，把当前值放进去，maxCount要更新为count
+            if (count > maxCount) {
+                maxCount = count
+                result = []
+                result.push(node.val)
+            }
+
+            // 9. 右边递归
+            searchBST(node.right)
+            return
+        }
+        console.log(findMode(aaa));
+    </script>
+</body>
+
+</html>

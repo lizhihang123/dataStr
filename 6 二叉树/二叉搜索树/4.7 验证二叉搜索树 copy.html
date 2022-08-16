@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(5)
+        var b = new Node(4)
+        var c = new Node(6)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(3)
+        var g = new Node(7)
+        a.left = b
+        a.right = c
+        // b.left = d
+        // b.right = e
+        c.left = f
+        c.right = g
+        /* 
+        
+        下面写法错误：
+        1. 因为每次比较，只比较了当前节点和左右子树，但是，二叉搜索树，比如左子树的所有节点的值都要比当前的节点的值小，而不仅仅是“下一层的左节点”
+        */
+        var isValidBST = function (root) {
+            debugger
+            if (root === null) {
+                return true
+            }
+            // 1. 递归的退出条件 一旦不符合 左小右大 就退出
+            if ((root.left && root.left.val >= root.val) || (root.right && root.right.val <= root.val)) {
+                return false
+            }
+            // 2. 递归的返回值 true 或者false 即可
+            return isValidBST(root.left) && isValidBST(root.right)
+        };
+        console.log(isValidBST(a));
+    </script>
+</body>
+
+</html>

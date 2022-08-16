@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        // 242
+        // 1. 时间O(n) n是for循环遍历的次数
+        // 2. 空间O(n) n是字符串的长度
+        // 3. 利用字符串的codePointAt()方法 获取s字符对应的ASCLL码，然后减去'a'的，就存储到数组的对应的位置
+        // 4. 然后遍历字符t，再往回减，一旦碰到值小于0的就return false
+        var isAnagram = function (s, t) {
+            // 1. 长度
+            if (s.length !== t.length) {
+                return false
+            }
+            // 2. 创建新数组
+            let arr = new Array(26).fill(null)
+            // 3. 遍历s字符 给arr数组回减
+            for (let i = 0; i < s.length; i++) {
+                arr[s.codePointAt(i) - 'a'.codePointAt(0)]++
+            }
+            // 4. 遍历t字符 回减
+            for (let j = 0; j < t.length; j++) {
+                arr[t.codePointAt(j) - 'a'.codePointAt(0)]--
+                if (arr[s.codePointAt(j) - 'a'.codePointAt(0)] < 0) {
+                    return false
+                }
+            }
+            return true
+        }
+        console.log(isAnagram('abcaa', 'cbaaa'));
+    </script>
+</body>
+
+</html>

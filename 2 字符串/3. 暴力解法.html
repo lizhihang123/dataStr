@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 387
+        // 3. 暴力解法
+        // 双重for循环 利用中间遍历 count进行计数 如果count为0 就return i的位置
+        // 注意 添加 i !== j 这个判断条件
+        // 时间复杂度 超时 
+        var firstUniqChar = function (s) {
+            var n = s.length;
+            for (var i = 0; i < n; i++) {
+                // 注意 count声明的位置 外层for循环 每次重新开始
+                let count = 0;
+                for (var j = 0; j < n; j++) {
+                    if (i !== j && s[i] === s[j]) {
+                        count++
+                    }
+                }
+                if (count === 0) {
+                    return i
+                }
+            }
+            return -1
+        }
+        console.log(firstUniqChar('abcbcad')); // 6
+        console.log(firstUniqChar('abcdabc')); // 3
+        console.log(firstUniqChar('aabbc')); // 4
+        console.log(firstUniqChar('aabb')); // 4
+    </script>
+</body>
+
+</html>

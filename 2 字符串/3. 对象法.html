@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        var firstUniqChar = function (s) {
+            debugger
+            // 1. {}对象法 键是字符串 值是个数
+            // 2. 遍历字符串 判断对象里面是否有这个数值 如果有就数量加1 如果没有就创建
+            // 3. 遍历对象 如果碰到obj[key]为1的，就直接跳出for循环
+            // 4. 打印 s.charAt(key)
+            let obj = {}
+            for (let item of s) {
+                if (obj[item] === undefined) {
+                    obj[item] = false
+                } else {
+                    obj[item] = true
+                }
+            }
+            for (let i = 0; i < s.length; i++) {
+                if (obj[s[i]] === false) {
+                    return i
+                }
+            }
+            return -1
+        };
+        console.log(firstUniqChar("loveleetcode"));
+
+
+        // 2. map解法
+        // 和上面类似
+        // 关键 map.get()
+        // map.set()
+        // var map = new Map()
+        // 时间复杂度ok
+        // var firstUniqChar = function (s) {
+        //     var map = new Map()
+        //     var n = s.length
+        //     for (let item of s) {
+        //         if (map.get(item) === undefined) {
+        //             map.set(item, false)
+        //         } else {
+        //             map.set(item, true)
+        //         }
+        //     }
+        //     for (var i = 0; i < n; i++) {
+        //         if (map.get(s[i]) === false) {
+        //             return i
+        //         }
+        //     }
+        //     return -1
+        // }
+        // console.log(firstUniqChar('abcbcad')); // 6
+        // console.log(firstUniqChar('abcdabc')); // 3
+        // console.log(firstUniqChar('aabbc')); // 4
+        // console.log(firstUniqChar('aabb')); // 4
+    </script>
+</body>
+
+</html>

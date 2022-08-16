@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        // 1. 写法1 通过map结构
+        // 时间O(n) 遍历字符串的次数
+        // 空间O(n) map数据结构占用的数量
+        //  先把s字符串的每个字符有多少个存到map里面去，
+        //  再去遍历字符串t，查看map里面有没有，
+        //  如果没有 return false 如果有 就数量减1 
+        //  遍历map数据结构 如果有值不等于0的，就return false
+        var isAnagram = function (s, t) {
+            let map = new Map()
+            // 1. 遍历s字符串 键是字符 值是出现的次数
+            for (let item of s) {
+                if (map.has(item)) {
+                    map.set(item, map.get(item) + 1)
+                } else {
+                    map.set(item, 1)
+                }
+            }
+            // 2. 遍历t字符串 去map里面判断有没有这个字符 有的话就--
+            for (let key of t) {
+                if (map.has(key)) {
+                    map.set(key, map.get(key) - 1)
+                } else {
+                    // 如果 t里面有这个字符 但是s里面没有 就return false
+                    return false
+                }
+            }
+
+            // 3. 遍历map
+            // 如果s里面有这个字符 但是t里面没有 就return false
+            for (let item of map.values()) {
+                if (item !== 0) {
+                    return false
+                }
+            }
+
+            return true
+        };
+        console.log(isAnagram('abcaa', 'cbaaa'));
+    </script>
+</body>
+
+</html>

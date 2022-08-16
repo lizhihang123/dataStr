@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(6)
+        var b = new Node(4)
+        var c = new Node(8)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(7)
+        var g = new Node(2)
+        a.left = b
+        a.right = c
+        c.left = f
+        c.right = g
+
+        /* 
+        时间：O(n) n是节点的个数
+        空间：O(n) n是栈空间的利用
+        核心思路是：1. 采用递归，退出条件 节点为null就返回true 2. 每一层递归，当前节点的值要处于一个范围区间。如果是左节点，(-infinity, 当前节点的值)，如果是右节点，(root.val, infinity)
+        */
+        const helper = (root, lower, upper) => {
+            // 1. 【递归的退出条件】当前节点是null 就返回true 为什么？因为叶子节点的话，可以不用比
+            if (root === null) {
+                return true
+            }
+            // 2. 【单层递归逻辑】如果越界 就return false
+            if (root.val < lower || root.val > upper) {
+                return false
+            }
+            // 3. 【递归点 传入参数 左右节点】
+            //    左节点递归【lower是 -Infinity upper是“当前节点” 因为后面的值都要比当前的值小 所以设置upper】
+            //    右节点递归【upper是 Infinity lower是当前节点 因为后的值都要比当前值大 所以设置lower】
+            return helper(root.left, -Infinity, root.val) && helper(root.right, root.val, Infinity)
+        }
+        var isValidBST = function (root) {
+            return helper(root, -Infinity, Infinity)
+        };
+        console.log(isValidBST(a));
+    </script>
+</body>
+
+</html>

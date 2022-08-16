@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var reverse = function (x) {
+            // 1. 转化为字符串 进行反转字符串
+            //    数字是0 返回0
+            //    第一位是负数
+            //    最后一位是0
+            //    反转后的结果不能够越界
+            // O(n) n表示数字的位数
+            // O(1) 只用了ord和now两个变量进行存储
+            // 思路：1 先取绝对值 98把8拿出来 * 10 + 9，就是89 ； 然后再判断越界与否
+            // 我觉得难点就是如果有负数该怎么办【绝对值+原来的x判断】+最后一位是0怎么办【上面的算法就可以处理】
+
+            // 1. 如果是0 直接返回0
+            debugger
+            if (x === 0) return 0
+            // 2. 取绝对值 先反转
+            let ord = Math.abs(x)
+            let now = 0
+            while (ord > 0) {
+                // 3. now用于存储累加后的值 now * 10 位数要相加 ord % 10最小 一个位数
+                now = now * 10 + ord % 10
+                // 4. ord不断砍掉最后一个位数
+                ord = Math.floor(ord / 10)
+            }
+
+            // 5. 判断是正
+            if (x >= 0) {
+                // 判断是否越界 注意是返回后的结果是否越界 不能代码开头一上来就判断是否越界
+                return now <= Math.pow(2, 31) - 1 ? now : 0
+                // 6. 判断是负
+            } else if (x < 0) {
+                // 7. 判断是否越界
+                return - now > - Math.pow(2, 31) ? - now : 0
+            }
+        };
+        console.log(reverse(1534236460));
+
+        // 3. 位或运算
+        // http://c.biancheng.net/view/5469.html
+        // https://juejin.cn/post/6911877972756545543
+    </script>
+</body>
+
+</html>

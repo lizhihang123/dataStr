@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(6)
+        var b = new Node(4)
+        var c = new Node(8)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(7)
+        var g = new Node(2)
+        a.left = b
+        a.right = c
+        // b.left = d
+        // b.right = e
+        c.left = f
+        c.right = g
+        /* 
+
+        */
+        var isValidBST = function (root) {
+            // 1. 初始化变量
+            // 栈数组
+            const stack = []
+            // 游标 current
+            let current = root
+            // 记录前一个节点
+            let pre = null
+            while (stack.length > 0 || current !== null) {
+                // 1. 中序遍历的套路 不断遍历 把游标的节点加入栈
+                if (current) {
+                    stack.push(current)
+                    // 2. 不断遍历左子树 节点 加入栈
+                    current = current.left
+                } else {
+                    // 3. 如果碰到了叶子节点 就取出栈的元素 判断值是否小于上一个节点的值
+                    current = stack.pop()
+                    // 4. 如果小于 证明不是二叉搜索树 因为二叉搜索树 左 - 中 - 右 应该是递增的顺序
+                    if (pre !== null && current.val <= pre.val) {
+                        return false
+                    }
+                    // 5. 修改上一个节点的值 为当前的节点
+                    pre = current
+                    // 6. 中序遍历的套路 修改游标
+                    current = current.right
+                }
+            }
+        };
+        console.log(isValidBST(a));
+    </script>
+</body>
+
+</html>

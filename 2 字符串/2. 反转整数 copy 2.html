@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 2. 位或 运算 只要这个整数 小于32位 自己和自己位或的结果是自身 和0位或的结果还是自身
+        //    位或区别于 位异或的点在于 ：位异或 自身和自身的结果是0，而位或 自身和自身的位或结果是自身。
+        //    位或：1 | 1 = 1; 1| 0 = 1; 0 | 1 = 1; 0 | 0 = 0
+        //    位异或：1 ^ 1 = 0; 1 ^ 0 = 1; 0 ^ 1 = 1; 0 ^ 0 = 0;
+        var reverse = function (x) {
+            debugger
+            let result = 0;
+            while (x !== 0) {
+                // result还是做累加
+                result = result * 10 + x % 10;
+                // x 砍掉末尾的一个值 和 0进行位或 会强制转化为32位整数
+                x = (x / 10) | 0;
+            }
+            return (result | 0) === result ? result : 0;
+        };
+        console.log(reverse(2147483653));
+        console.log(reverse(2147483650)); // 反转后 小于32位 
+    </script>
+</body>
+
+</html>

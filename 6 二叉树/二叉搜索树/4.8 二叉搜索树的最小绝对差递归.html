@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        // let b = new TreeNode(4)
+        let c = new TreeNode(5)
+        let d = new TreeNode(3)
+        // a.left = b
+        a.right = c
+        c.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+        /* 
+        时间O(n) n是节点的个数
+        空间O(n) n是栈空间的大小
+        思路：中序遍历 每次遍历的时候 先左 再中[进行min判断和cur修改] 再右边的遍历
+        */
+
+        let pre = null
+        let preSum = Infinity
+        var getMinimumDifference = function (root) {
+            // 2. 递归数组 递归的参数
+            set(root)
+            // 3. 返回值
+            return preSum
+        };
+        // 递归函数的参数
+        function set(node) {
+            debugger
+            // 4. 退出条件 
+            if (node === null) return
+
+            // 单层递归的逻辑
+            // 5. 左
+            node.left && set(node.left)
+            // 6. 中 进行判断
+            // res.push(node.val)
+            if (pre !== null) {
+                // 比较哪个值更小 preSum是上一个更小的值
+                preSum = Math.min(Math.abs(node.val - pre.val), preSum)
+                // 修改pre节点 更新他
+            }
+            pre = node
+            // 7. 右
+            node.right && set(node.right)
+        }
+        console.log(getMinimumDifference(a));
+    </script>
+</body>
+
+</html>

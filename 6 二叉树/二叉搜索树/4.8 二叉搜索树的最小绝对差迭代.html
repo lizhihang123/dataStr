@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        let b = new TreeNode(3)
+        let c = new TreeNode(2)
+        let d = new TreeNode(5)
+        a.left = b
+        a.right = c
+        b.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+        /* 
+        时间O(n) n是节点的个数
+        空间O(n) n是栈空间的大小
+        思路：迭代：修改中序遍历，设置pre为当前节点和(当前节点.val - 上一个节点.val)判断是否比(上一个节点的.val - 上上一个节点.val)小
+        */
+        var getMinimumDifference = function (root) {
+            // 1 stack数组
+            const stack = []
+            // 1 游标
+            let current = root
+            // 2 上一个节点指针
+            let pre = 0
+            // 3 (上一个节点 - 上上一个节点的val值) 初始值给一个很大的值
+            let preSum = Infinity
+            while (stack.length > 0 || current !== null) {
+                debugger
+                if (current) {
+                    // 4. 遍历所有的左子节点
+                    stack.push(current)
+                    current = current.left
+                } else {
+                    current = stack.pop()
+                    // 5. 求出当前节点 - 上一个节点的 差值
+                    // 5. 修改当前节点的差值(比较此刻的差值 和 上一个差值 是谁的更小 就要谁)
+                    // 注意 pre的初始值为0 而0.val是undefined 而 current.val是1 而 1-undefined是NaN 小于Infinity 那么节点1的时候就不改变Infinity的值
+                    preSum = Math.abs(current.val - pre.val) < preSum ? Math.abs(current.val - pre.val) : preSum
+                    // 6. 修改当前节点的值
+                    pre = current
+                    // 7. 中序 遍历右节点
+                    current = current.right
+                }
+                // 7. 返回preSum
+            }
+            return preSum
+        };
+        console.log(getMinimumDifference(a));
+    </script>
+</body>
+
+</html>

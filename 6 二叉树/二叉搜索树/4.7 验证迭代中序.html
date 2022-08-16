@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(5)
+        var b = new Node(1)
+        var c = new Node(4)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(3)
+        var g = new Node(6)
+        a.left = b
+        a.right = c
+        // b.left = d
+        // b.right = e
+        c.left = f
+        c.right = g
+        /* 
+        98题
+
+        时间O(n) n是节点的个数
+        空间O(n) n是stack栈数据结构的使用
+        核心思路：
+        1. 中序遍历 左中右是递增的 只要每次遍历 都是升序 也就是当前节点的值小于上一个遍历的节点的值 就是二叉搜索树
+        2. 所以要在每次遍历时，记录上一个节点的值
+        */
+        var isValidBST = function (root) {
+            debugger
+            // 1. 初始化变量 pre记录前一个节点
+            let stack = []
+            let pre = null
+            let current = root
+
+            // 2. while循环 条件
+            while (stack.length > 0 || current !== null) {
+                debugger
+                if (current) {
+                    // 3. 左节点先入栈
+                    stack.push(current)
+                    current = current.left
+                } else {
+                    current = stack.pop()
+                    // 4. 比较大小 当前节点和前一个节点
+                    if (pre !== null && current.val <= pre.val) {
+                        return false
+                    }
+                    // 5. 记录上一个节点的值
+                    pre = current
+                    // 6. 当前节点的值进行修改 赋值
+                    current = current.right
+                }
+            }
+            return true
+        };
+        console.log(isValidBST(a));
+    </script>
+</body>
+
+</html>

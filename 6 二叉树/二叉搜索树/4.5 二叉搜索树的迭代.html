@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间O(N) 最坏情况是 要搜索的二叉树是一条链 搜索到最后一个节点
+        // 空间O(1) 没有额外的空间
+        // 1 迭代法：
+        //   不需要栈或者队列
+        //   直接遍历 和当前节点比较 如果大于当前节点的值 就去右子树找
+        //   while循环的退出条件就是 root是否是null
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+
+        var a = new Node("4");
+        var b = new Node("7");
+        var c = new Node("2");
+        var f = new Node("1");
+        var g = new Node("3");
+        var h = new Node("")
+
+        a.left = c;
+        a.right = b;
+        c.left = f;
+        c.right = g;
+        var searchBST = function (root, val) {
+            while (root !== null) {
+                if (root.val > val) {
+                    root = root.left
+                } else if (root.val < val) {
+                    root = root.right
+                } else if (root.val === val) {
+                    return root
+                }
+            }
+            return root
+        };
+        console.log(searchBST(a, '5'));
+    </script>
+</body>
+
+</html>

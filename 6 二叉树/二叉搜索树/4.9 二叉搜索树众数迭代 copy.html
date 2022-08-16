@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        let b = new TreeNode(3)
+        let c = new TreeNode(2)
+        let d = new TreeNode(5)
+        a.left = b
+        a.right = c
+        b.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        let ff = new TreeNode(1)
+        let gg = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+        ee.right = gg
+        bb.left = ff
+
+        let aaa = new TreeNode(1)
+        let bbb = new TreeNode(2)
+        aaa.right = bbb
+        /* 
+        时间O(n) n是最多递归的次数
+        空间O(n) n是result节点的占用
+        思路：迭代：中序遍历+pre指针和当前的值进行比较+count计数器和maxCount计数器的比较
+        */
+        // 1. 声明变量
+        var findMode = function (root) {
+            // 1. 初始化变量
+            let pre = null // 上一个节点
+            let stack = [] // 栈
+            let count = 0 // 计数器
+            let maxCount = 0 // 最大值
+            let current = root //游标
+            let result = [] // 结果数组
+            // 2. while循环 退出条件
+            while (current !== null || stack.length > 0) {
+                // 不断遍历左节点 放入栈
+                if (current) {
+                    stack.push(current)
+                    current = current.left
+                } else {
+                    // 4. 中间节点的 逻辑
+                    // 出栈
+                    current = stack.pop()
+                    // 判断pre和当前current的值大小
+                    if (pre === null) {
+                        count = 1 // 根节点
+                    } else if (pre.val === current.val) {
+                        count++ // 找到相同的数
+                    } else {
+                        count = 1 // 只有一个数
+                    }
+                    // 更新 pre
+                    pre = current
+                    // 判断count和maxCount的大小
+                    // 如果计数器和最大值一致，就往结果数组里面push当前值，表示有一个相同数量的值
+                    if (count === maxCount) {
+                        result.push(current.val)
+                    } else if (count > maxCount) {
+                        // 如果计数器比最大值要大，表示最大值要更新了，结果数组要更新，因为众数有更大的了
+                        result = []
+                        result.push(current.val)
+                        maxCount = count
+                    }
+                    // 5. 右节点进行赋值
+                    current = current.right
+                }
+            }
+            return result
+        }
+        console.log(findMode(aaa));
+    </script>
+</body>
+
+</html>

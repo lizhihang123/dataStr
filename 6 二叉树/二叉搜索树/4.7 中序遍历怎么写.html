@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(6)
+        var b = new Node(4)
+        var c = new Node(8)
+        // var d = new Node(3)
+        // var e = new Node(4)
+        var f = new Node(7)
+        var g = new Node(2)
+        a.left = b
+        a.right = c
+        // b.left = d
+        // b.right = e
+        c.left = f
+        c.right = g
+        /* 
+          中序遍历迭代的写法
+        */
+        var isValidBST = function (root) {
+            const res = []
+            const stack = []
+            let current = root
+            let pre = null
+            while (stack.length > 0 || current !== null) {
+                if (current) {
+                    stack.push(current)
+                    // current为什么这里要一直替换current.left 如果左子树存在 也要放到栈里面去 如果不存在就走下面的else循环
+                    current = current.left
+                } else {
+                    // 如果没有左子节点 就改变游标的值
+                    current = stack.pop()
+                    res.push(current.val)
+                    // 假如当前节点没有右节点 current就是null 走 else 再次从栈里面取出值来
+                    current = current.right
+                }
+            }
+            return res
+        };
+        console.log(isValidBST(a));
+    </script>
+</body>
+
+</html>

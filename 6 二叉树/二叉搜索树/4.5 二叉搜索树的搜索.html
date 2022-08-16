@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间O(N)
+        // 空间O(N)最坏情况需要O(N)的空间
+        // 1  二叉搜索树的搜索 查找到指定的节点 和 普通二叉树不同 不需要回溯
+        // 2. 二分查找的思想 右子树都比根节点大 左子树都比根节点小 => 左小右大；左右子树也都是二叉搜索树
+        function Node(value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+        }
+
+        var a = new Node("4");
+        var b = new Node("7");
+        var c = new Node("2");
+        var f = new Node("1");
+        var g = new Node("3");
+        var h = new Node("")
+
+        a.left = c;
+        a.right = b;
+        c.left = f;
+        c.right = g;
+        var searchBST = function (root, val) {
+            // 1. 退出条件 如果 root 是null值 也返回root 这个root就是null；
+            //    如果root.val就是要找的值 就要返回root节点
+            //    注意点 root === null要放在 root.val === val的前面 不然报错 因为如果root是null 就不存在root.val了
+            if (root === null || root.val === val) {
+                return root
+            }
+            // 2. 如果要找的val节点 比root.val节点小，就要往左节点去找root.left
+            if (root.value > val) {
+                // 注意 这里加return 为什么？如果我们只要搜索一条边，搜到了就退出，就要加return 如果不加，找到了root，还是会继续遍历 下面的return也是一样的
+                return searchBST(root.left, val)
+                // 3. 如果要找的val节点 比root.val节点要大，就要往右节点去找root.right
+            } else if (root.value < val) {
+                return searchBST(root.right, val)
+            }
+        };
+        console.log(searchBST(h, '5'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // // 1. 内置方法
+        var firstUniqChar = function (s) {
+            var n = s.length;
+            // for(var i = 0; i < n; i++) {
+            //     let count = 0;
+            //     for(var j = i + 1; j < n; j++) {
+            //         if(s[i] === s[j]) {
+            //             count++
+            //         }
+            //     }
+            //     if(count === 0) {
+            //         return s[i]
+            //     } 
+            // }
+            // 上面写有bug 如果是'abccabd' 索引为4的第5个字符是a 往后 也没有重复的 但是前面有重复的 a会被输出
+            for (var i = 0; i < n; i++) {
+                if (s.indexOf(s[i]) === s.lastIndexOf(s[i])) {
+                    return i
+                }
+
+            }
+            return -1
+        };
+        console.log(firstUniqChar('abcbcad')); // 6
+        console.log(firstUniqChar('abcdabc')); // 3
+        console.log(firstUniqChar('aabbc')); // 4
+        console.log(firstUniqChar('aabb')); // 4
+
+
+    </script>
+</body>
+
+</html>
