@@ -14,19 +14,23 @@
         // \W的意思是 [^A-Za-z0-9_]也就是 排除数字 字母 下划线
         // 那为什么还要加一个|_呢？
         var isPalindrome = function (s) {
-            s = s.replace(/[\W|_]/g, '').toLowerCase()
-            console.log(s);
+            // 1. 判空
             if (s === null) {
                 return false
             }
-            let left = 0
-            let right = s.length - 1
-            while (left < right) {
-                if (s[left] !== s[right]) {
+            // 2. 创建正则验证 去除特殊符号 + 大写
+            s = s.replace(/[\W|_]/g, '').toUpperCase()
+            // 3. 创建两个指针 while循环两个指针比较
+            let i = 0
+            let j = s.length - 1
+            while (i <= j) {
+                // 4. 如果不相等，就直接跳出
+                if (s[i] !== s[j]) {
                     return false
                 }
-                left++
-                right--
+                // 5. 指针变化
+                i++
+                j--
             }
             return true
         }

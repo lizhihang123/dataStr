@@ -27,28 +27,34 @@
             let left = 0
             let right = s.length - 1
             while (left < right) {
-                if (
-                    isLetterOrDigit(s[left]) && isLetterOrDigit(s[right]) &&
-                    s[left] !== s[right]) {
+                debugger
+                if (!isLetterOrDigit(s.charCodeAt(left))) {
+                    left++
+                } else if (!isLetterOrDigit(s.charCodeAt(right))) {
+                    right--
+                } else if (s[left] !== s[right]) {
                     return false
+                } else if (s[left] === s[right]) {
+                    left++
+                    right--
                 }
-                left++
-                right--
             }
             return true
         }
 
-        var isLetterOrDigit = (s) => {
+        function isLetterOrDigit(code) {
             debugger
-            if ((s.codePointAt('0') >= 48 && s.codePointAt('0') <= 57) ||
-                (s.codePointAt('0') >= 97 && s.codePointAt('0') <= 122)
-            ) {
+            if (
+                (code >= 97 && code <= 122) ||
+                (code >= 65 && code <= 90) ||
+                (code >= 48 && code <= 57)) {
                 return true
             } else {
                 return false
             }
         }
-        console.log(isPalindrome("A man, a plan, a canal: Panama"));
+        // console.log(isPalindrome("A man, a plan, a canal: Panama"));
+        console.log(isPalindrome("race a car"));
     </script>
 </body>
 

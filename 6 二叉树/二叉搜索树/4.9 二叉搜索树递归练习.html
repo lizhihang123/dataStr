@@ -40,6 +40,8 @@
         let aaa = new TreeNode(1)
         let bbb = new TreeNode(2)
         aaa.right = bbb
+
+        let ccc = new TreeNode(0)
         /* 
         时间O(n) n是最多递归的次数
         空间O(n) n是result节点的占用
@@ -50,6 +52,7 @@
         let count
         let maxCount
         let result
+        let obj = {}
         var findMode = function (root) {
             debugger
             // 2. 变量初始值
@@ -59,49 +62,38 @@
             result = []
             // 3. 调用递归
             searchBST(root)
+            debugger
+            let max = 0
+            for (let key in obj) {
+                if (obj[key] > max) {
+                    max = obj[key]
+                    result = []
+                    result.push(key)
+                } else if (obj[key] === max) {
+                    result.push(key)
+                }
+            }
             return result
         };
         function searchBST(node) {
-            debugger
             // 4. 递归退出条件
             if (node === null) {
                 return
             }
-
             // 5. 左边递归
             searchBST(node.left)
-
-            // 6. 判断pre和当前值是否相等 分三种情况 更新计数器
-            if (pre === null) {
-                count = 1 // 根节点
-            } else if (pre.val === node.val) {
-                // 相同的值
-                count++
+            // 6. 中间节点的处理
+            if (obj[node.val]) {
+                obj[node.val] += 1
             } else {
-                // 一旦不相同 计数器就中断了
-                count = 1
+                obj[node.val] = 1
             }
-
-            // 7. 更新上一个节点
-            pre = node
-
-            // 8. 判断count计数器和最大值谁的更大
-            if (count === maxCount) {
-                // [1, 2]表示有1和2的个数是一样的
-                result.push(node.val)
-            }
-            // 如果count大于max，就清空result，把当前值放进去，maxCount要更新为count
-            if (count > maxCount) {
-                maxCount = count
-                result = []
-                result.push(node.val)
-            }
-
             // 9. 右边递归
             searchBST(node.right)
             return
         }
-        console.log(findMode(aaa));
+        // console.log(findMode(aa));
+        console.log(findMode(ccc));
     </script>
 </body>
 
