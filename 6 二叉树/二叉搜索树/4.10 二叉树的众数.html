@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        let a = new TreeNode(1)
+        let b = new TreeNode(1)
+        let c = new TreeNode(2)
+        let d = new TreeNode(2)
+        a.left = b
+        a.right = c
+        b.left = d
+
+        let aa = new TreeNode(2)
+        let bb = new TreeNode(1)
+        let cc = new TreeNode(3)
+        let dd = new TreeNode(4)
+        let ee = new TreeNode(7)
+        let ff = new TreeNode(1)
+        let gg = new TreeNode(7)
+        aa.left = bb
+        aa.right = cc
+        bb.right = dd
+        cc.right = ee
+        ee.right = gg
+        bb.left = ff
+
+        let aaa = new TreeNode(1)
+        let bbb = new TreeNode(2)
+        aaa.right = bbb
+        /* 
+        如何给一个二叉树 求出里面的众数？
+        时间不确定，有点忘记了 冒泡排序的时间复杂度是多少，下回来补
+        空间O(n) n是result节点的占用
+        思路：迭代：中序遍历+pre指针和当前的值进行比较+count计数器和maxCount计数器的比较
+        */
+        // 1. 声明变量
+        var findMode = function (root) {
+            // 1. 初始化变量
+            let current = root //游标
+            let result = [] // 结果数组
+            let obj = {} // 记录每个节点的个数
+            // 2. while循环 退出条件
+            while (current !== null || stack.length > 0) {
+                // 不断遍历左节点 放入栈
+                if (current) {
+                    stack.push(current)
+                    current = current.left
+                } else {
+                    // 4. 中间节点的 逻辑
+                    // 出栈
+                    current = stack.pop()
+                    if (obj[current.val]) {
+                        obj[current.val] += 1
+                    } else {
+                        obj[current.val] = 1
+                    }
+                    current = current.right
+                }
+            }
+            // 把对象的值取出来 组成数组 然后进行排序
+            let arr = Object.values(obj).sort((a, b) => {
+                return b - a
+            })
+            // 取出数组里面的第一个值，一定是最大的，然后去遍历对象 和数组的第一个字符进行比较，如果相等的就push进入结果数组 {1: 2, 2: 2, 3: 2} 比如1 2 3 都各自有2个，就都会放进数组里去
+            for (let key in obj) {
+                if (obj[key] === arr[0]) {
+                    result.push(+ key)
+                }
+            }
+            return result
+        }
+        console.log(findMode(a));
+    </script>
+</body>
+
+</html>

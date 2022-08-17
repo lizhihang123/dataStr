@@ -62,20 +62,10 @@
             result = []
             // 3. 调用递归
             searchBST(root)
-            debugger
-            let max = 0
-            for (let key in obj) {
-                if (obj[key] > max) {
-                    max = obj[key]
-                    result = []
-                    result.push(key)
-                } else if (obj[key] === max) {
-                    result.push(key)
-                }
-            }
             return result
         };
         function searchBST(node) {
+            debugger
             // 4. 递归退出条件
             if (node === null) {
                 return
@@ -83,11 +73,29 @@
             // 5. 左边递归
             searchBST(node.left)
             // 6. 中间节点的处理
-            if (obj[node.val]) {
-                obj[node.val] += 1
+            // 如果上一个节点的值是null 就是根节点 count是1
+            if (pre === null) {
+                count = 1
+            } else if (pre.val === node.val) {
+                // 如果值相等 说明计数器要更新
+                count++
             } else {
-                obj[node.val] = 1
+                // 如果不相等，说明计数器中断了
+                count = 1
             }
+
+            // count要和最大值进行比较 如果count值 === maxCount 比如之前已经有两个3了，现在的count也是2，现在的node.val是5，表示现在也有2个5，那么5这个数也要放进去结果数组
+            // 如果现在的count是3，node.val是6，表示有3个6，超过了2个3，就要把之前的3给移出出去
+            if (count === maxCount) {
+                result.push(node.val)
+            } else if (count > maxCount) {
+                result = []
+                result.push(node.val)
+                // 更新现在的最大值
+                maxCount = count
+            }
+            // 更新上一个节点的值
+            pre = node
             // 9. 右边递归
             searchBST(node.right)
             return
