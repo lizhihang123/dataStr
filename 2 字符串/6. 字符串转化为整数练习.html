@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // 分析题目描述
-        // 1. 如果开头是空格，忽略这个空格
-        // 2. 如果检测完空格，紧接着检测是否是负数，如果检测到-号，最终要转化为负数 不然就是正数 默认
-        // 3. 如果下一个字符是非数字，就停止读，非数字不能放进去
+        // 0. 判断是否数字是否是0
+        // 1. 如果开头是空格，忽略开头所有空格 去除前导空格
+        // 2. 如果检测完空格，紧接着检测是否是负数，如果检测到-号，最终要转化为负数 不然就是正数 默认 前置符号判断
+        // 3. 如果下一个字符是非数字，就停止读，非数字不能放进去 非数字判断
         // 4. 如果一个数字都没有，就返回0
-        // 5. 如果正数 超过 2^31-1 就固定为2^31-1 Math.pow(2,31)
+        // 5. 如果正数 超过 2^31-1 就固定为2^31-1 Math.pow(2,31) 是否溢出判断
         // 6. 如果负数 小于 -2^31  就固定为 -2^31 - Math.pow(2,31)
+        // 7. 取出字符组合成整数
 
         // 用例：
         // "42" 42
@@ -23,31 +27,25 @@
         // "words and 987" 0 
         // "-91283472332" -2147483648
 
-        // 逻辑顺序
-        // 1、长度为0
-        // 2、去除前导空格
-        // 3、前置符号判断
-        // 4、非数字判断
-        // 5、是否溢出判断
-        // 6、取出字符变成整数的算法
-        var myAtoi = function(s) {
-            let n = s.length - 1
-            let res = 0
-            let index = 0
-            let sign = 1
+        var myAtoi = function (s) {
+            debugger
+            // 1. 前面的空格去掉
+            // 2. 检测符号 + - 使用sign变量
+            // 3. 中间出现了非数字 就停止
+            // 4. 如果没有数字就是0
+            // 5. 字符转化为数字 利用 - '0' 并且要进行截取回滚
+
+            let index = 0 // 控制循环
+            let sign = 1 // 控制正负
+            let n = s.length // 字符的长度
+            let sum = 0 // 用于求和
             let max = Math.pow(2, 31) - 1
             let min = - Math.pow(2, 31)
-            let temp = 0
             // 1. 
-            if (s.length === 0) {
-                return 0
-            }
-            // 2. 
-            while(s === ' ') {
+            while (s[index] === ' ') {
                 index++
             }
-
-            // 3. 
+            // 2. 
             if (s[index] === '+') {
                 sign = 1
                 index++
@@ -56,92 +54,34 @@
                 index++
             }
 
-            // 4. 
-            while (index <= n) {
-                // 中间碰到空格
+            // 3.
+            while (index < n) {
+                // 中间非数字
                 if (s[index] === ' ') {
-                    return res * sign
+                    break
                 }
-                // 非数字
-                if (!(s.charCodeAt(i) >= 48 && s.charCodeAt(i) <= 57)) {
-                    return false
+                // 非字符
+                if (!(s.charCodeAt(index) >= 48 && s.charCodeAt(index) <= 57)) {
+                    break
                 }
-                // 化为整数
-                let num = s[index] - '0'
+                let num = s[index] - 0
+                sum = sum * 10 + num
+                index++
             }
 
-
-            // 5. 是否溢出做判断
-            
-        }
-        function test(s) {
-            if (code >= 47 && code <= 56) {
-                return true
+            // 4. 溢出判断
+            let res = sign * sum
+            if (res > max) {
+                return max
+            } else if (res < min) {
+                return min
             }
-            return false
+            return res
         }
-        // 探索1： charCodeAt(i)
-        // 探索2： 如何判断溢出
-        console.log(myAtoi('-123456abccba'));
-        console.log(myAtoi("4193 with words"));
-        console.log(myAtoi("-91283472332"));
-        // JS的最大安全数：-2^ 53 ~ Math.pow(2, 53) - 1，即 9007199254740991
-        // 这个之间
-        // Math.pow(2, 53) === Math.pow(2, 53) + 1 true
-        // 对应同一个双精度数 因此 Math.pow(2, 53) 不是安全数
-
-        // 173.8125 转化位二进制 整数 除2取余逆序排列 小数部分 ×2取整 正序排列
-        // 0.1 转化为二进制会无限循环 丢失了精度  0.5 不会丢失
-        // 为什么会丢失精度？0.1 + 0.2 为什么 不等于0.3 而是0.30000000000000004
-        // 因为 转化为二进制会无限循环
-        // 为什么会无限循环？
-        // 来自公式
-
-        
-
-
-
-        // 解法2：
-        // const NUMBERS = "0123456789";
-        // const MIN = -Math.pow(2,31);
-        // const MAX = Math.pow(2,31) - 1;
-        // var myAtoi = function (str) {
-        //     str = str.trim();
-        //     let arr = str.split(""),
-        //         flag = "+",
-        //         result = "0";
-        //     try {
-        //         arr.forEach((item, index) => {
-        //             if (index === 0) {
-        //                 if (item === "-") {
-        //                     flag = "-";
-        //                 } else if (item === "+") {
-        //                     flag = "+";
-        //                 } else if (NUMBERS.indexOf(item) === -1) {
-        //                     throw new Error("break");
-        //                 } else {
-        //                     result = result + item;
-        //                 }
-        //             } else {
-        //                 if (NUMBERS.indexOf(item) === -1) {
-        //                     throw new Error("break");
-        //                 } else {
-        //                     result = result + item;
-        //                 }
-        //             }
-        //         })
-        //     } catch (error) {
-        //         console.log("error", error);
-        //     }
-        //     result = parseInt(flag + result);
-        //     if (result < MIN) {
-        //         result = MIN;
-        //     } else if (result > MAX) {
-        //         result = MAX;
-        //     }
-        //     return result;
-        // }
+        // console.log(myAtoi("   -42"));
+        console.log(myAtoi("words and 987"));
     </script>
-    
+
 </body>
+
 </html>

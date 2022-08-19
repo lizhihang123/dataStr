@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
-        // 1. 力扣：https://leetcode.cn/problems/insert-into-a-binary-search-tree/
-        // 现在的问题是，
-        // 输入root = null, val = 5 但是结果还是null 希望是root.val = 5
-        // 初始化一个二叉树节点
         function TreeNode(val) {
             this.val = val;
             this.left = null;
             this.right = null;
         }
         // a是根节点
-        var a = new TreeNode("4");
-        var b = new TreeNode("7");
-        var c = new TreeNode("2");
-        var f = new TreeNode("1");
-        var g = new TreeNode("3");
+        var a = new TreeNode(4);
+        var b = new TreeNode(2);
+        var c = new TreeNode(7);
+        var f = new TreeNode(1);
+        var g = new TreeNode(3);
         var h = new TreeNode(null);
-        var m = null
 
-        a.left = c;
-        a.right = b;
-        c.left = f;
-        c.right = g;
+        a.left = b;
+        a.right = c;
+        b.left = f;
+        b.right = g;
+
+        // 二叉树的特点: 二分查找的思想 右子树都比根节点大 左子树都比根节点小 
+        // 逻辑 如果插入的值大于当前节点，就去右子树继续递归，反之，左子树
+        //      如果递归式，当前节点是null 就直接创建一个新的节点
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(n) 递归调用栈的调用情况
+        // 声明一个值 记得上一个节点 parent
+
 
         // 二叉树的特点: 二分查找的思想 右子树都比根节点大 左子树都比根节点小 
         // 逻辑
@@ -46,47 +51,43 @@
         // 4.3 如果没有直接 root.left = val
         // 5. 如果插入的节点是初始化了的 直接 root.val = val
         // 6. 如果插入的节点是null 没有 new TreeNode()
-        var insertIntoBST = function(root, val) {
-            function setTree(root, val) {
-                if(!root) {
-                    // root = null
+        var insertIntoBST = function (root, val) {
+            // 递归函数
+            function set(root, val) {
+                // 1. 退出条件 如果插入的节点是空值
+                if (!root.val) {
                     root = new TreeNode(val)
-                    return root
-                } else if (!root.val) {
-                    // root.val = null时
+                } else if (root.val === null) {
+                    // 2. 如果插入的节点的值等于控制
                     root.val = val
                 } else if (root.val < val) {
-                    // 插入的值比当前节点大
-                    if(root.right) {
-                        setTree(root.right, val)
+                    // 3. 插入的节点值 小于当前节点的值
+                    if (root.right) {
+                        set(root.right, val)
                     } else {
                         root.right = new TreeNode(val)
                     }
                 } else if (root.val > val) {
-                    // 插入的值比当前节点小
+                    // 4. 插入的节点的值 大于当前节点的值
                     if (root.left) {
-                        setTree(root.left, val)
+                        set(root.left, val)
                     } else {
                         root.left = new TreeNode(val)
                     }
                 } else if (root.val === val) {
-                    // 插入的值和当前节点一致
+                    // 5. 插入的节点的值 大于当前节点的值
                     if (root.left) {
-                        setTree(root.left, val)
+                        set(root.left, val)
                     } else {
                         root.left = new TreeNode(val)
                     }
                 }
-                console.log(root);
+                return root
             }
-            setTree(root, val)
-            console.log(root);
-            return root
+            return set(root, val)
         };
-        console.log(insertIntoBST(m, '5')) // m是null的情况 执行完毕函数 root就变成了null 函数里面 root还是一个有值的节点
-        // console.log(insertIntoBST(h, '5')) // h是new TreeNode(null)的情况
-        // console.log(insertIntoBST(a, '8'))
-        // console.log(insertIntoBST(a, '2')) // 相等的情况
+        console.log(insertIntoBST(h, 5)) // 有节点 但是val是null的情况
     </script>
 </body>
+
 </html>

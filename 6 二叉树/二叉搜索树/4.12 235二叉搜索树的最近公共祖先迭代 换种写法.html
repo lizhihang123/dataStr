@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(2)
+        var b = new Node(1)
+        // var c = new Node(8)
+        // var d = new Node(0)
+        // var e = new Node(4)
+        // var f = new Node(7)
+        // var g = new Node(9)
+        // var j = new Node(3)
+        // var k = new Node(5)
+        a.left = b
+        // a.right = c
+        // b.left = d
+        // b.right = e
+        // c.left = f
+        // c.right = g
+        // e.left = j
+        // e.right = k
+
+        var h = new Node(2)
+        var i = new Node(1)
+
+
+        /* 
+        时间O(n)
+        空间O(1)
+        核心思路：
+        不需要栈， 直接while循环 + 判断是否都比p和q大，如果是，就去左子树；否则 右子树
+        都不是，就返回当前的节点
+        while如果退出 就返回null
+        
+        */
+        var lowestCommonAncestor = function (root, p, q) {
+            while (root) {
+                if (root.val > q.val && root.val > p.val) {
+                    root = root.left
+                } else if (root.val < q.val && root.val < p.val) {
+                    root = root.right
+                } else {
+                    return root
+                }
+            }
+            return null
+        }
+        console.log(lowestCommonAncestor(a, h, i));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(6)
+        var b = new Node(2)
+        var c = new Node(8)
+        var d = new Node(0)
+        var e = new Node(4)
+        var f = new Node(7)
+        var g = new Node(9)
+        var j = new Node(3)
+        var k = new Node(5)
+        a.left = b
+        a.right = c
+        b.left = d
+        b.right = e
+        c.left = f
+        c.right = g
+        e.left = j
+        e.right = k
+
+        var h = new Node(3)
+        var i = new Node(5)
+
+
+        /* 
+        时间O(n)
+        空间O(n)
+        核心思路：
+        采用递归的方法：
+        1. 判断当前节点值 是否都比p q 大，如果是，去遍历左子树
+           反过来 遍历右子树
+        2. 如果都不是 正好处在区间里面 [p, q]或者是[q, p]
+           就返回当前的节点
+        
+        */
+        var lowestCommonAncestor = function (root, p, q) {
+            debugger
+            // 1. 递归的退出条件
+            if (root === null) {
+                return root
+            }
+            // 2. 单层的循环
+            // 在[p, q]区间内 直接返回即可 [q, p]也是一样的
+            // 3. 递归点
+            if (root.val > p.val && root.val > q.val) {
+                let left = lowestCommonAncestor(root.left, p, q)
+                if (left !== null) {
+                    return left
+                }
+            }
+
+            if (root.val < q.val && root.val < p.val) {
+                let right = lowestCommonAncestor(root.right, p, q)
+                if (right !== null) {
+                    return right
+                }
+            }
+            // 4. 处于区间 返回当前节点
+            return root
+        }
+        console.log(lowestCommonAncestor(a, h, i));
+    </script>
+</body>
+
+</html>

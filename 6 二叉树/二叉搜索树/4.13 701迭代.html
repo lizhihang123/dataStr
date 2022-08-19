@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 初始化一个二叉树节点
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        var a = new TreeNode(4);
+        var b = new TreeNode(2);
+        var c = new TreeNode(7);
+        var f = new TreeNode(1);
+        var g = new TreeNode(3);
+        // var h = new TreeNode(null);
+
+        a.left = b;
+        a.right = c;
+        b.left = f;
+        b.right = g;
+
+        // 二叉树的特点: 二分查找的思想 右子树都比根节点大 左子树都比根节点小 
+        // 逻辑 迭代是，先用while循环，跟当前节点比较，找到目标的父节点的值，
+        //      再把子节点放到这个父节点的左边或者是右边
+
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(1) 没有使用数组啥的
+
+        // 声明一个值 记得上一个节点 parent
+        var insertIntoBST = function (root, val) {
+            debugger
+            // 1. 判断是否为空
+            if (root === null) {
+                let node = new TreeNode(val)
+                return node
+            }
+
+            // 2.参数赋值
+            let parent = root
+            let cur = root
+            // 3. 找到目标的父节点，找到了才能够把值 插到下面
+            while (cur !== null) {
+                parent = cur
+                if (cur.val > val) {
+                    cur = cur.left
+                } else {
+                    cur = cur.right
+                }
+            }
+            // 4. 判断节点给到父节点的哪个位置
+            let node = new TreeNode(val)
+            if (val < parent.val) {
+                parent.left = node
+            } else {
+                parent.right = node
+            }
+            return root
+        };
+        console.log(insertIntoBST(a, 5));
+
+
+    </script>
+</body>
+
+</html>

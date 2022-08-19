@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 初始化一个二叉树节点
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        var a = new TreeNode(4);
+        var b = new TreeNode(1);
+        var c = new TreeNode(8);
+        var f = new TreeNode(6);
+        var g = new TreeNode(10);
+        var h = new TreeNode(5);
+        var i = new TreeNode(9);
+        var j = new TreeNode(11);
+        var mm = new TreeNode(0);
+        a.left = b;
+        a.right = c;
+        // c.left = f;
+        c.right = g;
+        // f.left = h
+        g.left = i
+        g.right = j
+
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(n) 栈的使用情况
+
+        // 1. 情况一：没有找到删除的节点 遍历到空节点就直接返回
+        // 2. 情况二：左右孩子都为空(叶子节点), 直接删除节点，返回null为根节点
+        // 3. 情况三：左孩子为空(叶子节点),右孩子不为空，删除节点，右孩子补位，返回右孩子为根节点
+        // 4. 情况四：右孩子为空(叶子节点),左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点
+        // 5. 左右孩子都不为空，删除节点的左子树，放到删除节点右子树的左孩子的最下面
+
+        var deleteNode = function (root, key) {
+            debugger
+            // 1. 没有找到删除的节点 返回
+            if (root === null) return root
+            if (root.val === key) {
+                // 2. 找到节点左右孩子都为空 直接删除即可
+                /* 
+                注意，这里的判断条件 root.left === null 就直接进入，不需要
+                root.left === null && root.right !== null
+                如果左孩子为空 补上右孩子 如果右孩子也是空 直接删掉就好了 就是null呗
+                */
+                if (root.left === null) {
+                    // 3. 左孩子为空 右孩子不，直接补上
+                    return root = root.right
+                } else if (root.right == null) {
+                    // 4. 左孩子不为空 右孩子是空，直接补上
+                    return root = root.left
+                } else {
+                    // 5. 左右孩子都不为空 找到右孩子 最左边的最下面的那个节点 
+                    let cur = root.right
+                    /* 
+                    cur.left === null 就不能够进入while循环了
+                    */
+                    while (cur.left !== null) {
+                        cur = cur.left
+                    }
+
+                    /* 
+                    注意这个先后顺序 先把“待删除元素的”左子树 靠到右边左子树的最底下，然后在进行root = root.left
+                    */
+                    // 左子树整棵靠过去
+                    cur.left = root.left
+                    // 删除的节点进行赋值
+                    root = root.right
+                    return root
+                }
+            }
+            // 没找到 继续递归
+            if (root.val > key) root.left = deleteNode(root.left, key)
+            if (root.val < key) root.right = deleteNode(root.right, key)
+            return root
+        };
+        // console.log(deleteNode(a, 8));
+        console.log(deleteNode(mm, 0));
+
+
+    </script>
+</body>
+
+</html>

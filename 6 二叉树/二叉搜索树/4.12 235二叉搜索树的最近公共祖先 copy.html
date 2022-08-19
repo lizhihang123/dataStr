@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Node(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        var a = new Node(2)
+        var b = new Node(1)
+        // var c = new Node(8)
+        // var d = new Node(0)
+        // var e = new Node(4)
+        // var f = new Node(7)
+        // var g = new Node(9)
+        // var j = new Node(3)
+        // var k = new Node(5)
+        a.left = b
+        // a.right = c
+        // b.left = d
+        // b.right = e
+        // c.left = f
+        // c.right = g
+        // e.left = j
+        // e.right = k
+
+        var h = new Node(2)
+        var i = new Node(1)
+
+
+        /* 
+        核心思路：
+        采用入栈的方法 + 每次pop出一个节点，判断是否在[p, q] 或者是 [q, p]之间
+        1. 因为二叉搜索树是有序的,只要某个节点的值在[p, q]之间 该节点就是公共的祖先
+        2. 不管是哪种遍历方式都是可行的 因为没有中间节点的匹配逻辑
+        3. 题目注意点：p q 都在二叉搜索树中，没有重复的节点
+        
+        */
+        var lowestCommonAncestor = function (root, p, q) {
+            debugger
+            const res = []
+            const stack = [root]
+            while (stack.length > 0) {
+                let node = stack.pop()
+                if (node.val <= q.val && node.val >= p.val) {
+                    return node
+                } else if (node.val >= q.val && node.val <= p.val) {
+                    return node
+                }
+                node.left && stack.push(node.left)
+                node.right && stack.push(node.right)
+            }
+        }
+        console.log(lowestCommonAncestor(a, h, i));
+    </script>
+</body>
+
+</html>
