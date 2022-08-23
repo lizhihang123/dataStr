@@ -46,7 +46,40 @@
 
 
         var trimBST = function (root, low, high) {
+            debugger
+            // 1. 判空
+            if (!root) {
+                return null
+            }
+            // 2. 让root处于[low, high的区间内]
+            while (root !== null && (root.val < low || root.val > high)) {
+                if (root.val < low) {
+                    root = root.right
+                } else {
+                    root = root.left
+                }
+            }
+            let cur = root
+            // 3. 处理左孩子小于low的情况
+            while (cur !== null) {
+                while (cur.left && cur.left.val < low) {
+                    cur.left = cur.left.right
+                }
+                cur = cur.left
+            }
 
+            cur = root
+
+            // 4. 处理右孩子大于high的情况
+            while (cur !== null) {
+                while (cur.right && cur.right.val > high) {
+                    cur.right = cur.right.left
+                }
+                cur = cur.right
+            }
+            // 5. 返回
+            // root变化的原因是 cur和root指向的是同一块的内存空间
+            return root
         };
         // console.log(deleteNode(a, 8));
         console.log(trimBST(a, 1, 3));

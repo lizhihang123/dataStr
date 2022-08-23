@@ -42,10 +42,8 @@
 
 
         // 算法：
-        // 
-
-
         var trimBST = function (root, low, high) {
+            debugger
             // 1. 判断root是否为空 返回null
             if (root === null) {
                 return null
@@ -60,7 +58,7 @@
             }
             // 3. 判断当前节点的值是否大于 low 是 =》递归左节点 返回左节点
             // 为什么？
-            // 因为如果当前节点值大于high 但是左节点小于 当前节点的盒子
+            // 因为如果当前节点值大于high 但是左节点小于 当前节点的值
             // 所以是有可能在区间范围内的，因此我们去递归遍历左节点
             if (root.val > high) {
                 let left = trimBST(root.left, low, high)
