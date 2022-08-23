@@ -17,22 +17,17 @@
             this.right = null;
         }
         // a是根节点
-        var a = new TreeNode(4);
-        var b = new TreeNode(1);
-        var c = new TreeNode(8);
-        var f = new TreeNode(6);
-        var g = new TreeNode(10);
-        var h = new TreeNode(5);
-        var i = new TreeNode(9);
-        var j = new TreeNode(11);
-        var mm = new TreeNode(0);
+        var a = new TreeNode(5);
+        var b = new TreeNode(3);
+        var c = new TreeNode(6);
+        var f = new TreeNode(2);
+        var g = new TreeNode(4);
+        var h = new TreeNode(7);
         a.left = b;
         a.right = c;
-        // c.left = f;
-        c.right = g;
-        // f.left = h
-        g.left = i
-        g.right = j
+        b.left = f
+        b.right = g
+        c.right = h
 
         // 时间：O(n) 最差是 链式的二叉树
         // 空间: O(n) 栈的使用情况
@@ -41,7 +36,7 @@
         // 2. 情况二：左右孩子都为空(叶子节点), 直接删除节点，返回null为根节点
         // 3. 情况三：左孩子为空(叶子节点),右孩子不为空，删除节点，右孩子补位，返回右孩子为根节点
         // 4. 情况四：右孩子为空(叶子节点),左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点
-        // 5. 左右孩子都不为空，删除节点的左子树，放到删除节点右子树的左孩子的最下面
+        // 5. 左右孩子都不为空，把节点的左子树，放到删除节点右子树的左孩子的最下面
 
         var deleteNode = function (root, key) {
             debugger
@@ -85,8 +80,7 @@
             if (root.val < key) root.right = deleteNode(root.right, key)
             return root
         };
-        // console.log(deleteNode(a, 8));
-        console.log(deleteNode(mm, 0));
+        console.log(deleteNode(a, 3));
 
 
     </script>

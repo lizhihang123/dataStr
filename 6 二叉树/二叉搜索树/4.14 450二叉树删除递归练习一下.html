@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 初始化一个二叉树节点
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        var a = new TreeNode(4);
+        var b = new TreeNode(1);
+        var c = new TreeNode(7);
+        var f = new TreeNode(6);
+        var g = new TreeNode(10);
+        var h = new TreeNode(5);
+        var i = new TreeNode(8);
+        var j = new TreeNode(11);
+        var mm = new TreeNode(0);
+        a.left = b;
+        a.right = c;
+        c.left = f;
+        c.right = g;
+        f.left = h
+        g.left = i
+        g.right = j
+
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(n) 栈的使用情况
+
+        // 1. 情况一：没有找到删除的节点 遍历到空节点就直接返回
+        // 2. 情况二：左右孩子都为空(叶子节点), 直接删除节点，返回null为根节点
+        // 3. 情况三：左孩子为空(叶子节点),右孩子不为空，删除节点，右孩子补位，返回右孩子为根节点
+        // 4. 情况四：右孩子为空(叶子节点),左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点
+        // 5. 左右孩子都不为空，删除节点的左子树，放到删除节点右子树的左孩子的最下面
+
+
+
+
+        var deleteNode = function (root, key) {
+            debugger
+            // 1
+            if (root === null) return root
+            // 2
+            if (root.val === key) {
+                // 2.1
+                if (root.left === null) {
+                    return root.right
+                }
+                // 2.2
+                if (root.right === null) {
+                    return root.left
+                }
+                // 2.3
+                // 这里的代码是关键：左右都不为空，就去当前root的右节点
+                // 找到右节点的最左边的最下面的那棵树
+                // 然后把当前root的左子树放到右子树的最下面
+                let cur = root.right
+                // 这里的cur.left不为空时，才会进行cur.left遍历 不然cur就是null 下面的cur.left就会报错
+                while (cur.left !== null) {
+                    debugger
+                    cur = cur.left
+                }
+                cur.left = root.left
+                root = root.right
+                return root
+            }
+            // 3
+            if (root.val > key) {
+                // 如果root.left递归，是叶子结点递归，就会返回null，root是父节点，left就会被设置为null，就能够删除掉这个值【假设left是我们要找的那个值】
+                root.left = deleteNode(root.left, key)
+            }
+            // 4
+            if (root.val < key) {
+                root.right = deleteNode(root.right, key)
+            }
+            // 5
+            return root
+        };
+        // console.log(deleteNode(a, 8));
+        console.log(deleteNode(a, 4));
+
+
+    </script>
+</body>
+
+</html>

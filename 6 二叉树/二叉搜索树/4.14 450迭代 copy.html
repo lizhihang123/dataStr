@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 初始化一个二叉树节点
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        // var a = new TreeNode(5);
+        // var b = new TreeNode(3);
+        // var c = new TreeNode(6);
+        // var f = new TreeNode(2);
+        // var g = new TreeNode(4);
+        // var i = new TreeNode(7);
+        // a.left = b;
+        // a.right = c;
+        // b.left = f
+        // b.right = g
+        // c.right = i
+
+        var a = new TreeNode(50);
+        var b = new TreeNode(30);
+        var c = new TreeNode(70);
+        var f = new TreeNode(40);
+        var g = new TreeNode(60);
+        var i = new TreeNode(80);
+        a.left = b;
+        a.right = c;
+        b.right = f
+        c.left = g
+        c.right = i
+
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(1)
+
+        /* 
+            1. 
+        */
+
+        var deleteNode = function (root, key) {
+            debugger
+            // 1. 判空
+            if (root === null) {
+                return root
+            }
+            // 2. 声明游标和父节点
+            let cur = root
+            let pre = null
+            // 3. while循环 判断是否是目标节点 + 往哪一条路上走
+            while (cur) {
+                // 找到目标节点 直接break
+                if (cur.val === key) break
+                // 没找到 记录pre
+                pre = cur
+                // 判断走哪一条路
+                // 如果key更大 走右边
+                if (pre.val < key) {
+                    cur = cur.right
+                } else {
+                    // 如果key更小 走右边
+                    cur = cur.left
+                }
+            }
+            // 4. 这里卡住了
+            // 如果删除的是头结点 就直接调用deleteNodeOperation(头结点)
+            if (pre === null) {
+                return deleteNodeOperation(cur)
+            }
+            // 找到cur那个目标节点
+            // 如果说是父节点的左节点等于(要删除的值)，就让左节点进行操作 传入的值就是cur
+            if (pre.left && pre.left.val === key) {
+                pre.left = deleteNodeOperation(cur)
+            }
+            if (pre.right && pre.right.val === key) {
+                pre.right = deleteNodeOperation(cur)
+            }
+            return root
+        };
+
+
+
+        var deleteNodeOperation = function (target) {
+            debugger
+            // target就是我们要删除的那个元素
+            // 5. 判断target是否为空
+            if (target === null) {
+                return target
+            }
+            // 6. 判断target的右节点是否为空是的话 直接返回左节点就好了
+            if (target.right === null) {
+                return target.left
+            }
+            // 7. 先找到target(要删的那个元素)的右节点
+            let cur = target.right
+            //   声明cur游标
+            while (cur.left !== null) {
+                // 如果cur有左节点的话，就不断往下去赋值 找到最下面的那个节点
+                cur = cur.left
+            }
+            cur.left = target.left
+            // 8. 返回cur节点
+            // 这里出错 注意
+            return target.right
+        };
+        console.log(deleteNode(a, 50));
+
+
+    </script>
+</body>
+
+</html>

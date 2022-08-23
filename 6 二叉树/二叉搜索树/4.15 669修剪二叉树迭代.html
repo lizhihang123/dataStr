@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 初始化一个二叉树节点
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        var a = new TreeNode(3);
+        var b = new TreeNode(0);
+        var c = new TreeNode(2);
+        var f = new TreeNode(4);
+        var g = new TreeNode(1);
+        var h = new TreeNode(5);
+        a.left = b;
+        a.right = f;
+        b.right = c;
+        c.left = g;
+        f.left = h
+
+        // 时间：O(n) 最差是 链式的二叉树
+        // 空间: O(n) 栈的使用情况
+
+        // 读题：
+        // 1. 给定最小边界 low 和最大 high
+        // 2. 修剪节点的值 [low, high] => 所有的值 都在这个区间
+        // 3. 不改变保留在树中的元素的相对结构，只要没有被移除
+        // 4. 有唯一的答案
+        // 5. 返回根节点
+        // 6. 每个节点的值都是唯一的
+
+
+        // 算法：
+        // 
+
+
+        var trimBST = function (root, low, high) {
+
+        };
+        // console.log(deleteNode(a, 8));
+        console.log(trimBST(a, 1, 3));
+    </script>
+</body>
+
+</html>
