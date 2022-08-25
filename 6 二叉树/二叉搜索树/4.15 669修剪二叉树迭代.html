@@ -20,17 +20,19 @@
         var a = new TreeNode(3);
         var b = new TreeNode(0);
         var c = new TreeNode(2);
-        var f = new TreeNode(4);
+        var f = new TreeNode(6);
         var g = new TreeNode(1);
-        var h = new TreeNode(5);
+        var h = new TreeNode(9);
+        var i = new TreeNode(5);
         a.left = b;
         a.right = f;
         b.right = c;
         c.left = g;
-        f.left = h
+        f.right = h
+        f.left = i
 
-        // 时间：O(n) 最差是 链式的二叉树
-        // 空间: O(n) 栈的使用情况
+        // 时间：O(n) n最差为遍历每个节点一次
+        // 空间: O(n1)  
 
         // 读题：
         // 1. 给定最小边界 low 和最大 high
@@ -42,7 +44,10 @@
 
 
         // 算法：
-        // 
+        // 1. 先处理根节点 是否在范围内 不在 就要舍弃一边
+        // 2. 再处理左孩子小于low
+        // 3. 再处理右孩子大于high
+        // 4. 有点不太理解写法：cur = null 了 为什么 root还是有值的，不是指向同一个地址嘛？
 
 
         var trimBST = function (root, low, high) {
@@ -52,6 +57,7 @@
                 return null
             }
             // 2. 让root处于[low, high的区间内]
+            // 如果根节点不在区间里面，要进行剪枝
             while (root !== null && (root.val < low || root.val > high)) {
                 if (root.val < low) {
                     root = root.right
@@ -63,8 +69,10 @@
             // 3. 处理左孩子小于low的情况
             while (cur !== null) {
                 while (cur.left && cur.left.val < low) {
+                    // 如果当前节点的值 已经比low小了 就看看他的right 是否还是比low小 因为此时他的left是肯定比low小的
                     cur.left = cur.left.right
                 }
+                // 如果说当前节点没有比low小，就会依靠这个节点 递归遍历下去 直到把左边的所有子节点都遍历完毕
                 cur = cur.left
             }
 
@@ -72,17 +80,23 @@
 
             // 4. 处理右孩子大于high的情况
             while (cur !== null) {
+                debugger
                 while (cur.right && cur.right.val > high) {
+                    // 看看左节点是否有值 有的话要和high再次进行比较 如果没有 cur.left就是null，那么cur.right就让他直接等于null就好了
                     cur.right = cur.right.left
                 }
+                // 如果说当前节点没有比high大，就会依靠这个节点 递归遍历下去 直到把右边的所有子节点都遍历完毕
+                // 如果没有right 就会退出最外层的null
                 cur = cur.right
             }
             // 5. 返回
-            // root变化的原因是 cur和root指向的是同一块的内存空间
+            // root变化的原因是 cur和root指向的是同一块的内存空间 所以上面对root的内部修改都会影响到root的值
+            // 但是cur = null 相当于 cur和那块内存空间断开了
+            // 但是cur还是指向的那块内存空间
             return root
         };
         // console.log(deleteNode(a, 8));
-        console.log(trimBST(a, 1, 3));
+        console.log(trimBST(a, 0, 3));
     </script>
 </body>
 

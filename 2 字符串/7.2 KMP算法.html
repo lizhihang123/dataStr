@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
 
         // 纯净无注释代码 下面有 “注释版代码”
-        var strStr = function (haystack, needle) {
-            if (needle.length === 0)
-                return 0;
+        // var strStr = function (haystack, needle) {
+        //     if (needle.length === 0)
+        //         return 0;
 
-            const getNext = (needle) => {
-                let next = [];
-                let j = 0;
-                next.push(j);
+        //     const getNext = (needle) => {
+        //         let next = [];
+        //         let j = 0;
+        //         next.push(j);
 
-                for (let i = 1; i < needle.length; ++i) {
-                    while (j > 0 && needle[i] !== needle[j])
-                        j = next[j - 1];
-                    if (needle[i] === needle[j])
-                        j++;
-                    next.push(j);
-                }
+        //         for (let i = 1; i < needle.length; ++i) {
+        //             while (j > 0 && needle[i] !== needle[j])
+        //                 j = next[j - 1];
+        //             if (needle[i] === needle[j])
+        //                 j++;
+        //             next.push(j);
+        //         }
 
-                return next;
-            }
+        //         return next;
+        //     }
 
-            let next = getNext(needle);
-            let j = 0;
-            for (let i = 0; i < haystack.length; ++i) {
-                while (j > 0 && haystack[i] !== needle[j])
-                    j = next[j - 1];
-                if (haystack[i] === needle[j])
-                    j++;
-                if (j === needle.length)
-                    return (i - needle.length + 1);
-            }
+        //     let next = getNext(needle);
+        //     let j = 0;
+        //     for (let i = 0; i < haystack.length; ++i) {
+        //         while (j > 0 && haystack[i] !== needle[j])
+        //             j = next[j - 1];
+        //         if (haystack[i] === needle[j])
+        //             j++;
+        //         if (j === needle.length)
+        //             return (i - needle.length + 1);
+        //     }
 
-            return -1;
-        };
+        //     return -1;
+        // };
 
         // 注释版本代码
         var strStr = function (haystack, needle) {
+            debugger
             if (needle.length === 0)
                 return 0;
             const getNext = (needle) => {
@@ -65,18 +68,22 @@
                 // aaba =》next[0,1,0,1]
                 // aabaa =》next[0,1,0,1,2]
                 // aabaaa =》next[0,1,0,1,2,1]
-                for (let i = 1; i < needle.length; ++i) {
-                    while (j > 0 && needle[i] !== needle[j])
+                for (let i = 1; i < needle.length; i++) {
+                    while (j > 0 && needle[i] !== needle[j]) {
                         // 0. 这里用while循环是关键 因为j的回退不是只回退一次 而是很多次
                         // 1. j从0开始移动，i从1开始移动 
                         // 2. 一旦指针指的值不同 ，j要回退，回退到哪里是关键
                         // 3. next[j - 1]比如是0，j就回退到索引0的位置
                         // 4. next[j - 1]比如是1，j就回退到索引1的位置 因此如下赋值
+                        // 5. 请注意，只要j不是=0，就会一直while循环，直到j = 0
                         j = next[j - 1];
-                    if (needle[i] === needle[j])
+                    }
+                    if (needle[i] === needle[j]) {
                         // 5. 如果相同
                         // j++ i++ i是for循环自增 
                         j++;
+                    }
+                    // 请注意，j有时候是0，而i是一直递增的
                     next.push(j);
                     // 6. next.push(j) 必须放到末尾是关键 不管是冲突还是相等， 都应该往next数组里面push值
                 }
@@ -87,32 +94,52 @@
             let next = getNext(needle);
             // 上面的next数组生成好了 比如是[0, 1, 0, 1, 2, 0]
             let j = 0;
+            debugger
             for (let i = 0; i < haystack.length; ++i) {
+                debugger
                 // 这里是i和j意义不同
                 // i遍历主串
                 // j遍历模式串
-                while (j > 0 && haystack[i] !== needle[j])
+                while (j > 0 && haystack[i] !== needle[j]) {
                     // 这里看似代码类似，但实际是匹配主串和模式串
                     // 如果不等就让j回退到一个位置，前一个j-1对应next数组的值，比如next[j - 1] 是 3 就回退到索引3
                     // 如果下面相等 就++
+
+                    // 比如这个测试用例里面
+                    // [0, 1, 0, 1, 2, 0]
+                    // j此时为5的时候冲突，就要看 next[j - 1] 就是2
+                    // 为什么是看2呢？
+                    // aabaabaaf
+                    // aabaaf
+                    // 我们发现f的前一位的子串里面，最长相等前缀后缀是2，所以我们从索引为2的数开始 也就是第一个aa“这个前缀”的后面的一个值开始
                     j = next[j - 1];
-                if (haystack[i] === needle[j])
+                }
+
+                if (haystack[i] === needle[j]) {
                     j++;
+                }
                 // 如果j到头了，就返回
-                if (j === needle.length)
+                if (j === needle.length) {
+                    // aabaabaaf
+                    // aabaaf
+                    // 此时 i是8
+                    // 此时 j是6
+                    // 8  -  6 + 就是haystack的索引为3的数开始的
                     return (i - needle.length + 1);
-                    // 这里return i - needle.length + 1是我没想到的
-                    // 但是仔细一对比 画个图就可以看出来了
+                }
+                // 这里return i - needle.length + 1是我没想到的
+                // 但是仔细一对比 画个图就可以看出来了
             }
 
             return -1;
         };
         console.log(strStr('aabaabaaf', 'aabaaf')); // 3
-        console.log(strStr('aabaabaafdaabaafg', 'aabaafg')); // 10
+        // console.log(strStr('aabaabaafdaabaafg', 'aabaafg')); // 10
 
 
 
 
     </script>
 </body>
+
 </html>

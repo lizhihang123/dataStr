@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        
+        1. 时间：是O(n) 加上 父亲和儿子的匹配 就是O(m + n)
+        记得看csdn的文章
+        2. i是从1开始 j是从0开始的，注意，j的初始值就是0，next数组的初始值就是0
+        */
+        const getNext = function (needle) {
+            debugger
+            // 1. 声明一个next数组 第一个值是 0
+            let next = []
+            next.push(0)
+            // 2. 声明一个 j指针 从1开始 因为next数组里面已经有1了
+            let j = 0
+            // 2. 进行一个 while循环
+            // 如果说 needle里面的i和j指针的值不相同 就要进行回退
+            // j = next[j - 1]
+            for (let i = 1; i < needle.length; i++) {
+                while (j > 0 && needle[i] !== needle[j]) {
+                    j = next[j - 1]
+                }
+                // 3. 如果值相等，就要进行j++
+                if (needle[i] === needle[j]) {
+                    j++
+                }
+                // 4. 不管相等还是不相等 都要往next数组里面push值进去
+                next.push(j)
+            }
+            return next
+        }
+        console.log(getNext('aabaac'));
+        const subStr = function (haystack, needle) {
+
+        }
+    </script>
+</body>
+
+</html>

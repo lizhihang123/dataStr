@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+        // a是根节点
+        var a = new TreeNode(3);
+        var b = new TreeNode(0);
+        var c = new TreeNode(2);
+        var f = new TreeNode(4);
+        var g = new TreeNode(1);
+        var h = new TreeNode(5);
+        a.left = b;
+        a.right = f;
+        b.right = c;
+        c.left = g;
+        f.left = h
+
+        /* 
+        时间O(N)
+        空间O(n)
+        思路：
+        1、 找到分割点，把分割点作为一个树的根节点
+        2、 然后去递归处理 这个根节点的左右子树
+        2.  很巧妙的是 -》排序好的数组 后面一个值 一定会比前面一个大 所以一定是右节点
+            每次递归到后面 -> left > right 所以只有 root.right 会能够递归成功
+        3、 注意区间 mid - 1 和 mid + 1 就是不能取到mid
+
+        
+        */
+        var traversal = function (nums, left, right) {
+            debugger
+            // 1. 递归的退出条件
+            if (left > right) {
+                return null
+            }
+            // 2. 单层递归干什么
+            // 求切割点
+            // 记得向下取整
+            // let mid = Math.floor((left + right) / 2) 这样也可以哒
+            let mid = Math.floor((right - left) / 2) + left
+            // 根据切割点创建一个 节点
+            let root = new TreeNode(nums[mid])
+
+
+            // 3. 递归点
+            root.left = traversal(nums, left, mid - 1)
+            root.right = traversal(nums, mid + 1, right)
+            return root
+        };
+
+        var sortedArrayToBST = function (nums) {
+            let root = traversal(nums, 0, nums.length - 1)
+            return root
+        };
+        console.log(sortedArrayToBST([-10, -3, 0, 5, 9]));
+    </script>
+</body>
+
+</html>
