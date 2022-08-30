@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 双边循环法
+        // 1 选定一个基准值 left指针从基准值开始[也可以是任意的]
+        //   right从最右边开始
+        //   right指针对应的值如果小于基准值，就停止 换 left移动 left指针对应的值如果大于基准值 就停止，交换left和right
+        //   直到left和right指针相遇 要交换基准值和left指针的值
+        //   还要修改startIndex
+        //   这里的startIndex到底指向什么值
+
+        /**
+         * @name: 
+         * @param {*} nums
+         * @param {*} startIndex 起始下标
+         * @param {*} endIndex 终止下标
+         * @return {*}
+         */
+
+
+        function sortArray(nums) {
+            // debugger
+            let startIndex = 0
+            let endIndex = nums.length - 1
+            quickSort(nums, startIndex, endIndex)
+            return nums
+        }
+
+        function quickSort(nums, startIndex, endIndex) {
+            // debugger
+            if (startIndex > endIndex) {
+                return
+            }
+            let privotIndex = partition(nums, startIndex, endIndex)
+            quickSort(nums, startIndex, privotIndex - 1)
+            quickSort(nums, privotIndex + 1, endIndex)
+        }
+
+
+        function partition(nums, startIndex, endIndex) {
+            // debugger
+            let left = startIndex
+            let right = endIndex
+            let privt = nums[startIndex]
+            while (left < right) {
+                while (left < right && nums[right] > privt) {
+                    right--
+                }
+                while (left < right && nums[left] < privt) {
+                    left++
+                }
+                if (left < right) {
+                    let temp = nums[left]
+                    nums[left] = nums[right]
+                    nums[right] = temp
+                }
+            }
+            nums[startIndex] = nums[left]
+            nums[left] = privt
+            return left
+        }
+        // console.log(sortArray([5, 4, 3, 2, 1]));
+        // console.log(sortArray([5, 1, 1, 2, 0, 0]));
+        console.log(sortArray([5, 9, 7, 10, 3, 4]));
+    </script>
+</body>
+
+</html>

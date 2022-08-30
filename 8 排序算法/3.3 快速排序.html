@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        时间O(nlogn)
+        空间O(n)
+        出错：1. 重复的元素 >=
+              2. 删除元素代码注意熟悉怒
+        */
+        function quickSort(nums) {
+            debugger
+            // 1. 判空 其实也是递归的出口
+            if (nums.length === 0) {
+                return []
+            }
+            if (nums.length === 1) {
+                return nums
+            }
+            // 2. 基准元素 - 我们取中间值
+            let mid = Math.floor(nums.length / 2)
+            // 3. 基准值
+            let targetNum = nums[mid]
+            // 4. 删除这个元素 其实不删也没关系
+            nums.splice(mid, 1)
+            // 5. 声明数组变量
+            let leftArr = []
+            let rightArr = []
+            // 6. 遍历 比较大小
+            for (let i = 0; i < nums.length; i++) {
+                // nums[i] 更大 放进右边 更小 放进左边
+                if (nums[i] > targetNum) {
+                    rightArr.push(nums[i])
+                }
+                if (nums[i] < targetNum) {
+                    leftArr.push(nums[i])
+                }
+            }
+            // 在这里进行递归
+            // 左边递归 + targetNum + 右边递归
+            let newArr = quickSort(leftArr).concat(targetNum, quickSort(rightArr))
+            return newArr
+        }
+        let test3 = [5, 1, 1, 2, 0, 0]
+        // console.log(sortArray(test1));
+        // console.log(sortArray(test2));
+        console.log(quickSort(test3));
+    </script>
+</body>
+
+</html>

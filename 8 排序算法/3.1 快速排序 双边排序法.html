@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // https://www.bilibili.com/video/BV1MR4y1N7De?share_source=copy_web&vd_source=7149a850fbc1d6e85ac97c3e2372208c
@@ -35,7 +37,7 @@
          * @param {*} startIndex 起始下标
          * @param {*} endIndex 终止下标
          * @return {*}
-         */     
+         */
         //  let startIndex = Math.floor((nums.length - 1) / 2)
         //  let endIndex = nums.length - 1   
         function sortArray(nums) {
@@ -45,10 +47,10 @@
             quickSort(nums, startIndex, endIndex)
             return nums
         }
-        function quickSort (nums, startIndex, endIndex) {
+        function quickSort(nums, startIndex, endIndex) {
             // 递归退出条件
             if (startIndex >= endIndex) {
-                return 
+                return
             }
             // 得到基准元素位置
             debugger
@@ -56,9 +58,10 @@
             // 根据基准元素 分成两部分进行排序
             quickSort(nums, startIndex, pivotIndex - 1)
             quickSort(nums, pivotIndex + 1, endIndex)
-        }   
+        }
 
-        function partition (arr, startIndex, endIndex) {
+        function partition(arr, startIndex, endIndex) {
+            debugger
             // 取第一个位置 也可以是随机的位置
             let pivot = arr[startIndex]
             let left = startIndex
@@ -69,7 +72,7 @@
                 debugger
                 while (left < right && arr[right] > pivot) {
                     right--
-                } 
+                }
                 while (left < right && arr[left] <= pivot) {
                     left++
                 }
@@ -90,4 +93,5 @@
         console.log(sortArray([5, 9, 7, 10, 3, 4]));
     </script>
 </body>
+
 </html>

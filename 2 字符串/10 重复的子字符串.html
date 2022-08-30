@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 求next数组
+        const getNext = function (needle) {
+            // 1. 初始化变量
+            let next = []
+            let j = 0
+            next.push(j)
+            // 2. for循环 i在j的后面
+            for (let i = 1; i < needle.length; i++) {
+                // 前缀匹配 -> 字符不相等
+                while (j > 0 && needle[i] !== needle[j]) {
+                    j = next[j - 1]
+                }
+                // 前缀匹配 -> 字符相等
+                if (needle[j] === needle[i]) {
+                    j++
+                }
+                // 不管相等与否 字符都要放进入 next数组
+                next.push(j)
+            }
+            return next
+        }
+        console.log(getNext('aabaaf'));
+        // 子串父串匹配的函数
+        const strStr = function (haystack, needle) {
+            debugger
+            if (haystack === '') {
+                reutrn - 1
+            }
+            let j = 0
+            for (let i = 0; i < haystack.length; i++) {
+                while (j > 0 && haystack[i] !== needle[j]) {
+                    j = next[j - 1]
+                }
+                if (haystack[i] === needle[j]) {
+                    j++
+                }
+                if (j === needle.length) {
+                    count++
+                    j = 0
+                }
+                if (i === haystack.length - 1) {
+                    return
+                }
+            }
+            return false
+        }
+        // 看看字符串是否匹配
+        const repeatedSubstringPattern = function (s) {
+            debugger
+            let count = 0
+            // 获取next数组
+            let next = getNext(s)
+            // 获取子串的函数
+            const getStr = function (i) {
+                count = 0
+                return s[i] + s[i + 1]
+            }
+            for (let i = 0; i < s.length - 1; i++) {
+                // 遍历每个字符 -> 匹配到对应的子串
+                let str = getStr(i)
+                // 进行子串和父串的匹配
+                strStr(s, str)
+                // 如果数量是>1的，才会返回true
+                // 如果不是，下一次for循环，会清0count变量重新计算 -> 在getStr里面清零
+                // 'bb'这个字符我有点搞不懂了
+                if (count > 1) {
+                    return true
+                }
+            }
+            return false
+        }
+        /*
+        'abab'[0, 0, 1, 2]是对的，因为ab 和 ab是首位相连的
+        */
+        console.log(repeatedSubstringPattern('abab'));
+        // console.log(repeatedSubstringPattern('aba'));
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间O(n^2)
+        // 空间O(n) n是dp数组的长度
+        var numTrees = function (n) {
+            const memo = new Array(n + 1).fill(0)
+            const uniqueBinaryTree = function (n) {
+                debugger
+                // 出口
+                if (n === 0 || n === 1) {
+                    return 1
+                }
+                // 单层
+                let num = 0
+                for (let i = 0; i < n; i++) {
+                    num = num + uniqueBinaryTree(i) * uniqueBinaryTree(n - i - 1)
+                }
+                memo[n] = num
+                return memo[n]
+            }
+            return uniqueBinaryTree(n)
+        };
+        console.log(numTrees(3));
+    </script>
+</body>
+
+</html>

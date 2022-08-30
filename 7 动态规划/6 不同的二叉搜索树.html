@@ -10,7 +10,30 @@
 
 <body>
     <script>
-
+        // 时间O(n^2)
+        // 空间O(n) n是dp数组的长度
+        var numTrees = function (n) {
+            let dp = new Array(n + 1).fill(0)
+            dp[0] = 1
+            /* 
+            ps：
+            i必须从1开始，原因是节点至少有1个，上面数组初始化也有影响
+            j可以取到i，还要以i为头结点的情况
+            */
+            for (let i = 1; i <= n; i++) {
+                for (let j = 1; j <= i; j++) {
+                    /* 
+                     ps：这里每一次的j代表的都是，以谁为头结点。
+                         比如，i=1, j=1,表示只有一个节点，1就是头结点
+                         比如，i=3,j=1,表示有3个个节点，1是头结点；还会有2、3分别是头结点
+                         dp[3]由节点1、节点2、节点3分别为头结点组成的，在内层递归完成
+                    */
+                    dp[i] = dp[i] + dp[j - 1] * dp[i - j]
+                }
+            }
+            return dp[n]
+        };
+        console.log(numTrees(3));
     </script>
 </body>
 
