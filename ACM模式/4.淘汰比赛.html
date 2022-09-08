@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 比赛裁判
+        // 输入1：参赛人数 n + 分数的范围[2, 3]
+        // 输入2：参赛选手所有分数 从中选择一个分数 然后进行分割
+        // 输出：最低的分数
+
+        function fn(num, arr1, arr2) {
+            // let first = readline().split(' ')
+            // let n = parseInt(first[0]), x = parseInt(first[1]), y = parseInt(first[2])
+            // let arrs = readline().split(' ').map(item => parseInt(item))
+            let n = num,
+                x = arr1[0],
+                y = arr1[1],
+                arrs = arr2
+            debugger
+            arrs.sort((a, b) => { return a - b })
+            let l = 0, r = n - 1
+            while (l <= r) {
+                let mid = l + Math.floor((r - l) / 2)
+                let pass = n - mid, fail = mid
+                if (pass < x || fail > y) {
+                    r = mid - 1
+                } else if (pass > y || fail < x) {
+                    l = mid + 1
+                } else {
+                    r = mid - 1
+                }
+            }
+
+            let pass = n - l
+            let fail = l
+
+            if ((pass >= x && pass <= y) && (fail >= x && fail <= y)) {
+                return arrs[l - 1]
+            } else {
+                return -1
+            }
+        }
+        console.log(fn(6, [2, 3], [1, 2, 3, 4, 5, 6]));
+
+        // https://labfiles.acmcoder.com/ojhtml/index.html#/?id=%e8%af%bb%e5%8f%96%e4%b8%80%e8%a1%8c%e8%be%93%e5%85%a5
+
+        // https://www.nowcoder.com/question/next?pid=28665343&qid=1371127&tid=60692845
+        // https://blog.csdn.net/qq_41329791/article/details/123913671
+    </script>
+</body>
+
+</html>

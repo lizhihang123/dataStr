@@ -11,6 +11,7 @@
 <body>
     <script>
         // 3. 递归2：
+        // 这个方法 我不能李姐
         var reverse = function (head) {
             if (!head || !head.next) return head;
             // 从后往前翻
@@ -19,6 +20,7 @@
             pre.next = head;
             return head;
         }
+
         var reverseList = function (head) {
             let cur = head;
             while (cur && cur.next) {

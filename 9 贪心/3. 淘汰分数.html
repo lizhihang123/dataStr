@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let first = readline().split(' ') // 第一行的数
+        let n = parseInt(first[0]) // 总共参赛人数
+        let x = parseInt(first[1]) // [3, 5]的3 
+        let y = parseInt(first[2]) // [3, 5]的5
+
+        let arr = readline().split(' ').map(item => parseInt(item)) // 参赛人员的分数 转化为整数
+
+        arr.sort((a, b) => { return a - b })  // 分数 进行排序
+
+        // 选择分数线 截取数组？
+        // 如何去选择一个数字?
+
+        // 从数组的 [3, 5] -》 先去截取3之前的数
+        for (let i = x; i <= y; i++) {
+            let arr1 = arr.slice(0, i)
+            let arr2 = arr.slice(i)
+            if (x <= arr1.length <= y && x <= arr2.length <= y) {
+                return arr1[i - 1]
+            }
+        }
+        return -1
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 2. 递归法
+        // 时间O(n)
+        // 空间O(n)
+        // 思路：1. 递归参数就是null 和当前节点head
+        //      2. 修改temp 暂存变量
+        //      3. 修改当前节点的next -》pre
+        //      4. 更新pre
+        //      5. 递归点 当前节点传 temp
+        // 错误点：1. 递归的退出条件-> 如果没有头结点 就返回pre节点
+        var reverse2 = function (pre, head) {
+            if (!head) {
+                return pre
+            }
+            // 保存next指针的值
+            const temp = head.next
+            // 反转操作
+            head.next = pre
+            // 更新pre指针
+            pre = head
+            // 通过递归来执行
+            // head = temp 相当于递归操作
+            return reverse2(pre, temp)
+        }
+        var reverseList2 = function (head) {
+            return reverse2(null, head)
+        }
+    </script>
+</body>
+
+</html>

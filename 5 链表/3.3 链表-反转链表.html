@@ -1,38 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
-        // 1. 
-        // cur.next = 2; temp = 2
-        // prev = null; cur.next = null改变节点1的next为null
-        // cur是1; prev = 1
-        // temp是2, cur = 2
-        // 2. 
-        // cur.next = 3; temp = 3
-        // prev = 1; cur.next = 1// 改变节点2的next为1
-        // cur是2; prev = 2
-        // temp是3, cur = 3
-        // 3. 
-        // cur.next = 4; temp = 4
-        // prev = 2; cur.next = 2// 改变节点3的next为2
-        // cur是3; prev = 3
-        // temp是4, cur = 4
-        // 4. 
-        // cur.next = 5; temp = 5
-        // prev = 3; cur.next = 3// 改变节点4的next为3
-        // cur是4; prev = 4
-        // temp是5, cur = 5
-        // 5. 
-        // cur.next = null; temp = 5
-        // prev = 4; cur.next = 4 // 改变节点5的next为4
-        // cur是5; prev = 5
-        // temp是5, cur = 5
         let reverseList = (head) => {
             let cur = head
             let prev = null
@@ -48,7 +25,8 @@
             }
             return prev
         }
-        console.log(reverseList([1,2,3,4,5]));
+        console.log(reverseList([1, 2, 3, 4, 5]));
     </script>
 </body>
+
 </html>

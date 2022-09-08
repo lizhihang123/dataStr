@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 优化的思路2：
+        // 进一步优化：不仅仅是从走8趟 -》 走4趟
+        // 且 如果有些元素已经是有序的了，就不需要再进行比较了
+        function swap(arr, i, j) {
+            let temp = arr[i]
+            arr[i] = arr[j]
+            arr[j] = temp
+        }
+        // 2 排序
+        function BubbleSort(nums) {
+            let len = nums.length
+            // 外面for循环 表示走几趟，走 len-1趟，[5, 3, 2, 1] 走三趟
+            let sortBorder = nums.length - 1
+            let lastExchangeIndex = 0
+            for (let i = 0; i < len - 1; i++) {
+                let isSorted = true
+                debugger
+                // 里面的for循环 表示 每一趟走多少次，长度 - i - 1 而i表示当前是第几趟
+                for (let j = 0; j < sortBorder; j++) {
+                    debugger
+                    if (nums[j] > nums[j + 1]) {
+                        swap(nums, j, j + 1)
+                        isSorted = false
+                        // 更新为最后一次交换元素的位置
+                        // 也就是说 如果是 5, 4, 3, 6, 7, 8, 9 => j此时就是3，下一次遍历的范围就是 0, 3
+                        lastExchangeIndex = j
+                    }
+                }
+                // 请注意 边界更新 要等到 “内层for循环结束再去进行”
+                sortBorder = lastExchangeIndex
+                if (isSorted) {
+                    break
+                }
+            }
+            return nums
+        }
+        // console.log(BubbleSort([5, 8, 6, 3, 9, 2, 1, 7]));
+        // console.log(BubbleSort([5, 2, 1, 6, 3, 7, 8, 9]));
+        console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
+    </script>
+</body>
+
+</html>

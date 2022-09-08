@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 获得长度为n的序列
+        // 有限次操作中，将序列变为正则序列(正则序列 长度为n 取值范围在 1-n, 不存在重复的数，不要求排序)，
+        // 每次操作中，任选一个数字，将该数字+1或者-1
+        // 多少次操作 能够把这个序列 -> 正则序列
+
+
+
+        /* 
+        原本的思路：
+        // 暴力：
+        // 1. 遍历每个数字 判断是否在区间内，不在就要进行操作
+        // 2. 判断是小于最小值还是大于最大值
+        // 3. 如果是小于最小值，就求出差
+        // 4. 还要判断是否有重复的值
+
+
+        修正：
+        1. arr[i - 1], 只要不等于i，就进行累加 
+        2. 利用Math.abs(arr[i - 1] - i)
+        */
+
+        // 输入是：
+        // 5
+        // -1 2 3 10 100
+        // 输出是：
+        // 103
+
+        // 读入5
+        let num = parseInt(readline())
+        let count = 0
+        // 读入 -》转化为数组 [-1, 2, 3, 10, 100]
+        let arr = readline().split(' ').map(item => parseInt(item))
+        // 求出长度
+        // 序列进行排序
+        arr.sort((a, b) => a - b)
+        // 1-n 且不能重复，意思就是必须得是 1, 2, 3, 4, 5, ……, n
+        // arr[i - 1] !== i 所以才会有 只要不等于i，就要进行count的累加
+        for (let i = 1; i <= num; i++) {
+            if (arr[i - 1] !== i) {
+                count += Math.abs(arr[i - 1] - i)
+            }
+        }
+        print(count)
+    </script>
+</body>
+
+</html>

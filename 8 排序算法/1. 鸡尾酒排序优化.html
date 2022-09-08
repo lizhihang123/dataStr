@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 适合大部分数据都是有序的数组
+        // 可以对“有序部分”进行优化
+        function swap(arr, m, n) {
+            let temp = arr[m]
+            arr[m] = arr[n]
+            arr[n] = temp
+        }
+        function sort(array) {
+            // debugger
+            let mid = Math.floor(array.length / 2)
+            let len = array.length
+            let leftBorder = 0
+            let rightBorder = array.length - 1
+            let leftLast = 0
+            let rightLast = 0
+            // 控制循环的回合数
+            for (let i = 0; i < mid; i++) {
+                // debugger
+                let isSorted = true
+                // 从左向右边循环
+                for (let j = 0; j < rightBorder; j++) {
+                    // debugger
+                    if (array[j] > array[j + 1]) {
+                        swap(array, j, j + 1)
+                        isSorted = false
+                        rightLast = j
+                    }
+                }
+                rightBorder = rightLast
+                if (isSorted) {
+                    break
+                }
+
+                isSorted = true
+                // 从右边向左边循环
+                for (let j = len - i - 1; j > leftBorder; j--) {
+                    // debugger
+                    if (array[j] < array[j - 1]) {
+                        swap(array, j, j - 1)
+                        isSorted = false
+                        leftLast = j
+                    }
+                }
+                leftBorder = leftLast
+
+                if (isSorted) {
+                    break
+                }
+            }
+            return array
+        }
+        let arr = []
+        for (let i = 2; i < 1000000; i++) {
+            arr.push(i)
+        }
+        console.time('排序')
+        console.log(sort([...arr, 1]));
+        console.timeEnd('排序')
+    </script>
+</body>
+
+</html>

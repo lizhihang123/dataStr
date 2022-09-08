@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // 1. 暴力解法
         // 时间复杂度O(n^2)
-        var twoSum = function(nums, target) {
-            for(let i = 0; i < nums.length; i++) {
+        var twoSum = function (nums, target) {
+            for (let i = 0; i < nums.length; i++) {
+                // 这里使用 j = i + 1 而不是 j = 1 不然就会报错 =》 为什么报错？
+                // 假设i = 3呢 j 还是要倒着从1开始遍历，这样就乱套了
                 for (let j = i + 1; j < nums.length; j++) {
                     if (nums[i] + nums[j] === target) {
                         return [i, j]
@@ -21,22 +25,8 @@
             return {}
         };
 
-        // 2. 哈希法
-        // 核心思路：map.has(target - nums[i]) 存在 就返回索引
-        // 如果不存在 就设置值
-        // 时间复杂度 O(n)
-        var toSum2 = function (nums, target) {
-            let map = new Map()
-            // [1, 2, 3]
-            // map {1, 2}
-            for (let i = 0; i < nums.length; i++) {
-                if (map.has(target - nums[i])) {
-                    return [i, map.get(target - nums[i])]
-                }
-                map.set(nums[i], i)
-            }
-            return map
-        }
+
     </script>
 </body>
+
 </html>

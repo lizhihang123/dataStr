@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 从左到右进行交换
+        // 从右到左进行交换
+        // 相互交替
+        function swap(arr, m, n) {
+            let temp = arr[m]
+            arr[m] = arr[n]
+            arr[n] = temp
+        }
+        function sort(array) {
+            // debugger
+            let mid = Math.floor(array.length / 2)
+            let len = array.length
+            // 控制循环的回合数
+            for (let i = 0; i < mid; i++) {
+                let isSorted = true
+                // 从左向右边循环
+                for (let j = i; j < len - i - 1; j++) {
+                    // debugger
+                    if (array[j] > array[j + 1]) {
+                        swap(array, j, j + 1)
+                        isSorted = false
+                    }
+                }
+                if (isSorted) {
+                    break
+                }
+
+                isSorted = true
+                // 从右边向左边循环
+                for (let j = len - i - 1; j > i; j--) {
+                    // debugger
+                    if (array[j] < array[j - 1]) {
+                        swap(array, j, j - 1)
+                        isSorted = false
+                    }
+                }
+                if (isSorted) {
+                    break
+                }
+            }
+            return array
+        }
+        console.log(sort([5, 7, 2, 8, 9, 1]));
+        // let arr = []
+        // for (let i = 2; i < 1000000; i++) {
+        //     arr.push(i)
+        // }
+        // console.time('排序')
+        // console.log(sort([...arr, 1]));
+        // console.timeEnd('排序')
+    </script>
+</body>
+
+</html>

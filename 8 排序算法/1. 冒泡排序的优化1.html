@@ -10,17 +10,8 @@
 
 <body>
     <script>
-        // 逻辑
-        // 冒泡
-        // 1 时间复杂度O(n ^ 2) 空间复杂度O(1)
-        // 2 逻辑
-        // 每个元素和后一个元素比较 当 前一个 大于 后一个 进行交换【需要交换函数】这个元素像泡泡一样 飘到数组的一侧
-        // 是稳定排序 -> 不会打乱相同的元素相对位置
-        // 是原地排序 -> 没有使用额外的存储空间
-        // 每个元素都需要比较一波 => 外层循环是走len - 1次
-        // 每个元素比较时，比的次数是 len - 1 - i次 => 内层循环是 len - 1 - i
-
-        // 1. 交换 
+        // 优化的思路，原本要交换8趟，但是在第4趟，两两元素没有进行交换了，就可以停止不需要进行交换了
+        // 通过一个变量，只要进行了交换，这个变量就是true，否则是false，是true 就return
         function swap(arr, i, j) {
             let temp = arr[i]
             arr[i] = arr[j]
@@ -31,18 +22,26 @@
             let len = nums.length
             // 外面for循环 表示走几趟，走 len-1趟，[5, 3, 2, 1] 走三趟
             for (let i = 0; i < len - 1; i++) {
+                let isSorted = true
+                debugger
+                if (i === 3 || i === 4) {
+                    debugger
+                }
                 // 里面的for循环 表示 每一趟走多少次，长度 - i - 1 而i表示当前是第几趟
                 for (let j = 0; j < len - i - 1; j++) {
                     if (nums[j] > nums[j + 1]) {
                         swap(nums, j, j + 1)
+                        isSorted = false
                     }
+                }
+                if (isSorted) {
+                    break
                 }
             }
             return nums
         }
-        // console.log(BubbleSort([1, 2, 5, 333, 4, 8, 10, 9]));
-        // console.log(BubbleSort([5,1,1,2,0,0]));
-        console.log(BubbleSort([5, 3, 2, 1]));
+        // console.log(BubbleSort([5, 8, 6, 3, 9, 2, 1, 7]));
+        console.log(BubbleSort([5, 2, 1, 6, 3, 7, 8, 9]));
     </script>
 </body>
 
