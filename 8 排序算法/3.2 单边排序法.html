@@ -10,15 +10,13 @@
 <body>
     <script>
         function sortArray(nums) {
-            debugger
             let startIndex = 0
             let endIndex = nums.length - 1
             quickSort(nums, startIndex, endIndex)
             return nums
         }
         function quickSort(nums, startIndex, endIndex) {
-            debugger
-            if (startIndex > endIndex) {
+            if (startIndex >= endIndex) {
                 return
             }
             let privotIndex = partition(nums, startIndex, endIndex)
@@ -27,22 +25,25 @@
         }
 
         function partition(arr, startIndex, endIndex) {
-            debugger
             let mark = startIndex
-            let privot = arr[startIndex]
-            for (let i = startIndex + 1; i < endIndex; i++) {
-                if (arr[i] < privot) {
+            let pivot = arr[startIndex]
+            // ! i<=endIndex注意要加等于号
+            for (let i = startIndex + 1; i <= endIndex; i++) {
+                if (arr[i] < pivot) {
                     mark++ // mark停在那里的值是一定要比基准值小的
                     let p = arr[mark]
                     arr[mark] = arr[i]
                     arr[i] = p
                 }
             }
+            // 为什么是下面这样写？
+            // arr[mark]最后表示的是所以比基准值小的数的界限
+            // 接下来要交换基准值交换完之后左边所有的数都是比基准值小的
             arr[startIndex] = arr[mark]
-            arr[mark] = privot
+            arr[mark] = pivot
             return mark
         }
-        console.log(sortArray([5, 1, 1, 2, 0, 0]));
+        console.log(sortArray([4, 7, 3, 5, 6, 2, 8, 1]));
     </script>
 </body>
 

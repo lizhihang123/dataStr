@@ -10,26 +10,35 @@
 
 <body>
     <script>
+        // 归并排序的思路
+        // 先归类 再排序 再合并
+        // 
+
+        // 主函数
         function mergeSort(arr) {
             var len = arr.length;
             _mergeSort(arr, 0, len - 1)
             return arr
         }
 
+        // 分类的函数
         function _mergeSort(arr, left, right) {
             if (left >= right) {
                 return;
             }
             debugger;
-
+            // 利用left和right值 求出mid值 就是分类的基准值
             var mid = parseInt((left + right) / 2);
 
             // console.log('left', left, 'right', right)
+            // 这里用作递归
             _mergeSort(arr, left, mid);
             _mergeSort(arr, mid + 1, right);
             _merge(arr, left, mid, right);
         }
 
+
+        // 合并的函数
         function _merge(arr, left, mid, right) {
             // console.log('')
             var tempArr = [];
@@ -43,6 +52,7 @@
             // }
 
             // 循环为 merge的总长度
+            // 这里看不懂
             for (var i = 0; i < right - left + 1; i++) {
                 // debugger;
                 if (leftPoint > mid) {

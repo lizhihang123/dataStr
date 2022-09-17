@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+
+        /**
+         * @name: 
+         * @param {*} nums
+         * @param {*} startIndex 起始下标
+         * @param {*} endIndex 终止下标
+         * @return {*}
+         */
+
+        /* 
+        1.sortArray 里面第一次调用 quickSort方法 
+          quickSort方法用来"分治数组"
+          partition方法用来"数组排序"
+        2.quickSort
+          !退出条件 startIndex >= endIndex
+          通过partition方法获取循环一波后的基准值
+          递归调用 startIndex, mid
+          递归调用 mid, endIndex
+        3.partition
+          获取基准值的第一个值
+          while循环 left !== right
+            (右指针先开始 然后再是左指针)子循环比较 left < right 再判断大小决定要不要交换
+            要交换left和right的值
+          要交换pivot基准值和left指针停留的位置
+        
+        */
+        function sortArray(nums) {
+            let startIndex = 0
+            // ! nums.length 写成 nums.length 结果就会报错
+            let endIndex = nums.length - 1
+            quickSort(nums, startIndex, endIndex)
+            return nums
+        }
+
+        // 分治 + 递归
+        function quickSort(nums, startIndex, endIndex) {
+            if (startIndex >= endIndex) {
+                return
+            }
+            // !partition(nums, startIndex, endIndex) -> 写成了 partition(startIndex, endIndex)
+            let mid = partition(nums, startIndex, endIndex)
+            // !partition(nums, 0, mid - 1) 应该是 partition(nums, 0, mid - 1)
+            quickSort(nums, startIndex, mid - 1)
+            quickSort(nums, mid + 1, endIndex)
+        }
+
+        // 真正的排序在这里
+        function partition(nums, startIndex, endIndex) {
+            let pivot = nums[startIndex]
+            let left = startIndex
+            let right = endIndex
+            while (left < right) {
+                // !漏掉了left < right
+                while (left < right && nums[right] > pivot) {
+                    right--
+                }
+                // !left应该是小于等于pivot 少了等于就报错
+                while (left < right && nums[left] <= pivot) {
+                    left++
+                }
+                // left可以等于right
+                if (left < right) {
+                    let temp = nums[left]
+                    nums[left] = nums[right]
+                    nums[right] = temp
+                }
+            }
+            nums[startIndex] = nums[left]
+            nums[left] = pivot
+            // !忘记return left的值
+            return left
+        }
+        console.log(sortArray([4, 1, 2, 3, 5, 6, 8, 7]));
+    </script>
+</body>
+
+</html>

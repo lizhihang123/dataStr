@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1 - N-1的商品 顾客A必须都要买
+        // 可以选择在A商场买，也可以选择在B商场买 -> 求价格最小
+        // A商场: 顾客购买三件及以上的产品，在A商场买的总价就可以打六折，如果不满三件，就不能享受优惠
+        // B商场: (每)购买商品满3件，最便宜的那一件不要钱
+        const readline = require('readline');
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        })
+        rl.on('line', function (line) {
+            const arrA = line.split(',')
+            const arrB = line.split(',')
+            let obj = {}
+            let temp;
+            let countB = 0; // 计算B商城用了几个商品
+            let resultB = [] // 存储B商城记录的商品
+            let indexArrB = [] // 存储B商品是哪个索引
+            let resultA = [] // 存储A商城记录的商品
+            let sum = 0 // 最终要花费的最少费用
+            // 1. 把A商城的数据全部放到结果map里面去
+            for (let i = 0; i < arrA.length; i++) {
+                obj[i] = arrA[i]
+            }
+            // 2. 拿B商城和A进行比较
+            for (let j = 0; j < arrB.length; j++) {
+                temp = obj[j]
+                if (arrB[j] < temp) {
+                    obj[j] = arrB[j]
+                    indexArrB.push(j)
+                    resultB.push(arrB[j])
+                    countB++
+                }
+            }
+            // 3. 要来判断有几个B
+            // 先求出结果数组里面的所有的值
+            // 看看b数组的长度 mod 3 === 几 就取出几个最小的数
+            // let num = parseInt(resultB.length / 3)
+            // // 求出b的和
+            // let sumB = 0
+            // for (let i = 0; i < resultB.length; i++) {
+            //     sumB += resultB[i]
+            // }
+            // let min = resultB[0]
+            // for (let m = 0; m < resultB.length; m++) {
+            //     if (num === 0) {
+            //         break
+            //     }
+            //     if (min > resultB)
+            // }
+            // 看看总长度减去b的长度，是否大于3，是的话要单独把a的值拎出来乘以 60%
+
+            for (let key in obj) {
+                sum += obj[key]
+            }
+            console.log(sum)
+        })
+        // function test(arrA, arrB) {
+        //     // const arrA = arr1.split(',')
+        //     // const arrB = arr2.split(',')
+        //     let obj = {}
+        //     let temp;
+        //     let countB = 0; // 计算B商城用了几个商品
+        //     let resultB = [] // 存储B商城记录的商品
+        //     let indexArrB = [] // 存储B商品是哪个索引
+        //     let resultA = [] // 存储A商城记录的商品
+        //     let sum = 0 // 最终要花费的最少费用
+        //     // 1. 把A商城的数据全部放到结果map里面去
+        //     for (let i = 0; i < arrA.length; i++) {
+        //         obj[i] = arrA[i]
+        //     }
+        //     // 2. 拿B商城和A进行比较
+        //     for (let j = 0; j < arrB.length; j++) {
+        //         temp = obj[j]
+        //         if (arrB[j] < temp) {
+        //             obj[j] = arrB[j]
+        //             indexArrB.push(j)
+        //             resultB.push(arrB[j])
+        //             countB++
+        //         }
+        //     }
+        //     // 3. 要来判断有几个B
+        //     // 先求出结果数组里面的所有的值
+        //     // 看看b数组的长度 mod 3 === 几 就取出几个最小的数
+        //     // let num = parseInt(resultB.length / 3)
+        //     // // 求出b的和
+        //     // let sumB = 0
+        //     // for (let i = 0; i < resultB.length; i++) {
+        //     //     sumB += resultB[i]
+        //     // }
+        //     // let min = resultB[0]
+        //     // for (let m = 0; m < resultB.length; m++) {
+        //     //     if (num === 0) {
+        //     //         break
+        //     //     }
+        //     //     if (min > resultB)
+        //     // }
+        //     // 看看总长度减去b的长度，是否大于3，是的话要单独把a的值拎出来乘以 60%
+
+        //     for (let key in obj) {
+        //         sum += obj[key]
+        //     }
+        //     console.log(sum)
+        // }
+        console.log(test([5, 3, 2], [4, 2, 1]));
+
+    </script>
+</body>
+
+</html>

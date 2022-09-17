@@ -20,29 +20,28 @@
             //    如果不等 str[index] !== strs[i][index] flag=true break
             //    后续判断 if(flag) {return false}
             //    index++
-            if (strs.length <= 1) {
-                return '';
+            if (strs.length === 0) {
+                return ''
             }
-            let index = 0, str = strs[0];
-            let flag = false;
+            if (strs.length === 1) {
+                return strs[0]
+            }
+            let str = strs[0]
+            let index = 0
+            let flag = false
             while (index < str.length) {
                 for (let i = 1; i < strs.length; i++) {
                     if (str[index] !== strs[i][index]) {
-                        flag = true; // 这里记得flag为true 一旦不相等 就要 break
-                        break;
+                        flag = true
+                        break
                     }
-                    console.log(i, index);
-                    console.log(str[index]);
-                    console.log(strs[i][index]);
                 }
                 if (flag) {
-                    break;
+                    break
                 }
-                debugger
                 index++
-                console.log(index);
             }
-            return str.slice(0, index);
+            return str.slice(0, index)
         };
 
 

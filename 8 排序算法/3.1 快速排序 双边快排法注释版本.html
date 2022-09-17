@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+
+        /**
+         * @name: 
+         * @param {*} nums
+         * @param {*} startIndex 起始下标
+         * @param {*} endIndex 终止下标
+         * @return {*}
+         */
+
+
+        // 1.思路：选定一个基准值，利用两个指针进行遍历，比基准值小的在一边，比基准值大的在另外一边
+        function sortArray(nums) {
+            // 1.初始化
+            let startIndex = 0
+            let endIndex = nums.length - 1
+            quickSort(nums, startIndex, endIndex)
+            return nums
+        }
+
+        // 分治 + 递归
+        function quickSort(nums, startIndex, endIndex) {
+            // 必须有退出条件
+            if (startIndex >= endIndex) {
+                return
+            }
+            // 2.startIndex, endIndex为 0和nums.length时 进行第一波循环 得到变化的第一个基准值
+            let mid = partition(nums, startIndex, endIndex)
+            // 3.递归当前函数 通过基准值进行切分 注意基准值不再进入排序
+            //   递归两次的目的是 分治 
+            quickSort(nums, startIndex, mid - 1)
+            quickSort(nums, mid + 1, endIndex)
+        }
+
+        // 真正的排序在这里
+        function partition(nums, startIndex, endIndex) {
+            // 4. 存储基准索引的“值”
+            let pivot = nums[startIndex]
+            let left = startIndex
+            let right = endIndex
+            let temp //交换变量用
+            // 5. 只要left指针比right指针小 就一直进行循环
+            while (left < right) {
+                // 右边的值比基准值更大 继续while
+                while (left < right && nums[right] > pivot) {
+                    right--
+                }
+                // 左边的值比基准值更大 继续while
+                while (left < right && nums[left] <= pivot) {
+                    left++
+                }
+                // 如果说左右指针都停了 就进行元素交换(交换的前提是left<right)
+                if (left < right) {
+                    temp = nums[left]
+                    nums[left] = nums[right]
+                    nums[right] = temp
+                }
+            }
+            // 把left指针停留的位置的值赋值给startIndex的位置
+            nums[startIndex] = nums[left]
+            // left指针的值等于基准值pivot
+            nums[left] = pivot
+            // left是下一个基准值
+            return left
+        }
+        console.log(sortArray([4, 1, 2, 3, 5, 6, 8, 7]));
+    </script>
+</body>
+
+</html>
