@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给定两个整数 n和k
+        // 返回 1 …… n的k个组合
+        var combine = function (n, k) {
+            let arr = []
+            let result = []
+            for (let i = 1; i <= n; i++) {
+                arr.push(i)
+            }
+            let m = 0
+            while (m < arr.length - k + 1) {
+                for (let j = m; j < n - k + 1; j++) {
+                    result.push(arr.slice(j, j + k))
+                }
+                m++
+            }
+            debugger
+        };
+        console.log(combine(4, 2));
+    </script>
+</body>
+
+</html>

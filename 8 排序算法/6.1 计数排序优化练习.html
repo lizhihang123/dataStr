@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            计数排序优化 [90, 94, 95, 95, 99]
+            目的：为了能够让数字很大的整数也能够排序；为了相同的数之间能够区分开次序
+        */
+        function sortArray(nums) {
+            // 1.求最大值和最小值
+            // 2.依据最大最小的差值 初始化数组的值
+            // 3.把nums数组的值填充进去
+            // 4.每个值修改为(当前值+上一个值的和)
+            // 5.倒序遍历原始数组，从统计数组找到正确位置，输出到结果数组里面去
+
+            // 1.
+            let max = nums[0]
+            let min = nums[0]
+            // 2.
+            for (let j = 0; j < nums.length; j++) {
+                if (max < nums[j]) {
+                    max = nums[j]
+                }
+                if (min > nums[j]) {
+                    min = nums[j]
+                }
+            }
+            let d = max - min
+            let array = new Array(d + 1).fill(0)
+            // 3.
+            for (let i = 0; i < nums.length; i++) {
+                // 尤其注意 nums[i] - min的写法
+                array[nums[i] - min]++
+            }
+            // 4.
+            for (let m = 1; m < array.length; m++) {
+                array[m] += array[m - 1]
+            }
+            // 5.
+            let sortArray = new Array(nums.length)
+            for (let i = nums.length - 1; i >= 0; i--) {
+                debugger
+                //找到差
+                let index = nums[i] - min
+                //去array数组里面找到对应的值 - 1 就是最终要排序的位置
+                let value = array[index] - 1
+                //进行赋值
+                sortArray[value] = nums[i]
+                //数量要减少
+                array[index]--
+            }
+            return sortArray
+
+        }
+        console.log(sortArray([94, 90, 95, 95, 99]));
+    </script>
+</body>
+
+</html>

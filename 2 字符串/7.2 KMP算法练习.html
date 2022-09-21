@@ -11,7 +11,7 @@
 <body>
     <script>
         // 求next数组
-        const getNext = function(needle) {
+        const getNext = function (needle) {
             // 1. 初始化变量
             let next = []
             let j = 0
@@ -19,7 +19,7 @@
             // 2. for循环 i在j的后面
             for (let i = 1; i < needle.length; i++) {
                 // 前缀匹配 -> 字符不相等
-                while(j > 0 && needle[i] !== needle[j]) {
+                while (j > 0 && needle[i] !== needle[j]) {
                     j = next[j - 1]
                 }
                 // 前缀匹配 -> 字符相等
@@ -31,9 +31,9 @@
             }
             return next
         }
-        console.log(getNext('aabaaf'));
+        console.log(getNext('ababaaabb')); // [0, 0, 1, 1, 2, 3, 1, 1, 2, 0]
         // 看看字符串是否匹配
-        const strStr = function(haystack, needle) {
+        const strStr = function (haystack, needle) {
             // 1. 判空
             if (haystack === '') {
                 return -1
