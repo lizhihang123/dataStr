@@ -10,8 +10,10 @@
 
 <body>
     <script>
+        // 1.如果是两层for循环，就输出两个数的组合
+        // 2.如果是三层for循环，就输出3个数的组合
         function combine(m, k) {
-            let n = 1
+            let n = 0
             let result = []
             let arr = []
             for (let i = 1; i <= m; i++) {
@@ -19,15 +21,16 @@
             }
             console.log(arr);
             // 这个结果老是输入出来不对哇
-            while (n <= m) {
-                for (let i = n; i < m; i++) {
-                    result.push([arr[n], arr[i]])
+            for (i = 0; i < m; i++) {
+                for (let j = i + 1; j < m; j++) {
+                    for (let u = j + 1; u < m; u++) {
+                        result.push([arr[i], arr[j], arr[u]])
+                    }
                 }
-                n++
             }
-            console.log(result);
+            return result
         }
-        console.log(combine(4, 2));
+        console.log(combine(4, 3));
     </script>
 </body>
 

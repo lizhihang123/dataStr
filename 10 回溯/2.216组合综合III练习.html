@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // n表示希望的求和
+        // k组合的个数 [1,2,3]，比如这个只希望有3个
+        // sum表示每次的求和数量
+        // start表示每次递归从第几个数字开始递归
+        var combinationSum3 = function (k, n) {
+            // 1.变量声明
+            // 2.函数声明
+            // 3.函数调用
+            let res = [], // 结果数组
+                path = [] // 每层循环遍历的数组
+            const traverse = function (start) {
+                debugger
+                let l = path.length // path数组的长度
+                // path的求和 
+                let sum = path.reduce((prev, cur) => prev + cur, 0)
+                // 满足要求的path长度
+                if (l === k) {
+                    // 求和也满足条件
+                    if (sum === n) {
+                        // path记得延展运算符展开
+                        res.push([...path])
+                    }
+                    return
+                }
+
+                for (let i = start; i <= 9 - (k - l) + 1; i++) {
+                    path.push(i) // 放入path里面去
+                    // !用的是i+1 不是start
+                    traverse(i + 1)
+                    path.pop() // 回溯
+                }
+            }
+            traverse(1)
+            return res
+        };
+        console.log(combinationSum3(3, 7));
+    </script>
+</body>
+
+</html>

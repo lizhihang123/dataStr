@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*         排序部分
+                1 核心思路：
+                [2, 3, 1]此时2是有序区，3和2比较，大于2，那么有序区扩大包含2， 3；1和3比较，更小，交换，1和2比较，更小，交换，此时有序区为1,2,3
+                维护有序区，让无序区里面的元素和有序区的元素进行比较，整体排序完成
+                例子：扑克牌，抽到一张牌，如何进行比较。和前面的元素比较，如果更大，就停止插入
+                2 复杂度分析：
+                时间复杂度：最坏情况为O(n ^ 2) 为什么？因为外层循环次数为n，内层循环次数每一轮 在最坏的情况下都是 1 2 3 4 直到 n - 1
+                空间复杂度：是O(1) 是原地排序 没有借助第三方的空间 是原地排序
+                3 是稳定的排序吗？ */
+        function swap(arr, num1, num2) {
+            let temp = arr[num1]
+            arr[num1] = arr[num2]
+            arr[num2] = temp
+            return arr
+        }
+        function insertSort(arr) {
+            // 1.判空
+            // 2.第一层for 遍历arr所有元素
+            // 3.第二层for 每一个元素和前面的元素进行比较
+            if (arr.length < 2) {
+                return arr
+            }
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = i + 1; j > 0; j--) {
+                    // 如果当前元素小于上一个元素 交换
+                    if (arr[j - 1] > arr[j]) {
+                        swap(arr, j - 1, j)
+                    } else {
+                        // 如果当前元素大于上一个元素 就直接跳出循环
+                        break
+                    }
+                }
+            }
+            return arr
+        }
+        let initArr = []
+        for (let i = 10000; i > 0; i--) {
+            initArr.push(i)
+        }
+        console.time('init1')
+        console.log(insertSort(initArr));
+        console.timeEnd('init1')
+    </script>
+</body>
+
+</html>

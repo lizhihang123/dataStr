@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let result = []
+        let path = []
+        function combine(n, k) {
+            backtracking(n, k, 1)
+            return result
+        }
+        function backtracking(n, k, startIndex) {
+            debugger
+            // 退出条件
+            // 当path的长度和k的长度一致时，说明path遍历到了叶子节点
+            // 先把path放入结果数组 再return
+            if (path.length === k) {
+                // result.push(path) // 这样写是错的 使用的是浅拷贝 地址拷贝过去了 一改全改了
+                result.push([...path])
+                return
+            }
+            // 正式内容
+            // 是i <= n 而不是 i < n
+            // i <= n是不剪枝的写法
+            // i <= n - (k - path.length) + 1 是剪枝的写法
+            for (let i = startIndex; i <= n - (k - path.length) + 1; i++) {
+                path.push(i) // 处理节点 
+                backtracking(n, k, i + 1)// 递归
+                path.pop() // 回溯 撤销对递归的处理
+            }
+        }
+        console.log(combine(4, 3));
+    </script>
+</body>
+
+</html>

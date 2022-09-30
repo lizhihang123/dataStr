@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //需要的遍历 arr存储所有字母和字符对应的键的集合
+        //需要结果数组 res
+        //s每次生成的字符串
+        let arr = [
+            '',
+            '',
+            'abc',
+            'def',
+            'ghi',
+            'jkl',
+            'mno',
+            'pqrs',
+            'tuv',
+            'wzyz'
+        ]
+        // 变量
+        let res = []
+        let s = ''
+        var letterCombinations = function (digits) {
+            // 先判空
+            if (digits.length === 0) {
+                return res
+            }
+            backtracking(digits, 0)
+            return res
+        };
+        const backtracking = (digits, index) => {
+            if (index === digits.length) {
+                res.push(s)
+                return
+            }
+            let digit = digits[index] - '0' // 转化为数字 
+            let letters = arr[digit] // 取到对应的字母组合
+            for (let i = 0; i < letters.length; i++) { // 遍历字母组合
+                s = s + letters[i]
+                backtracking(digits, index + 1)
+                s = s.slice(0, s.length - 1) // 注意字符串的拼接问题
+            }
+        }
+        console.log(letterCombinations('23'));
+    </script>
+</body>
+
+</html>

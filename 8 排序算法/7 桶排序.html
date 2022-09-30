@@ -9,144 +9,121 @@
 
 <body>
     <script>
-        /* 
-            1. 时间复杂度：O(n) / O(nlogn)
-               平均情况下的时间复杂度O(n) 最坏情况下的时间复杂度O(nlogn)
-               平均情况：假设n个元素需要排序 分为n个桶 每个桶里面一个元素
-                - 求最大值和最小值 运算量为n
-                - 创建空桶 运算量为n
-                - 把原始数列的元素匹配到空桶里面 运算量为n
-                - 在桶的内部做排序，在元素分布相对均匀的情况下，所有桶的运算量之和为n
-                - 输出排序序列 -> 原始数组 运算量为n
-                最终为O(n)
-                最坏的情况：nlogn = nlogn[排序使用] + n = n (logn + 1) 而1可以忽略不计 就是nlogn
-
-            2. 空间复杂度：O(n)
-                - 一个空的数组 -> n
-            
-            3. 思路
-                先规定每个桶里面有几个元素
-                再根据最大值和最小值的差除以每个桶里面的元素数量向下取整 得到 几个桶
-                把元素分别放进桶
-                分别对每个桶里面的元素进行排序
-                清空原始数组 + 把每个桶里面的排序好的元素拿出来 放到 原始的数组里面去
-
-            4. 步骤    
-                1 数据的最大值和最小值 
-                2 先设定每个桶多少数据 + 结合每个桶的大小 算出需要多少个桶
-                3 创建二维数组 + 数据按照桶分类放进去[怎么放是难点 这里的分类 桶和桶之间的大小已经有变化了 排序好的]
-                4 每个桶里面的数据各自排序
-                5 拍平数组 一个个取出来就行
-        
-        */
-        function mergeSort(arr) {
-            var len = arr.length;
-            _mergeSort(arr, 0, len - 1)
+        function sortArray(arr) {
+            debugger
+            // 1.调用_mergeSort函数
+            // 返回
+            _mergeSort(arr, 0, arr.length - 1)
             return arr
         }
 
-        function _mergeSort(arr, left, right) {
-            if (left >= right) {
-                return;
-            }
-            debugger;
-
-            var mid = parseInt((left + right) / 2);
-
-            // console.log('left', left, 'right', right)
-            _mergeSort(arr, left, mid);
-            _mergeSort(arr, mid + 1, right);
-            _merge(arr, left, mid, right);
-        }
-
-        function _merge(arr, left, mid, right) {
-
-            // console.log('')
-
-            var tempArr = [];
-            var leftPoint = left;
-            var rightPoint = mid + 1;
+        // 分类的函数
+        function _mergeSort(arr, start, end) {
             debugger
-            // if (arr[leftPoint] < arr[rightPoint]) {
-            //     leftPoint ++;
-            // } else {
-            //     rightPoint ++;
-            // }
-
-            // 循环为 merge的总长度
-            for (var i = 0; i < right - left + 1; i++) {
-                // debugger;
-                if (leftPoint > mid) {
-                    tempArr.push(arr[rightPoint]);
-                    rightPoint++;
-                    continue;
-                }
-
-                if (rightPoint > right) {
-                    tempArr.push(arr[leftPoint]);
-                    leftPoint++;
-                    continue;
-                }
-
-                if (arr[leftPoint] < arr[rightPoint]) {
-                    tempArr.push(arr[leftPoint]);
-                    leftPoint++;
-                    continue;
-                } else {
-                    tempArr.push(arr[rightPoint]);
-                    rightPoint++;
-                    continue;
-                }
+            // 递归退出条件
+            // 2.求mid值(分组界限)
+            // 3.进行递归
+            // 4.调用合并排序函数
+            if (start >= end) {
+                return
             }
-
-            tempArr.forEach((val, index) => {
-                // console.log(i, value)
-                arr[left + index] = val;
-            });
-            // debugger;
-
-            // console.log(tempArr)
+            let mid = parseInt((start + end) / 2)
+            _mergeSort(arr, start, mid)
+            _mergeSort(arr, mid + 1, end)
+            _merge(arr, start, mid, end)
         }
-        function bucketSort(arr, bucketSize) {
-            // 最大值和最小值
-            if (arr.length === 0) {
-                return arr
+
+
+        // 排序合并的函数
+        function _merge(arr, start, mid, end) {
+            debugger
+            // 5.初始化p1,p2(不同分组的指针),p(新的结果数组的指针),tempArr(新的结果数组)
+            // 6.while循环判断p1和p2是否越界，没有越界，就把小的值放进结果数组，有一个越界，就要退出while循环
+            // 7.判断p1小于等于mid或者p2仍旧小于等于end，有的话依次放入结果数组
+            // 8.遍历结果数组 去替换原始arr数组的值
+            let p1 = start,
+                p2 = mid + 1,
+                p = 0, // 因为结果数组每次都是空的
+                tempArr = []
+            while ((p1 <= mid) && (p2 <= end)) {
+                // 思考，这里能否写等于号呢？能
+                if (arr[p1] <= arr[p2]) {
+                    tempArr[p++] = arr[p1++]
+                } else {
+                    tempArr[p++] = arr[p2++]
+                }
             }
+            while (p1 <= mid) {
+                tempArr[p++] = arr[p1++]
+            }
+            while (p2 <= end) {
+                tempArr[p++] = arr[p2++]
+            }
+            for (let i = 0; i < tempArr.length; i++) {
+                arr[i + start] = tempArr[i]
+            }
+        }
+
+        // 1. 时间复杂度：O(n) / O(nlogn)
+        // 平均情况下的时间复杂度O(n) 最坏情况下的时间复杂度O(nlogn)
+        // 平均情况：假设n个元素需要排序 分为n个桶 每个桶里面一个元素
+        //     - 求最大值和最小值 运算量为n
+        //     - 创建空桶 运算量为n
+        //     - 把原始数列的元素匹配到空桶里面 运算量为n
+        //     - 在桶的内部做排序，在元素分布相对均匀的情况下，所有桶的运算量之和为n
+        //     - 输出排序序列 -> 原始数组 运算量为n
+        //     最终为O(n)
+        // 最坏的情况：nlogn = nlogn[排序使用] + n = n(logn + 1) 而1可以忽略不计 就是nlogn
+
+
+        // 2. 空间复杂度：O(n)
+        //     - 一个空的数组 -> n
+
+        // 3. 逻辑
+        // 把若干个元素放到桶里面去，桶里面的元素各自排序，再把元素取出来就是排序后的结果。
+        // 如何判断有几个桶？根据最大值和最小值的差 / 每个桶里面的元素个数
+        // 如何判断每个元素应该放到哪个桶？ 目标元素 - min / 每个桶里面的元素个数
+        function bucketSort(arr, bucketSize) {
+            // 1.判空
+            if (arr.length === 0) {
+                return
+            }
+            // 2.1 设置每个桶的区间范围的默认值 => 每个桶的区间范围可以是预先传入的
+            let default_bucket_size = 5
+            bucketSize = bucketSize | default_bucket_size
+            // 2.2 求出最大值和最小值=>为了求出有多少个桶
             let min = arr[0]
             let max = arr[0]
-            for (let i = 1; i < arr.length; i++) {
-                if (arr[i] < min) {
-                    min = arr[i] // 数组最小值
-                } else if (arr[i] > max) {
-                    max = arr[i] // 数据最大值
+            for (let i = 0; i < arr.length; i++) {
+                if (max < arr[i]) {
+                    max = arr[i]
+                }
+                if (min > arr[i]) {
+                    min = arr[i]
                 }
             }
-            // 桶的初始化
-
-            // 每个桶的大小默认是5个数
-            let default_bucket_size = 5
-            bucketSize = bucketSize || default_bucket_size
-            // 总共要几个桶 假设10个数 -> 最大值 99 最小值 89 -> 3个桶
             let bucketCount = Math.floor((max - min) / bucketSize) + 1
-            // 创建3个空的桶
-            let buckets = new Array(bucketCount)
-            // 创建二维数组 [[], [], []]
-            for (let i = 0; i < buckets.length; i++) {
-                buckets[i] = []
+            // 创建桶数组
+            // 生成二维数组
+            let array = new Array(bucketCount)
+            for (let i = 0; i < bucketCount; i++) {
+                array[i] = []
             }
-            // 利用映射关系 将数据分配到各个桶中[难点]
+            // 4.把arr数据放入新生成的桶里面去
             for (let i = 0; i < arr.length; i++) {
-                // [99, 98, 97, 96, 95, 94, 93.4, 92.3, 91.2, 90.1]
-                buckets[Math.floor((arr[i] - min) / bucketSize)].push(arr[i])
+                // debugger
+                array[Math.floor((arr[i] - min) / bucketSize)].push(arr[i])
             }
-            // 清空原本的数组
-            arr.length = 0
-            // 外层的数组
-            for (let i = 0; i < buckets.length; i++) {
-                mergeSort(buckets[i]) // 使用插入排序 对每个桶内部进行排序
-                // 内层的数组
-                for (let j = 0; j < buckets[i].length; j++) {
-                    arr.push(buckets[i][j])
+            debugger
+            arr = []
+            // 5.再利用归并排序或者归并排序的优化版本对里面的每个值进行排序 
+            for (let i = 0; i < array.length; i++) {
+                // debugger
+                sortArray(array[i]) // 对array里面的二维数组进行排序
+                for (let j = 0; j < array[i].length; j++) {
+                    // debugger
+                    // 6.内层再嵌套一层for循环把值放到arr数组里面去
+                    arr.push(array[i][j])
                 }
             }
             return arr
