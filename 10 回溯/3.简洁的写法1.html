@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 逻辑是和组合类似的，要创建数组或者对象，把字母组合取出来，取出来之后的遍历以及回溯就和之前的相似。
+        // 还有一个不同点是，这里是字符串，push到数组里面去。
+        // 1.一种直接是字符串++
+        // 2.一种是先是数组，再join成字符串
+
+        // 时间复杂度；O(3^m * 4^n) m表示有3个字母的数字个数，n表示有4个字母的数字个数 要遍历这么多次
+        // 空间复杂度：O(n)递归调用层数
+        const letterCombinations = function (digits) {
+            if (digits.length === 0) {
+                return []
+            }
+            let res = []
+            let map = {
+                2: 'abc',
+                3: 'def',
+                4: 'ghi',
+                5: 'jkl',
+                6: 'mno',
+                7: 'pqrs',
+                8: 'tuv',
+                9: 'wxyz'
+            }
+            const dfs = function (curStr, i) {
+                // 写等于，就用digits.length
+                // 写大于，就用digits.length - 1
+                if (i > digits.length - 1) {
+                    res.push(curStr)
+                    return
+                }
+                // 取出来的letters就是abc def ghi
+                let letters = map[digits[i]]
+                // 这里的每一次for循环重新开始时就完成了回溯的
+                for (const l of letters) {
+                    dfs(curStr + l, i + 1)
+                }
+            }
+            // 初始的curStr就是空字符串
+            dfs('', 0)
+            return res
+        }
+        console.log(letterCombinations('23'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 这个写法和上一个简单写法的区别就是，利用path中间数组 上一个dfs是在递归的时候累加
+        var letterCombinations = function (digits) {
+            // 1.获取digits的长度 k
+            let k = digits.length
+            // 用于索引遍历
+            const arr = ["", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
+            // .判空0
+            if (k === 0) {
+                return []
+            }
+            // .如果是1，如何处置
+            if (k === 1) {
+                return arr[digits[0]].split('')
+            }
+            let res = []
+            // 每一次递归的中间数组
+            let path = []
+            function backtracking(n, k, i) {
+                // 思考为什么要取等于呢？
+                // k是固定的，当i等于k意味着数组的长度取到了目标要求的长度
+                if (i >= k) {
+                    // 把path的数组转化为字符串
+                    // ['a', 'b']
+                    res.push(path.join(''))
+                    return
+                }
+                // n是arr数组 digits是字符"23"
+                for (let l of n[digits[i]]) {
+                    path.push(l)
+                    backtracking(n, k, i + 1)
+                    path.pop()
+                }
+            }
+            backtracking(arr, k, 0)
+            return res
+        };
+        console.log(letterCombinations('23'));
+    </script>
+</body>
+
+</html>
