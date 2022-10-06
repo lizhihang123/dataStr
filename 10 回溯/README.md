@@ -1,4 +1,4 @@
-## 1.回溯的理论
+## 1. 回溯的理论
 
 回溯是递归的副产品，只要有递归就会有回溯
 
@@ -58,7 +58,7 @@ for循环外层 -> 多少个孩子就遍历多少次 横向遍历
 
 
 
-## 2.组合问题
+## 2. 组合问题
 
 ```diff
 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
@@ -126,7 +126,7 @@ console.log(combine(4, 3));
 
 
 
-## 3.组合问题的优化
+## 3. 组合问题的优化
 
 需要把下面的条件从 i <= n 改为 i <= n - (k - path.length) + 1就可以完成剪枝
 
@@ -170,4 +170,351 @@ console.log(combine(4, 3));
 
 下面是代码运行时的过程，然后红色框是剪枝剪掉的部分
 
-<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220928084536389.png" alt="image-20220928084536389" style="zoom:50%;" />
+path.length越小，k - path.length越大，整体就越小<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220928084536389.png" alt="image-20220928084536389" style="zoom:50%;" />
+
+
+
+
+
+## 4. 组合总和III
+
+**题目介绍**
+
+给定k和n，k表示组合的个数，n表示求和的“求和数”,只能从1-9的范围里面选择求和数
+
+每个数字最多只能使用一次
+
+区别：1.组合问题，没有限制只能1-9，本题有限制； 2.返回的是所有组合，没有限制组合的个数；但是本题有给定； 3.本题是要求和的，组合问题是没有求和的
+
+
+
+
+
+**代码**
+
+```js
+var combinationSum3 = function (k, n) {
+    // 1.变量声明
+    // 2.函数声明
+    // 3.函数调用
+    let res = [], // 结果数组
+        path = [] // 每层循环遍历的数组
+    const traverse = function (start) {
+        // debugger
+        let l = path.length // path数组的长度
+        // path的求和 
+        let sum = path.reduce((prev, cur) => prev + cur, 0)
+        // 满足要求的path长度
+        if (l === k) {
+            // 求和也满足条件
+            if (sum === n) {
+                // path记得延展运算符展开
+                res.push([...path])
+            }
+            return
+        }
+        for (let i = start; i <= 9 - (k - l) + 1; i++) {
+            path.push(i) // 放入path里面去
+            // !用的是i+1 不是start
+            traverse(i + 1)
+            path.pop() // 回溯
+        }
+    }
+    traverse(1)
+    return res
+};
+```
+
+
+
+
+
+
+
+
+
+## 5. 电话号码
+
+**题目解读：**
+
+1.给定 2-9的组合字符串，比如'23'
+
+2.'2'对应'abc'，‘3’对应'def'，那么有几种组合？[组合数是2个]
+
+['ad', 'ae', 'af', 'bd', 'be', 'bf'，……]
+
+3.注意1对应无效的字符
+
+
+
+**细节：**
+
+1.答案可以按照任何的顺序返回
+
+2.digits.length是大于等于0，小于等于4的
+
+3.digits[i]一定在 2-9之间
+
+
+
+
+
+**代码：**
+
+更喜欢这种写法
+
+```js
+function letterCombinations(digits) {
+            let arr = ['', '', 'abc', 'def', 'ghi', 'jkl', 'mno', 'pqrs', 'tuv', 'wxyz']
+            let res = []
+            let s = ''
+            function tracking(start) {
+                debugger
+                if (s.length === digits.length) {
+                    res.push(s)
+                    return
+                }
+                let temp = digits[start]
+                let letters = arr[temp]
+                debugger
+                for (let i = 0; i < letters.length; i++) {
+                    s += letters[i]
+                    tracking(start + 1)
+                    s = s.slice(0, s.length - 1)
+                }
+            }
+            tracking(0)
+            return res
+        }
+        console.log(letterCombinations('23'));
+```
+
+也可以这样写
+
+```js
+var letterCombinations = function (digits) {
+    // 1.获取digits的长度 k
+    let k = digits.length
+    // 用于索引遍历
+    const arr = ["", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
+    // .判空0
+    if (k === 0) {
+        return []
+    }
+    // .如果是1，如何处置
+    if (k === 1) {
+        return arr[digits[0]].split('')
+    }
+    let res = []
+    // 每一次递归的中间数组
+    let path = []
+    function backtracking(n, k, i) {
+        // 思考为什么要取等于呢？
+        // k是固定的，当i等于k意味着数组的长度取到了目标要求的长度
+        if (i >= k) {
+            // 把path的数组转化为字符串
+            // ['a', 'b']
+            res.push(path.join(''))
+            return
+        }
+        // n是arr数组 digits是字符"23"
+        for (let l of n[digits[i]]) {
+            path.push(l)
+            backtracking(n, k, i + 1)
+            path.pop()
+        }
+    }
+    backtracking(arr, k, 0)
+    return res
+};
+```
+
+
+
+这样写更加简单
+
+```js
+const letterCombinations = function (digits) {
+            if (digits.length === 0) {
+                return []
+            }
+            let res = []
+            let map = {
+                2: 'abc',
+                3: 'def',
+                4: 'ghi',
+                5: 'jkl',
+                6: 'mno',
+                7: 'pqrs',
+                8: 'tuv',
+                9: 'wxyz'
+            }
+            const dfs = function (curStr, i) {
+                // 写等于，就用digits.length
+                // 写大于，就用digits.length - 1
+                if (i > digits.length - 1) {
+                    res.push(curStr)
+                    return
+                }
+                // 取出来的letters就是abc def ghi
+                let letters = map[digits[i]]
+                // 这里的每一次for循环重新开始时就完成了回溯的
+                for (const l of letters) {
+                    dfs(curStr + l, i + 1)
+                }
+            }
+            // 初始的curStr就是空字符串
+            dfs('', 0)
+            return res
+        }
+        console.log(letterCombinations('23'));
+```
+
+
+
+**作图**
+
+通过分析下面两幅图，可以得出，backtracking传过去的值，到底写，start还是i了，i有可能达到2，而digits[2]是没有值的
+
+![image-20221005080206508](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221005080206508.png)
+
+![image-20221005080222662](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221005080222662.png)
+
+## 6. 组合总和
+
+**题目介绍**
+
+1.给定**candidate**数组 [1,2,3,4] 找到组合，求和为**target**的值,比如是4
+
+2.组合的值可以是 [1,1,2] [1,1,1,1], [2,2], [1,3],[4]
+
+3.组合与组合之间是不能够重复的
+
+
+
+**细节：**
+
+1.组合candidate里面没有元素重复
+
+2.组合里面的元素可以重复[1,1,1,1]
+
+3.组合与组合之间不能一致 [1,3]和[3,1]是重复的
+
+4.组合的数量少于150个
+
+5.1<=candidate[i] <= 200 ; 1<=target <= 500; 1 <=candidate <=30
+
+
+
+
+
+**代码**
+
+```js
+
+const combinationSum = function (candidates, target) {
+    //1.
+    let path = []
+    let res = []
+   
+    function tracking(sum, startIndex) {
+        // 3.
+        if (sum >= target) {
+            if (sum === target) {
+                res.push([...path])
+            }
+            return
+        }
+        //4.
+        for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+   			//5.
+            sum += candidates[i]
+            path.push(candidates[i])
+			//6.
+            tracking(sum, i)
+            //7.
+            sum -= candidates[i]
+            path.pop()
+        }
+    }
+    //2.
+    tracking(0, 0)
+    return res
+};
+console.log(combinationSum([2, 3, 6, 7], 7));
+```
+
+
+
+**非剪枝版本**
+
+![image-20221004102422315](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221004102422315.png)
+
+**剪枝版本**
+
+我们可以看到，上面，即便判断出了sum值大于target的值，依然会进行到下一波的循环->递归，要舍弃这个
+
+![image-20221004102350333](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221004102350333.png)
+
+
+
+
+
+
+
+## 7. 组合总和II
+
+这里的used的数组 感觉很困惑 很疑惑 
+
+```js
+// 这题和上一题的最大区别在哪里呢？
+// 区别1 注意看测试用例，candidates里面的值可能是重复的
+// 区别2 每个数字 在每个组合只能被使用一次 candidates[1,1,2] 里面的每个1只能被拿1次
+// 相同1 [1, 1, 6]是可以被允许的
+// 做法：仅仅通过排序 candidates + tracking[i+1]并不能起到去重 出现res里面有 [[1,6], [1,6]]的情况
+// 正因为candidates[1,1,6,7]开头两个1 才会出现两个 [1,7]的情况 如何排除？
+
+const combinationSum2 = function (candidates, target) {
+    // debugger
+    //1.
+    let path = []
+    let res = []
+    let used = new Array(candidates.length).fill(0)
+
+    candidates = candidates.sort((a, b) => a - b)
+    function tracking(sum, startIndex, used) {
+        debugger
+        // 3.
+        if (sum >= target) {
+            if (sum === target) {
+                res.push([...path])
+            }
+            return
+        }
+        //4.
+        // 问题1：直接跳出for循环，为什么会出现这个问题？第一个元素10已经大于 target
+        // 只要sum + candidates[i] >target就跳出循环吗？上题这么写能成功，刚好是，测试用例，是有序的，
+        for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+            debugger
+            if (i > 0 && candidates[i] === candidates[i - 1] && used[i - 1] === false) {
+                continue
+            }
+            //5.
+            sum += candidates[i]
+            path.push(candidates[i])
+            used[i] = true
+            //6.
+            tracking(sum, i + 1, used)
+            //7.
+            sum -= candidates[i]
+            path.pop()
+            used[i] = false
+        }
+    }
+    //2.
+    tracking(0, 0, used)
+    return res
+};
+console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+```
+

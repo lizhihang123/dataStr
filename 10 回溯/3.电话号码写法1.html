@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function letterCombinations(digits) {
+            let arr = ['', '', 'abc', 'def', 'ghi', 'jkl', 'mno', 'pqrs', 'tuv', 'wxyz']
+            let res = []
+            let s = ''
+            function tracking(start) {
+                debugger
+                if (s.length === digits.length) {
+                    res.push(s)
+                    return
+                }
+                let temp = digits[start]
+                let letters = arr[temp]
+                debugger
+                for (let i = 0; i < letters.length; i++) {
+                    s += letters[i]
+                    tracking(start + 1)
+                    s = s.slice(0, s.length - 1)
+                }
+            }
+            tracking(0)
+            return res
+        }
+        console.log(letterCombinations('23'));
+    </script>
+</body>
+
+</html>

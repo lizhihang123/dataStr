@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // candidate [1,2,3,4,5] target 5 
+        // [2,3]
+        // [1,4]
+        // [1,1,2]
+        // [1,2,2] =》candidates里面的数字可以无限被重复取到 但是组合不能是重复的 
+        // 像这样的写法 只能适合两个元素的和等于目标值的情况 如果说是任意数量的组合数 就没有办法解决了
+        // candidate[i]是大于等于1，小于等于200的，且组合数是小于等于150个的
+
+        // 什么时候用startIndex呢？
+        // 组合问题的情况下,如果是一个集合来求组合的话,就需要startIndex,如果是多个集合求组合的话,各个集合之间互不影响,那么就不用startIndex
+        const combinationSum = function (candidates, target) {
+            // 力扣 最好不要搞全局变量，不然它就会报错
+            let path = []
+            let res = []
+            // debugger
+            function tracking(sum, startIndex) {
+                // debugger
+                // console.log(1); // 剪枝前后的变化 少了9个
+                // if (sum > target) {
+                //     return
+                // }
+                if (sum >= target) {
+                    if (sum === target) {
+                        res.push([...path])
+                    }
+                    return
+                }
+                // candidates[i] + sum <= target是剪枝的条件
+                // 这里写小于等于才是对的，小于就是错的，等于，也可以进入循环
+                for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+                    // debugger
+                    sum += candidates[i]
+                    path.push(candidates[i])
+                    // 注意，这里传递的是i 而不是i+1 也不是永远的0，这样才不会出现[1,3] [3,1]的情况
+                    // 如果写 i+1 那么 就无法包含[2,2,2,2]的情况
+                    tracking(sum, i)
+                    sum -= candidates[i]
+                    path.pop()
+                }
+            }
+            tracking(0, 0)
+            return res
+        };
+        console.log(combinationSum([2, 3, 6, 7], 7));
+    </script>
+</body>
+
+</html>

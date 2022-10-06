@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 这题和上一题的最大区别在哪里呢？
+        // 区别1 注意看测试用例，candidates里面的值可能是重复的
+        // 区别2 每个数字 在每个组合只能被使用一次 candidates[1,1,2] 里面的每个1只能被拿1次
+        // 相同1 [1, 1, 6]是可以被允许的
+        // 做法：仅仅通过排序 candidates + tracking[i+1]并不能起到去重 出现res里面有 [[1,6], [1,6]]的情况
+        // 正因为candidates[1,1,6,7]开头两个1 才会出现两个 [1,7]的情况 如何排除？
+
+        const combinationSum2 = function (candidates, target) {
+            // debugger
+            //1.
+            let path = []
+            let res = []
+            let used = new Array(candidates.length).fill(0)
+
+            candidates = candidates.sort((a, b) => a - b)
+            function tracking(sum, startIndex, used) {
+                debugger
+                // 3.
+                if (sum >= target) {
+                    if (sum === target) {
+                        res.push([...path])
+                    }
+                    return
+                }
+                //4.
+                // 问题1：直接跳出for循环，为什么会出现这个问题？第一个元素10已经大于 target
+                // 只要sum + candidates[i] >target就跳出循环吗？上题这么写能成功，刚好是，测试用例，是有序的，
+                for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+                    debugger
+                    if (i > 0 && candidates[i] === candidates[i - 1] && used[i - 1] === false) {
+                        continue
+                    }
+                    //5.
+                    sum += candidates[i]
+                    path.push(candidates[i])
+                    used[i] = true
+                    //6.
+                    tracking(sum, i + 1, used)
+                    //7.
+                    sum -= candidates[i]
+                    path.pop()
+                    used[i] = false
+                }
+            }
+            //2.
+            tracking(0, 0, used)
+            return res
+        };
+        console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+    </script>
+</body>
+
+</html>
