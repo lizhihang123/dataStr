@@ -518,3 +518,10 @@ const combinationSum2 = function (candidates, target) {
 console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
 ```
 
+
+
+如下图所示，解释了used数组的作用
+
+![image-20221007083753626](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221007083753626.png)
+
+![image-20221007083804801](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221007083804801.png)

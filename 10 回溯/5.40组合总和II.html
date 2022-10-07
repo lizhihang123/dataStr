@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 这题和上一题的最大区别在哪里？
+        // 区别1 candidates里面的值可能是重复的
+        // 区别2 每个数字 在每个组合只能被使用一次 candidates[1,1,2] 里面的每个1只能被拿1次 如果candidates[1,2] 就不可能出现 [1,2]的组合
+        // 相同1 [1, 1, 6]可以被允许的
+        // 做法 去重得通过 used数组 [false, false, 0] candidates[i - 1] === candidates[i]
+
+        const combinationSum2 = function (candidates, target) {
+            let path = []
+            let res = []
+            // 如果这里初始化为0 那么下面的 判断重复时，里面也要增加为used[i] =false
+            let used = new Array(candidates.length).fill(0)
+            // 要进行排序，为什么？否则 [10, 1, 2, 7, 6, 1, 5] 直接第一个reutrn
+            candidates = candidates.sort((a, b) => a - b)
+            function tracking(sum, startIndex, used) {
+                // 3.
+                if (sum >= target) {
+                    if (sum === target) {
+                        res.push([...path])
+                    }
+                    return
+                }
+                /* 
+                如何去重？
+                前提：对数组进行排序
+                    1.同一个树枝上面可以重复 -》一个组合里面可以有重复
+                    2.同一个层级上面不能够够重复 -》不同出现 [[1,2], [1,2]]的情况
+                */
+                for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+                    // candidates[i] === candidates[i - 1]是什么意思呢？ 有重复元素candidates
+                    // 如果说 used[i - 1]等于false意味着什么 有重复 + 已经被用过一次
+                    if (i > 0 && candidates[i] === candidates[i - 1] && used[i - 1] === false) {
+                        // ![2,2,2] 因为 如果是第一个[false, 0, 0]
+                        // i = 1的时候，如果i - 1是false，并且candidates的条件满足，这里就跳过
+                        // 但是candidates[i]此时还是0，那么第三个2岂不是又能够重复了
+                        used[i] = false
+                        // 还有一种做法是,used的数组初始化都是0,
+                        continue
+                    }
+                    //5.
+                    sum += candidates[i]
+                    path.push(candidates[i])
+                    used[i] = true
+                    //6.
+                    tracking(sum, i + 1, used)
+                    //7.
+                    sum -= candidates[i]
+                    path.pop()
+                    used[i] = false
+                }
+            }
+            tracking(0, 0, used)
+            return res
+        };
+        // console.log(combinationSum2([1, 1, 2], 3));
+        // console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+        console.log(combinationSum2([2, 2, 2], 2));
+    </script>
+</body>
+
+</html>
