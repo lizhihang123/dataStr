@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            读题：
+                1.s 分割成一些子串 每个子串都是回文串(正着读和反着读都是一样的字符串)
+                2.测试用例：一个字符也叫作回文串 + 一定是连续的不能是随机组合的
+                3.字符串的长度小于16 
+                4.进一步发现理解错误 是拆分为子串，拆分后的所有子串都要是回文才行
+                'aab'
+                ['a', 'ab']这样是错的
+                ['a', 'a', 'b']这样是可以的
+                ['aa', 'b']这样是可以的
+            */
+
+        // 算法：
+        /**
+            1. 暴力
+            先拆分为所有子串的可能性
+            然后再去判断是不是回文字符串
+            2. 回溯 思路一致
+            先弄成子串
+            然后判断是不是回文
+         */
+        function isBack(str) {
+            let i = 0
+            let j = str.length - 1
+            while (i <= j) {
+                if (str[i] === str[j]) {
+                    i++
+                    j--
+                } else {
+                    return false
+                }
+            }
+            return true
+        }
+        // console.log(isBack('aabaa'));
+
+        /* 
+        1.切分
+        2.切分后丢进数组
+        3.数组拿去挨个判断是不是回文
+        4.不是，继续切分
+        */
+        var partition = function (s) {
+            let str1 = s.slice(0, 1)
+            let str2 = s.slice(1, 2)
+            let str3 = s.slice(2, 3)
+            let arr = []
+            arr.push(str1, str2, str3)
+            console.log(arr);
+            const flag = arr.every(item => {
+                return isBack(item)
+            })
+            return flag
+        };
+        console.log(partition('aab'));
+    </script>
+</body>
+
+</html>

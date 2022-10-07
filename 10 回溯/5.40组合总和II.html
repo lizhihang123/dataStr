@@ -10,11 +10,23 @@
 
 <body>
     <script>
-        // 这题和上一题的最大区别在哪里？
-        // 区别1 candidates里面的值可能是重复的
-        // 区别2 每个数字 在每个组合只能被使用一次 candidates[1,1,2] 里面的每个1只能被拿1次 如果candidates[1,2] 就不可能出现 [1,2]的组合
-        // 相同1 [1, 1, 6]可以被允许的
-        // 做法 去重得通过 used数组 [false, false, 0] candidates[i - 1] === candidates[i]
+        /*  
+         读题
+         这题和上一题的最大区别在哪里？
+         区别1 candidates里面的值可能是重复的
+         区别2 每个数字 在每个组合只能被使用一次 candidates[1,1,2] 里面的每个1只能被拿1次 如果candidates[1,2] 就不可能出现 [1,2]的组合
+         相同1 [1, 1, 6]可以被允许的
+         做法 去重得通过 used数组 [false, false, 0] candidates[i - 1] === candidates[i] 
+        
+         */
+
+
+        /* 
+        时间复杂度：
+        O(2^n*n)n是数组放进res的，2^n是判断这个数字是不是被用过的？不懂哎
+        空间复杂度：
+        O(n)数组的长度
+        */
 
         const combinationSum2 = function (candidates, target) {
             let path = []
