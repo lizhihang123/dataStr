@@ -12,7 +12,7 @@
     <script>
         /* 
             读题：
-                1.s 分割成一些子串 每个子串都是回文串(正着读和反着读都是一样的字符串)
+                1.s 分割成子串 每个子串都是回文串(正着读和反着读都是一样的字符串)
                 2.测试用例：一个字符也叫作回文串 + 一定是连续的不能是随机组合的
                 3.字符串的长度小于16 
                 4.进一步发现理解错误 是拆分为子串，拆分后的所有子串都要是回文才行
@@ -21,48 +21,51 @@
                 ['a', 'a', 'b']这样是可以的
                 ['aa', 'b']这样是可以的
             */
-
-        // 算法：
-        /**
-            1. 暴力
-            先拆分为所有子串的可能性
-            然后再去判断是不是回文字符串
-            2. 回溯 思路一致
-            先弄成子串
-            然后判断是不是回文
-         */
-        function isBack(str) {
-            let i = 0
-            let j = str.length - 1
-            while (i <= j) {
-                if (str[i] === str[j]) {
-                    i++
-                    j--
-                } else {
+        function isPalindrome(str, start, end) {
+            // 两个指针 开始和结尾指针 相继往中间靠拢 如果说碰到的值不一致就false否则true
+            for (let i = start, j = end; i < j; i++, j--) {
+                if (str[i] !== str[j]) {
                     return false
                 }
             }
             return true
         }
-        // console.log(isBack('aabaa'));
-
-        /* 
-        1.切分
-        2.切分后丢进数组
-        3.数组拿去挨个判断是不是回文
-        4.不是，继续切分
-        */
+        // console.log(isPalindrome('abb', 0, 2));
         var partition = function (s) {
-            let str1 = s.slice(0, 1)
-            let str2 = s.slice(1, 2)
-            let str3 = s.slice(2, 3)
-            let arr = []
-            arr.push(str1, str2, str3)
-            console.log(arr);
-            const flag = arr.every(item => {
-                return isBack(item)
-            })
-            return flag
+            // 递归退出条件
+            // 分割子串
+            // 判断回文
+            let res = []
+            let path = []
+            function tracking(s, startIndex) {
+                // 递归退出条件
+                if (path.length >= s.length) {
+                    if (path.length === s.length) {
+                        // 放入结果数组 是回文才走的进来
+                        res.push([...path])
+                        return
+                    }
+                }
+                // startIndex就是子串的分割线 因为递归 i + 1进来就是startIndex
+                for (let i = startIndex; i < s.length; i++) {
+                    if (isPalindrome(s, startIndex, i)) {
+                        // startIndex等于0时，i等于1时，1 - 0 + 1 = 2 那么截取的就是 (0,2)不包括2
+                        let str = s.substr(startIndex, i - startIndex + 1)
+                        // 截取的一部分子串
+                        path.push(str)
+                    } else {
+                        // 不是回文 直接continue i会越界 此种情况就不符合了
+                        continue
+                    }
+                    // 递归点 来把子串集合在一起 ['a', 'a', 'b']就是这样集合在一起的
+                    tracking(s, i + 1)
+                    path.pop() // 回溯 至关重要 
+                }
+
+            }
+            // startIndex初始值是0
+            tracking(s, 0)
+            return res
         };
         console.log(partition('aab'));
     </script>

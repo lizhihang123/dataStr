@@ -525,3 +525,88 @@ console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
 ![image-20221007083753626](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221007083753626.png)
 
 ![image-20221007083804801](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221007083804801.png)
+
+
+
+
+
+## 8. 分割回文字符串
+
+
+
+**什么时候需要startIndex?**
+
+- 如果多个集合，求组合，集合之间互不干扰的，就不需要startIndex
+- 如果是一个集合，求组合，是相互干扰的，就需要startIndex
+- startIndex是分割的关键 截取字符串`substr(startIndex, i - startIndex + 1)`, 为什么是startIndex，为什么是 i - startIndex + 1。假设截取 'aab'里面的'aa'，startIndex就是0，i就是1,1 - 0 + 1就是2。而通过递归 i + 1来改变startIndex的值，来继续截取
+
+
+
+**和组合总和II的区别是什么？**
+
+1.[1,1,6,7]是求组合，1,6,7是一种组合，不能够出重复组合数，但是两个1都可以拿一次 1,1,6是开业的
+
+2.分割回文串：是字符串；字符串的分割类型不同，这个和上面一致，多种组合；字符串分割必须有顺序，依靠的
+
+```js
+1.s 分割成子串 每个子串都是回文串(正着读和反着读都是一样的字符串)
+2.测试用例：一个字符也叫作回文串 + 一定是连续的不能是随机组合的
+3.字符串的长度小于16 
+4.进一步发现理解错误 是拆分为子串，拆分后的所有子串都要是回文才行
+'aab'
+['a', 'ab']这样是错的
+['a', 'a', 'b']这样是可以的
+['aa', 'b']这样是可以的
+
+
+function isPalindrome(str, start, end) {
+    // 两个指针 开始和结尾指针 相继往中间靠拢 如果说碰到的值不一致就false否则true
+    for (let i = start, j = end; i < j; i++, j--) {
+        if (str[i] !== str[j]) {
+            return false
+        }
+    }
+    return true
+}
+// console.log(isPalindrome('abb', 0, 2));
+var partition = function (s) {
+    // 递归退出条件
+    // 分割子串
+    // 判断回文
+    let res = []
+    let path = []
+    function tracking(s, startIndex) {
+        // 递归退出条件
+        if (path.length >= s.length) {
+            if (path.length === s.length) {
+                // 放入结果数组 是回文才走的进来
+                res.push([...path])
+                return
+            }
+        }
+        // startIndex就是子串的分割线 因为递归 i + 1进来就是startIndex
+        for (let i = startIndex; i < s.length; i++) {
+            if (isPalindrome(s, startIndex, i)) {
+                // startIndex等于0时，i等于1时，1 - 0 + 1 = 2 那么截取的就是 (0,2)不包括2
+                let str = s.substr(startIndex, i - startIndex + 1)
+                // 截取的一部分子串
+                path.push(str)
+            } else {
+                // 不是回文 直接continue i会越界 此种情况就不符合了
+                continue
+            }
+            // 递归点 来把子串集合在一起 ['a', 'a', 'b']就是这样集合在一起的
+            tracking(s, i + 1)
+            path.pop() // 回溯 至关重要 
+        }
+
+    }
+    // startIndex初始值是0
+    tracking(s, 0)
+    return res
+};
+```
+
+
+
+![image-20221010075617932](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221010075617932.png)
