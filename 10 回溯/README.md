@@ -610,3 +610,50 @@ var partition = function (s) {
 
 
 ![image-20221010075617932](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221010075617932.png)
+
+
+
+本题的难点：
+
+1.想到用回溯，可是到底如何去切割字符串呢？不知道从何下手
+
+2.如何模拟切割线呢？
+
+3.切割后，如何继续切割下面的字符串呢？
+
+4.如何停止切割呢？
+
+5.如何判断是回文呢？
+
+**总结难点，也是一种能力**
+
+
+
+
+
+判断回文，有值得优化的地方
+
+```js
+void computePalindrome(const string& s) {
+    // isPalindrome[i][j] 代表 s[i:j](双边包括)是否是回文字串 
+    isPalindrome.resize(s.size(), vector<bool>(s.size(), false)); // 根据字符串s, 刷新布尔矩阵的大小
+    for (int i = s.size() - 1; i >= 0; i--) { 
+        // 需要倒序计算, 保证在i行时, i+1行已经计算好了
+        for (int j = i; j < s.size(); j++) {
+            if (j == i) {isPalindrome[i][j] = true;}
+            else if (j - i == 1) {isPalindrome[i][j] = (s[i] == s[j]);}
+            else {isPalindrome[i][j] = (s[i] == s[j] && isPalindrome[i+1][j-1]);}
+        }
+    }
+}
+```
+
+
+
+
+
+## 9. 复原ip地址
+
+
+
+![image-20221011093256715](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221011093256715.png)
