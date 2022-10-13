@@ -27,7 +27,7 @@
                 const len = path.length;
                 if (len > 4) return;
 
-                // 如果path的长度是4，表示里面有4个子串；如果 i === s.length 表示所有的字符都被分割到了 而不仅仅是 ['2', '5', '5', '2'] -> 所以这里不会进入 下面的for再来一波 长度 > 4了就会return -> 再经历path.pop()
+                // 如果path的长度是4，表示里面有4个子串；如果 i === s.length 表示所有的字符都被分割到了 不是 ['2', '5', '5', '2'] 而是 [255,255, 11,135] -> ['2', '5', '5', '2'] 这个不会进入 -> 下面的for再来一波 长度 > 4了就会return -> 再经历path.pop()
                 if (len === 4 && i === s.length) {
                     debugger
                     res.push(path.join("."));

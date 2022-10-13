@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function restoreIpAddresses(s) {
+            // 1.创建结果变量和path变量
+            // 2.递归数组中
+            // 2.1 退出条件
+            // 2.2 成功进入结果数组的条件
+            // 2.3 遍历时 注意j = 1
+            // 2.4 注意如何截取字符串呢？
+            // 2.5 注意判断字符是否是超过255的
+            // 2.6 注意判断字符是否是012这样的呢？
+            // 3.递归，注意传入的是j+1
+            // 4.回溯
+            function backtracking(i) {
+                /* 
+                    易错点：
+                    1. 写成了 i > 4 一定是path数组的长度大于4就return而不是i，i表示的是什么呢？是在s字符串上面的指针，下面同理
+                    2. 和 i === 4 && i === s.length
+                    为什么一定是 i===s.length呢？因为是判断i这个指针是否走完了s.length
+                */
+                let len = path.length
+                if (len > 4) return
+                if (len === 4 && i === s.length) {
+                    // 注意分隔符是.
+                    // ['255', '255', '11', '135']符合上面的条件
+                    // ['2', '5', '5', '2', '5']不符合
+
+                    res.push(path.join('.'))
+                }
+                /* 
+                    易错点：
+                    1. 为什么一定是j === i呢？递归 j+1传进来，就是给到i，从i开始遍历，防止重复遍历
+                    2. str.length > 3 || +str>255 意思是ip地址必须是3位或者是大小如果超过了255，就要break 跳出这一层循环 回到上一层递归
+                    3. 如果是 '01' 这样的也要跳出循环 但是 '0'这样的就没关系
+                */
+                for (let j = i; j < s.length; j++) {
+                    let str = s.slice(i, j + 1)
+                    // ['2', '5', '5', '551'] 这种情况就会直接走break
+                    if (str.length > 3 || +str > 255) {
+                        break
+                    }
+                    // ['2', '5', '5', '01']如果是0开头并且0后面还有数字 就会直接break
+                    if (str[0] === '0' && str.length > 1) {
+                        break
+                    }
+                    path.push(str)
+                    backtracking(j + 1)
+                    path.pop()
+                }
+            }
+            const res = [],
+                path = []
+            backtracking(0)
+            return res
+        }
+        console.log(restoreIpAddresses('25525511135'));
+    </script>
+</body>
+
+</html>
