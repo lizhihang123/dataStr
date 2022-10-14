@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间复杂度
+        var subsets = function (nums) {
+            let res = []
+            let path = []
+            let len = nums.length
+            backtracking(0)
+            return res
+            function backtracking(i) {
+                // 递归退出点 只要没有大于nums的长度 都可以放进res
+                if (i <= len) {
+                    // 记得是解构放进res数组
+                    res.push([...path])
+                } else {
+                    return
+                }
+                // for循环遍历的条件
+                for (let j = i; j < len; j++) {
+                    path.push(nums[j])
+                    // j+1注意 这样能够避免重复
+                    backtracking(j + 1)
+                    path.pop()
+                }
+            }
+        };
+        console.log(subsets([1, 2, 3]));
+    </script>
+</body>
+
+</html>

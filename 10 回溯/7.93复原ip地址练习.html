@@ -10,6 +10,8 @@
 
 <body>
     <script>
+        // 时间复杂度:O(3^(ip地址的段数) * |s|) |s|表示字符串的长度 3^ip地址的段数(每一位不会超过3，每一段最多深入到3层)
+        // 空间复杂度：O(n)
         function restoreIpAddresses(s) {
             // 1.创建结果变量和path变量
             // 2.递归数组中
@@ -26,7 +28,8 @@
                     易错点：
                     1. 写成了 i > 4 一定是path数组的长度大于4就return而不是i，i表示的是什么呢？是在s字符串上面的指针，下面同理
                     2. 和 i === 4 && i === s.length
-                    为什么一定是 i===s.length呢？因为是判断i这个指针是否走完了s.length
+                    为什么一定是 i===s.length呢？表示所有字符都切割完毕
+                    i===4表示有4个子串
                 */
                 let len = path.length
                 if (len > 4) return
@@ -45,7 +48,7 @@
                 */
                 for (let j = i; j < s.length; j++) {
                     let str = s.slice(i, j + 1)
-                    // ['2', '5', '5', '551'] 这种情况就会直接走break
+                    // ['2', '5', '5', '551'] 这种情况 551 就会直接走break 或者是2221长度大于3
                     if (str.length > 3 || +str > 255) {
                         break
                     }
@@ -58,8 +61,8 @@
                     path.pop()
                 }
             }
-            const res = [],
-                path = []
+            const res = []
+            const path = []
             backtracking(0)
             return res
         }

@@ -654,6 +654,109 @@ void computePalindrome(const string& s) {
 
 ## 9. 复原ip地址
 
+如何用几句话是概括思路？
+
+1.需要用到递归与回溯
+
+2.需要一个中间数组比如path和一个结果数组res，符合条件的才放到res数组里面去
+
+3.比如551、2222和01这样的情况排除 要记得break，然后截取str放到path数组里面去；如果path数组长度为4并且i等于字符串的长度就放到res数组
+
+4.递归点，传入的变量是j+1；
+
+```js
+// 时间复杂度:O(3^(ip地址的段数) * |s|) |s|表示字符串的长度 3^ip地址的段数(每一位不会超过3，每一段最多深入到3层)
+// 空间复杂度：O(n)
+function restoreIpAddresses(s) {
+    // 1.创建结果变量和path变量
+    // 2.递归数组中
+    // 2.1 退出条件
+    // 2.2 成功进入结果数组的条件
+    // 2.3 遍历时 注意j = 1
+    // 2.4 注意如何截取字符串呢？
+    // 2.5 注意判断字符是否是超过255的
+    // 2.6 注意判断字符是否是012这样的呢？
+    // 3.递归，注意传入的是j+1
+    // 4.回溯
+    function backtracking(i) {
+        /* 
+            易错点：
+            1. 写成了 i > 4 一定是path数组的长度大于4就return而不是i，i表示的是什么呢？是在s字符串上面的指针，下面同理
+            2. 和 i === 4 && i === s.length
+            为什么一定是 i===s.length呢？表示所有字符都切割完毕
+            i===4表示有4个子串
+        */
+        let len = path.length
+        if (len > 4) return
+        if (len === 4 && i === s.length) {
+            // 注意分隔符是.
+            // ['255', '255', '11', '135']符合上面的条件
+            // ['2', '5', '5', '2', '5']不符合
+
+            res.push(path.join('.'))
+        }
+        /* 
+            易错点：
+            1. 为什么一定是j === i呢？递归 j+1传进来，就是给到i，从i开始遍历，防止重复遍历
+            2. str.length > 3 || +str>255 意思是ip地址必须是3位或者是大小如果超过了255，就要break 跳出这一层循环 回到上一层递归
+            3. 如果是 '01' 这样的也要跳出循环 但是 '0'这样的就没关系
+        */
+        for (let j = i; j < s.length; j++) {
+            let str = s.slice(i, j + 1)
+            // ['2', '5', '5', '551'] 这种情况 551 就会直接走break 或者是2221长度大于3
+            if (str.length > 3 || +str > 255) {
+                break
+            }
+            // ['2', '5', '5', '01']如果是0开头并且0后面还有数字 就会直接break
+            if (str[0] === '0' && str.length > 1) {
+                break
+            }
+            path.push(str)
+            backtracking(j + 1)
+            path.pop()
+        }
+    }
+    const res = []
+    const path = []
+    backtracking(0)
+    return res
+}
+console.log(restoreIpAddresses('25525511135'));
+```
 
 
-![image-20221011093256715](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221011093256715.png)
+
+![image-20221014081512392](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014081512392.png)
+
+
+
+
+
+## 10. 子集问题
+
+比较之前的题目：
+
+1.组合问题：给定 n和k，返回 1到n的数中，k个数的可能性。比如给n = 8， k = 2；那么要返回的是 1到8的数字中，所有两个数的组合。但是子集问题，返回的是所有可能，1位数，2位数，3位数，空的。每个数字也是只能用1次
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084607707.png" alt="image-20221014084607707" style="zoom:50%;" />
+
+2.组合综合III：1到9的数字，n是固定的；每个数字只能用1次。返回1到9中，个数为k的，求和为7的所有的组合。
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084533079.png" alt="image-20221014084533079" style="zoom:50%;" />
+
+3.组合总和：给定了一个组合，求目标值，组合里面的每个数字可以无限的提取。
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084735994.png" alt="image-20221014084735994" style="zoom:50%;" />
+
+4.组合综合II：给定组合，求目标值，每个数字只能使用1次。组合总和与组合总和II都是，个数是随机的。组合总和III，个数是给定的。
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084859083.png" alt="image-20221014084859083" style="zoom:50%;" />
+
+
+
+
+
+5.再看子集问题：返回一个数组里面的，所有可能的子集
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084953446.png" alt="image-20221014084953446" style="zoom:50%;" />
+
