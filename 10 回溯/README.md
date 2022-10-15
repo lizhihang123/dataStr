@@ -760,3 +760,76 @@ console.log(restoreIpAddresses('25525511135'));
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084953446.png" alt="image-20221014084953446" style="zoom:50%;" />
 
+
+
+回溯解法：
+
+1.为了避免重复，j要从i开始，每次递归的时候，i都会++
+
+2.可以没有终止条件，因为每次for循环时 已经判断 i < len了，如果超过了len，无法进入for循环的
+
+3.如果抽象为树结构，那么组合问题，分割问题都是求叶子节点；但是子集问题求的是，所有的节点
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221015081708479.png" alt="image-20221015081708479" style="zoom:50%;" />
+
+```js
+var subsets = function (nums) {
+    let res = []
+    let path = []
+    let len = nums.length
+    backtracking(0)
+    return res
+    function backtracking(i) {
+        // 递归退出点 只要没有大于nums的长度 都可以放进res
+        // [1] [1, 2] [1, 2, 3] [2, 3] [3] [2]
+
+        if (i <= len) {
+            // 记得是解构放进res数组
+            res.push([...path])
+        } else {
+            // 没有这个终止条件也是ok的
+            return
+        }
+        // for循环遍历的条件
+        for (let j = i; j < len; j++) {
+            path.push(nums[j])
+            // j+1注意 这样能够避免重复
+            backtracking(j + 1)
+            path.pop()
+        }
+    }
+};
+console.log(subsets([1, 2, 3]));
+```
+
+
+
+
+
+
+
+**JS的位移运算符：**
+
+```js
+>>
+右移运算符
+1000 >> 8 就是把二进制的数整体往右边移动8位，多出的位数，舍弃
+其实也是相当于 1000 / (2 ^ 8) = 1000 / 256 = 3
+
+<<
+左移运算符
+5 << 2  二进制的数整体往左边移动2位，多出的位数，舍弃
+相当于 5 * (2 ^ 2) = 20
+```
+
+
+
+
+
+## 11. 子集问题II
+
+疑问是，去重问题：
+
+1.为啥，us
+
+![image-20221015084919082](C:/Users/huawei/AppData/Roaming/Typora/typora-user-images/image-20221015084919082.png)

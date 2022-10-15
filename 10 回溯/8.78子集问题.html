@@ -10,7 +10,6 @@
 
 <body>
     <script>
-        // 时间复杂度
         var subsets = function (nums) {
             let res = []
             let path = []
@@ -19,10 +18,13 @@
             return res
             function backtracking(i) {
                 // 递归退出点 只要没有大于nums的长度 都可以放进res
+                // [1] [1, 2] [1, 2, 3] [2, 3] [3] [2]
+
                 if (i <= len) {
                     // 记得是解构放进res数组
                     res.push([...path])
                 } else {
+                    // 没有这个终止条件也是ok的
                     return
                 }
                 // for循环遍历的条件
