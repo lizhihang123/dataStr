@@ -19,7 +19,8 @@
 
         // 如何去重是关键：
         // 1.必须排序数组
-        // 2.
+        // 2.必须要使用used数组 然后回溯时 used数组也要归类为false
+        //   如果前后数字相同，前一个数组表示true，那么后一个数字可以使用；如果前一个数组表示false 后一个数字不能使用 这个是一种规则
         var subsetsWithDup = function (nums) {
             debugger
             let res = []
@@ -32,7 +33,6 @@
             backtracking(0)
             return res
             function backtracking(i) {
-                debugger
                 res.push([...path])
                 for (let j = i; j < len; j++) {
                     if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {

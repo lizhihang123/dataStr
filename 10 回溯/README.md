@@ -828,8 +828,48 @@ console.log(subsets([1, 2, 3]));
 
 ## 11. 子集问题II
 
-疑问是，去重问题：
+![image-20221017092435165](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221017092435165.png)
 
-1.为啥，us
+```js
+// 读题：
+        // 1. 和子集II的区别是：给定的集合里面可能包含重复的元素
+        // 2. 既然包含重复的元素，意味着选出的集合可能是有重复的
+        // 3. 要进行集合的去重
+        // [1, 2, 2]集合，那么可能同时选出[1, 2]和[1, 2]两个集合，就要去重
 
-![image-20221015084919082](C:/Users/huawei/AppData/Roaming/Typora/typora-user-images/image-20221015084919082.png)
+
+        // 如何去重是关键：
+        // 1.必须排序数组
+        // 2.必须要使用used数组 然后回溯时 used数组也要归类为false
+        //   如果前后数字相同，前一个数组表示true，那么后一个数字可以使用；如果前一个数组表示false 后一个数字不能使用 这个是一种规则
+        var subsetsWithDup = function (nums) {
+            debugger
+            let res = []
+            let path = []
+            let len = nums.length
+            // used数组
+            let used = new Array(nums.length).fill(0)
+            // 排序数组
+            nums = nums.sort((a, b) => a - b)
+            backtracking(0)
+            return res
+            function backtracking(i) {
+                res.push([...path])
+                for (let j = i; j < len; j++) {
+                    if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {
+                        continue
+                    }
+                    used[j] = true
+                    path.push(nums[j])
+                    backtracking(j + 1)
+                    used[j] = false
+                    path.pop()
+                }
+            }
+        };
+        console.log(subsetsWithDup([1, 2, 2]));
+```
+
+
+
+![image-20221017092040569](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221017092040569.png)
