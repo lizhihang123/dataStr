@@ -16,6 +16,8 @@ while (line = readline()) {
 
 
 
+请注意，有的是 readline(),有的是 read_line()
+
 
 
 
@@ -94,6 +96,8 @@ while (line = readline()) {
 
 
 ## 题5
+
+
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220909092126355.png" alt="image-20220909092126355" style="zoom:50%;" />
 
@@ -186,25 +190,29 @@ while (line = readline()) {
 
 ## Nodejs 输入输出
 
+### ACM模式：
+
+需要自己构建输入和输出
+
 输出还是用 print和console.log
 
 
 
-### 单行输入输出
+### 1.单行输入输出
 
 ```js
 var readline = require('readline');
+// 获取读取的参数
 rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+// 调用r1参数的on方法
 rl.on('line', function(data) {
     // 获取输入
     var inputs = data.trim().split(' ');
-
     // 处理
     var result = deal(inputs);
-
     // 输出结果
     console.log(result);
 });
@@ -212,7 +220,9 @@ rl.on('line', function(data) {
 
 
 
-### 多行输入，组数确定
+
+
+### 2.多行输入，组数确定
 
 ```js
 var readline = require('readline');
@@ -222,10 +232,11 @@ rl = readline.createInterface({
     output: process.stdout
 });
 
-var K = 1; // 输入K行（这里说一组有几行就是几）
+var K = 4; // 输入K行（这里说一组有几行就是几）
 var inputs = [];
 rl.on('line', function(data) {
     // 获取输入
+    // 注意 如果有很多行 这里会执行很多次 -> 那么 inputs的长度是会累加的
     inputs.push(data.trim());
     if (K == inputs.length) { //
         // 处理
@@ -235,6 +246,9 @@ rl.on('line', function(data) {
         console.log(result);
         // 清0
         inputs.length = 0;
+        
+        // 关闭程序
+        r1.close()
 
     }
 });
@@ -250,36 +264,47 @@ function deal(inputs) {
     // dosomething
     return result;
 }
+
+r1.on('close', function() {
+    process.exit(0)
+})
 ```
 
 
 
 
 
-### 行数不确定
+
+
+
+
+### 3.行数不确定
 
 ```js
+// 1.引入包
 var readline = require('readline');
-
+// 2.获取读取的参数
 rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
+// 3.存取所有的数组
 var inputs = [];
+// 4.num为0的时候
 var num = 0;
 rl.on('line', function(data) {
     if(num == 0){
+        //第一个值可能是行数
         num = Number(data.trim());
     } else {
+        // 不是第一次获取数字 -> 把数据放到inputs数组里面去
         inputs.push(data.trim());
+        // 如果数组获取完了才处理结果
         if (num == inputs.length) {
             // 处理
             var result = deal(inputs);
-
             // 输出结果
             console.log(result);
-
             // 清0
             inputs.length = 0;  //不可改动
             num = 0;    //不可改动
@@ -297,5 +322,11 @@ function deal(inputs) {
     // dosomething
     return result;
 }
+```
+
+
+
+```js
+https://blog.csdn.net/Vivien_Dennis/article/details/83046606?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166591503516782428627269%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=166591503516782428627269&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-18-83046606-null-null.142^v56^new_blog_pos_by_title,201^v3^control_1&utm_term=nodejs%20acm%E8%AF%BB%E5%85%A5%E6%95%B0%E6%8D%AE&spm=1018.2226.3001.4187
 ```
 

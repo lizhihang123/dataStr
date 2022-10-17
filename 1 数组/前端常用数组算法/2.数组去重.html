@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1.利用ES6的方式去重
+        // {}两个对象没有去重
+        function unique(arr) {
+            return Array.from(new Set(arr))
+        }
+        let arr1 = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+        console.log(unique(arr1))
+
+        // 2.双层for循环 嵌套去重
+        // NaN和{}没能够去重
+        function unique2(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = i + 1; j < arr.length; j++) {
+                    if (arr[i] === arr[j]) {
+                        arr.splice(j, 1)
+                        j--
+                    }
+                }
+            }
+            return arr
+        }
+        let arr2 = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+        console.log(unique(arr2))
+
+        // 3.hasOwnProperty去重 为什么能够实现呢？
+        // 就是利用对象的键来判断
+        // 第一次存储了 number1
+        // 第二次进来 发现还有number1 就返回false 那么这个1就不能够存到数组里面去
+        function unique3(arr) {
+            debugger
+            var obj = {}
+            let array = arr.filter((item, index, arr) => {
+                debugger
+                let target = obj.hasOwnProperty((typeof item) + item) ? false : (obj[(typeof item) + item] = true)
+                return target
+            })
+            return array
+        }
+        let arr3 = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+        console.log(unique3(arr3))
+    </script>
+</body>
+
+</html>

@@ -25,7 +25,9 @@
             let res = []
             let path = []
             let len = nums.length
+            // used数组
             let used = new Array(nums.length).fill(0)
+            // 排序数组
             nums = nums.sort((a, b) => a - b)
             backtracking(0)
             return res
@@ -33,9 +35,9 @@
                 debugger
                 res.push([...path])
                 for (let j = i; j < len; j++) {
-                    // if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {
-                    //     continue
-                    // }
+                    if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {
+                        continue
+                    }
                     used[j] = true
                     path.push(nums[j])
                     backtracking(j + 1)

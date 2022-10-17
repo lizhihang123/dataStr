@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 直接调用flat方法 注意里面必须传递Infinity，不然就只能flat一层
+        let arr = [1, [2, [3, [4]]], 5]
+        let arr2 = arr.flat(Infinity)
+        console.log(arr2);
+
+        // 2. 先使用JSON.stringify把他转化为字符串 -> 然后再用replace方法把所有的[或者]替换为空字符串 -> 然后利用split把字符串转化为数组 
+        let str = JSON.stringify(arr)
+        let str2 = str.replace(/(\[|\])/g, '')
+        console.log(str2.split(',').map(Number));
+
+
+        // 3. 第三种处理方式
+        let str3 = '[' + str2 + ']' // 此时的str3还是一个json字符串
+        console.log(JSON.parse(str3));
+
+        // 4. 递归调用处理
+        let result = []
+        let flatten = function (arr) {
+            // 遍历数组的每一项
+            // 如果是数组就要递归处理
+            // 如果不是数组，就放到结果数组里面去
+            for (let i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    flatten(arr[i])
+                } else {
+                    result.push(arr[i])
+                }
+            }
+            return result
+        }
+        console.log(flatten(arr));
+
+        // 5. 使用reduce去实现
+        // reduce的特点就是能够进行累加
+        // prev.concat合并的结果 能够作为下一次合并的时候的使用
+        function flatten2(arr) {
+            return arr.reduce((prev, cur) => {
+                return prev.concat(Array.isArray(cur) ? flatten2(cur) : cur)
+            }, [])
+        }
+        console.log(flatten2(arr));
+
+        // 6. 能用迭代的思路去实现
+        function flatten3(arr) {
+            debugger
+            while (arr.some(item => Array.isArray(item))) {
+                debugger
+                arr = [].concat(...arr)
+                console.log(arr);
+            }
+            return arr
+        }
+        console.log(flatten3(arr));
+
+        // 7. 这个方法是上面那种方法的简写形式
+        function flatten4(arr) {
+            while (arr.some(Array.isArray)) {
+                arr = [].concat(...arr)
+            }
+            return arr
+        }
+        console.log(flatten4(arr));
+    </script>
+</body>
+
+</html>
