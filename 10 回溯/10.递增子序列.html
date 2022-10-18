@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var findSubsequences = function (nums) {
+            /**
+            读题：
+                1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+                2.nums数组里面可能有重复的元素，所以要去重
+                3.子集length必须大于等于2
+                4.注意，相等的元素，该被当作是递增的
+             */
+            let res = []
+            let path = []
+            let used = new Array(nums.length).fill(0)
+            function backtracking(startIndex) {
+                // 子集length必须大于等于2
+                if (path.length >= 2) {
+                    res.push([...path])
+                }
+                // 如何去重是难点 使用uset
+                let uset = []
+                for (let j = startIndex; j < nums.length; j++) {
+                    debugger
+                    // 前半部分判断path必须有值且子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+                    // 后半部分判断是否是重复的元素，如果是uset里面有的就是重复的(注意，一定是比较同级，若不是同一个分支)
+
+                    // 为什么不能使用原来的那种去重的方式呢？
+                    if ((path.length > 0 && nums[j] < path[path.length - 1]) || uset[nums[j] + 100]) {
+                        debugger
+                        continue
+                    }
+                    // +100的原因是 num[j]的大小就是在100之间的
+                    uset[nums[j] + 100] = true
+                    path.push(nums[j])
+                    backtracking(j + 1)
+                    // uset分支不需要回溯 因为每一层递归都会重新声明新的uset
+                    path.pop()
+                }
+            }
+            backtracking(0)
+            return res
+        };
+        // console.log(findSubsequences([4, 4, 3, 2, 5, 5]));
+        console.log(findSubsequences([4, 7, 6, 7]));
+    </script>
+</body>
+
+</html>

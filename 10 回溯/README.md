@@ -873,3 +873,45 @@ console.log(subsets([1, 2, 3]));
 
 
 ![image-20221017092040569](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221017092040569.png)
+
+
+
+
+
+
+
+## 12. 递增子序列
+
+比较区别：
+
+
+
+**子集II**
+
+1.可以有空的集合。
+
+2.集合可以只有一个元素
+
+3.集合可以是没有顺序的
+
+4.但是子集之间不能重复
+
+![image-20221018085026046](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221018085026046.png)
+
+
+
+**子集I**
+
+1.和子集II的区别是，子集I里面的nums数组没有重复的
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221018085216532.png" alt="image-20221018085216532" style="zoom: 50%;" />
+
+
+
+**递增子序列的特点：**
+
+1.子集必须是递增的
+
+2.nums数组里面可能有重复的元素，所以要去重
+
+3.子集数量必须大于等于2

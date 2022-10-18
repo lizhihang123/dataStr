@@ -33,11 +33,17 @@
             backtracking(0)
             return res
             function backtracking(i) {
+                debugger
                 res.push([...path])
                 for (let j = i; j < len; j++) {
                     if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {
                         continue
                     }
+                    // 这里写大于startIndex也是OK的
+                    // if (j > i && nums[j] === nums[j - 1] && used[j - 1] === false) {
+                    //     // continue
+                    //     debugger
+                    // }
                     used[j] = true
                     path.push(nums[j])
                     backtracking(j + 1)
