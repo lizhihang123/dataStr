@@ -910,8 +910,90 @@ console.log(subsets([1, 2, 3]));
 
 **递增子序列的特点：**
 
-1.子集必须是递增的
+1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
 
 2.nums数组里面可能有重复的元素，所以要去重
 
 3.子集数量必须大于等于2
+
+
+
+
+
+**代码**
+
+```js
+var findSubsequences = function (nums) {
+    /**
+    读题：
+        1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+        2.nums数组里面可能有重复的元素，所以要去重
+        3.子集length必须大于等于2
+        4.注意，相等的元素，该被当作是递增的
+     */
+    let res = []
+    let path = []
+    let used = new Array(nums.length).fill(0)
+    function backtracking(startIndex) {
+        debugger
+        // 子集length必须大于等于2
+        if (path.length >= 2) {
+            res.push([...path])
+        }
+        // 如何去重是难点 使用uset
+        let uset = []
+        for (let j = startIndex; j < nums.length; j++) {
+            debugger
+            // 前半部分判断path必须有值且子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+            // 后半部分判断是否是重复的元素，如果是uset里面有的就是重复的(注意，一定是比较同级，若不是同一个分支)
+
+            // 为什么不能使用原来的那种去重的方式呢？
+            if ((path.length > 0 && nums[j] < path[path.length - 1]) || uset[nums[j] + 100]) {
+                debugger
+                continue
+            }
+            // +100的原因是 num[j]的大小就是在100之间的
+            uset[nums[j] + 100] = true
+            path.push(nums[j])
+            backtracking(j + 1)
+            // uset分支不需要回溯 因为每一层递归都会重新声明新的uset
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return res
+};
+// console.log(findSubsequences([4, 4, 3, 2, 5, 5]));
+console.log(findSubsequences([4, 7, 6, 7]));
+```
+
+
+
+
+
+**去重的情况**
+
+下图红线部分就是重复的情况
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221019083819187.png" alt="image-20221019083819187" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221019083732348.png" alt="image-20221019083732348" style="zoom:50%;" />
+
+上图，就是重复的情况
+
+
+
+
+
+之前的去重的方式，是整体只有一个used数组，每次used回溯时，都要对used数组同样的进行回溯的操作。但是，之前的回溯，组合总和II：
+
+1. 必须排序
+2. 既然排序，那么重复的元素就会前后挨着了。我们就可以利用`used[i - 1] === used[i] && used[i - 1] === false`这个条件进行判断
+
+
+
+本题使用的去重的方式是，在每一层递归，都声明一个used数组：
+
+1. 不需要每一层递归，都去对uset数组进行去重
+2. 因为题目给出了nums[i] 在-100到100之间，所以可以使用数组来存储。毕竟值不是特别大，效率比map更高，是的，效果测起来会好一些。因为，map会去做key到value的哈希映射，效率会有损耗
+

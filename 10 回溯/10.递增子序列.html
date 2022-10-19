@@ -20,26 +20,28 @@
              */
             let res = []
             let path = []
-            let used = new Array(nums.length).fill(0)
             function backtracking(startIndex) {
+                // debugger
                 // 子集length必须大于等于2
                 if (path.length >= 2) {
                     res.push([...path])
                 }
-                // 如何去重是难点 使用uset
-                let uset = []
+                // 如何去重是难点 使用uset数组更好一些
+                let map = new Map()
+                // let uset = []
                 for (let j = startIndex; j < nums.length; j++) {
-                    debugger
+                    // debugger
                     // 前半部分判断path必须有值且子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
                     // 后半部分判断是否是重复的元素，如果是uset里面有的就是重复的(注意，一定是比较同级，若不是同一个分支)
 
                     // 为什么不能使用原来的那种去重的方式呢？
-                    if ((path.length > 0 && nums[j] < path[path.length - 1]) || uset[nums[j] + 100]) {
-                        debugger
+                    if ((path.length > 0 && nums[j] < path[path.length - 1]) || map.has(nums[j] + 100)) {
+                        // debugger
                         continue
                     }
                     // +100的原因是 num[j]的大小就是在100之间的
-                    uset[nums[j] + 100] = true
+                    // uset[nums[j] + 100] = true
+                    map.set(nums[j] + 100, true)
                     path.push(nums[j])
                     backtracking(j + 1)
                     // uset分支不需要回溯 因为每一层递归都会重新声明新的uset
@@ -50,7 +52,7 @@
             return res
         };
         // console.log(findSubsequences([4, 4, 3, 2, 5, 5]));
-        console.log(findSubsequences([4, 7, 6, 7]));
+        console.log(findSubsequences([4, 6, 7, 7]));
     </script>
 </body>
 
