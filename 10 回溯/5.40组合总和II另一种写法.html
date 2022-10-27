@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*  
+         */
+
+
+        /* 
+        */
+
+        const combinationSum2 = function (candidates, target) {
+            debugger
+            let path = []
+            let res = []
+
+            // 如果这里初始化为0 那么下面的 判断重复时，里面也要增加为used[i] =false
+            // 要进行排序，为什么？否则 [10, 1, 2, 7, 6, 1, 5] 直接第一个reutrn
+            candidates = candidates.sort((a, b) => a - b)
+            function tracking(sum, startIndex, used) {
+                debugger
+                // 3.
+                if (sum >= target) {
+                    if (sum === target) {
+                        res.push([...path])
+                    }
+                    return
+                }
+                const helperSet = new Set();
+                for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+                    // 
+                    if (helperSet.has(candidates[i])) continue
+                    helperSet.add(candidates[i])
+                    //5.
+                    sum += candidates[i]
+                    path.push(candidates[i])
+                    //6.
+                    tracking(sum, i + 1, used)
+                    //7.
+                    sum -= candidates[i]
+                    path.pop()
+                }
+            }
+            tracking(0, 0)
+            return res
+        };
+        // console.log(combinationSum2([2, 2, 2], 2));
+        console.log(combinationSum2([2, 5, 2, 1, 2], 5));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var permuteUnique = function (nums) {
+            // 1. 第一步 数组一定要排序
+            // 2. 声明好result 和 path
+            // 3. 写递归数组
+            // 3.1 递归退出条件 -> 如果path的长度和nums的长度一致 就放进result结果数组 然后return
+            // 3.2 for循环 初始值从0，而不是startIndex开始，为什么，因为[1,1,2]和[1,2,1]是算作不同的排列顺序 有startIndex就不能 这样做
+            // 3.3 退出条件 -> i > 0 大于0的原因是 nums[i - 1]i如果是0就出问题了 && i === 0时，我们会去单独处理 -> 用的是continue而不是break 注意
+            // 3.4 !used[i]表示如果是 used[i]是true，就不能进入，这个是给同一个树枝上面的去重处理
+            // 3.5 接下来就是 used[i]改为true path.push(nums[i]) + 回溯 used[i]改为false 和 path.pop
+            nums.sort((a, b) => {
+                return a - b
+            })
+            let result = []
+            let path = []
+            function backtracing(used) {
+                if (path.length === nums.length) {
+                    result.push([...path])
+                    return
+                }
+                for (let i = 0; i < nums.length; i++) {
+                    if (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]) {
+                        continue
+                    }
+                    if (!used[i]) {
+                        used[i] = true
+                        path.push(nums[i])
+                        backtracing(used)
+                        path.pop()
+                        used[i] = false
+                    }
+                }
+            }
+            backtracing([])
+            return result
+        }
+        console.log(permuteUnique([1, 1, 2]));
+    </script>
+</body>
+
+</html>

@@ -530,11 +530,53 @@ console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
 
 
 
+**另一种去重的方式**同样必须每一层都有一个set
+
+set和used数组的本质区别是，used数组是标识，这个数组是否使用过，set记录的就是这个真真切切的值，用过，就不能再用。所以set，如果不`每一次层都有一个`，那么`树枝`上面都无法出现重复的。[1,1,2]这样都不行
+
+```diff
+const combinationSum2 = function (candidates, target) {
+    let path = []
+    let res = []
+    // 如果这里初始化为0 那么下面的 判断重复时，里面也要增加为used[i] =false
+    // 要进行排序，为什么？否则 [10, 1, 2, 7, 6, 1, 5] 直接第一个reutrn
+    candidates = candidates.sort((a, b) => a - b)
+    function tracking(sum, startIndex, used) {
+        // 3.
+        if (sum >= target) {
+            if (sum === target) {
+                res.push([...path])
+            }
+            return
+        }
++        const helperSet = new Set();
+        for (let i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++) {
+            // 
++            if (helperSet.has(candidates[i])) continue
++            helperSet.add(candidates[i])
+            //5.
+            sum += candidates[i]
+            path.push(candidates[i])
+            //6.
+            tracking(sum, i + 1, used)
+            //7.
+            sum -= candidates[i]
+            path.pop()
+        }
+    }
+    tracking(0, 0)
+    return res
+};
+console.log(combinationSum2([2, 2, 2], 2));
+```
+
+
+
 ## 8. 分割回文字符串
 
 
 
-**什么时候需要startIndex?**
+### **什么时候需要startIndex?**
 
 - 如果多个集合，求组合，集合之间互不干扰的，就不需要startIndex
 - 如果是一个集合，求组合，是相互干扰的，就需要startIndex
@@ -740,7 +782,7 @@ console.log(restoreIpAddresses('25525511135'));
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084607707.png" alt="image-20221014084607707" style="zoom:50%;" />
 
-2.组合综合III：1到9的数字，n是固定的；每个数字只能用1次。返回1到9中，个数为k的，求和为7的所有的组合。
+2.组合总和III：1到9的数字，n是求和项；**每个数字只能用1次**。返回1到9中，个数为k的，求和为7的所有的组合。
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084533079.png" alt="image-20221014084533079" style="zoom:50%;" />
 
@@ -748,7 +790,7 @@ console.log(restoreIpAddresses('25525511135'));
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084735994.png" alt="image-20221014084735994" style="zoom:50%;" />
 
-4.组合综合II：给定组合，求目标值，每个数字只能使用1次。组合总和与组合总和II都是，个数是随机的。组合总和III，个数是给定的。
+4.**组合总和II**：给定组合，求目标值，每个数字只能使用1次。组合总和与组合总和II都是，个数是随机的。组合总和III，个数是给定的。
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084859083.png" alt="image-20221014084859083" style="zoom:50%;" />
 
@@ -756,7 +798,7 @@ console.log(restoreIpAddresses('25525511135'));
 
 
 
-5.再看子集问题：返回一个数组里面的，所有可能的子集
+5.再看**子集**问题：返回一个数组里面的，所有可能的子集
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221014084953446.png" alt="image-20221014084953446" style="zoom:50%;" />
 
@@ -830,6 +872,14 @@ console.log(subsets([1, 2, 3]));
 
 ![image-20221017092435165](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221017092435165.png)
 
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221027084509809.png" alt="image-20221027084509809" style="zoom:50%;" />
+
+上面这幅图，是子集II的去重的过程。关键还是 i > 0 && nums[i] === nums[i - 1]这个判断条件。并且关键的是，`要排序`
+
+**没有排序，结果如下,子集重复了**
+
+![image-20221027085138689](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221027085138689.png)
+
 ```js
 // 读题：
         // 1. 和子集II的区别是：给定的集合里面可能包含重复的元素
@@ -878,11 +928,85 @@ console.log(subsets([1, 2, 3]));
 
 
 
+**不太理解，如果说，全局共用一个set或者map或者数组，这种写法是错误的，这是为什么呢？**
+
+```diff
+var subsetsWithDup = function (nums) {
+    debugger
+    let res = []
+    let path = []
+    let len = nums.length
+    // used数组
+    let used = new Array(nums.length).fill(0)
+    // 排序数组
+    nums = nums.sort((a, b) => a - b)
+    backtracking(0)
++ 	如果set写在这里 - 全局 {1, 2} 而 {1, 2, 2} 这样的结果是无法出现的,因为前面有一个2了。所以set必须每层递归都是新的
+    return res
+    function backtracking(i) {
+        debugger
+        res.push([...path])
++        let helpSet = new Set()
+        for (let j = i; j < len; j++) {
++            if (helpSet.has(nums[j])) continue
++            helpSet.add(nums[j])
+            path.push(nums[j])
+            backtracking(j + 1)
+            path.pop()
+        }
+    }
+};
+```
+
+和used数组的区别是什么呢？used
+
+```diff
+var subsetsWithDup = function (nums) {
+    debugger
+    let res = []
+    let path = []
+    let len = nums.length
+    // used数组
++    let used = new Array(nums.length).fill(0)
+    // 排序数组
+    nums = nums.sort((a, b) => a - b)
+    backtracking(0)
+    return res
+    function backtracking(i) {
+        debugger
+        res.push([...path])
+        
++        for (let j = i; j < len; j++) { 
++注意used数组这里判断的是 前后是否相等+前一位数是否是false
++            if (j > 0 && nums[j] === nums[j - 1] && used[j - 1] === false) {
+                continue
+            }
+            // 这里写大于startIndex也是OK的
+            // if (j > i && nums[j] === nums[j - 1] && used[j - 1] === false) {
+            //     // continue
+            //     debugger
+            // }
++既有修改也有回溯而set每一层控制，不需要回溯
++            used[j] = true
+            path.push(nums[j])
+            backtracking(j + 1)
++            used[j] = false
+            path.pop()
+        }
+    }
+};
+console.log(subsetsWithDup([1, 2, 2]));
+```
+
+
+
+
+
 
 
 ## 12. 递增子序列
 
-比较区别：
+**比较区别：**
 
 
 
@@ -900,9 +1024,13 @@ console.log(subsets([1, 2, 3]));
 
 
 
+
+
+
+
 **子集I**
 
-1.和子集II的区别是，子集I里面的nums数组没有重复的
+1.和子集II的区别是，子集I里面的nums数组里面的数字没有重复的,其他都一致。
 
 <img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221018085216532.png" alt="image-20221018085216532" style="zoom: 50%;" />
 
@@ -910,11 +1038,15 @@ console.log(subsets([1, 2, 3]));
 
 **递增子序列的特点：**
 
-1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+1.子集必须是递增的，但是你`不能对nums数组进行排序`。就得按照原有的顺序进行查找
 
-2.nums数组里面可能有重复的元素，所以要去重
+2.nums数组里面可能有重复的元素，所以要去重，因为不能排序，不能用之前的去重的逻辑
 
 3.子集数量必须大于等于2
+
+
+
+![image-20221027084909038](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221027084909038.png)
 
 
 
@@ -922,15 +1054,17 @@ console.log(subsets([1, 2, 3]));
 
 **代码**
 
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221027084703907.png" alt="image-20221027084703907" style="zoom:50%;" />
+
 ```js
 var findSubsequences = function (nums) {
-    /**
-    读题：
-        1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
-        2.nums数组里面可能有重复的元素，所以要去重
-        3.子集length必须大于等于2
-        4.注意，相等的元素，该被当作是递增的
-     */
+/**
+读题：
+    1.子集必须是递增的，但是你不能对nums数组进行排序。就得按照原有的顺序进行查找
+    2.nums数组里面可能有重复的元素，所以要去重
+    3.子集length必须大于等于2
+    4.注意，相等的元素，该被当作是递增的
+ */
     let res = []
     let path = []
     let used = new Array(nums.length).fill(0)
@@ -992,8 +1126,163 @@ console.log(findSubsequences([4, 7, 6, 7]));
 
 
 
-本题使用的去重的方式是，在每一层递归，都声明一个used数组：
+本题使用的去重的方式是，**在每一层递归，都声明一个used数组：**
 
-1. 不需要每一层递归，都去对uset数组进行去重
+1. 不需要每一层递归，都去对uset数组进行修改为false。每一层的used是自己管自己的
 2. 因为题目给出了nums[i] 在-100到100之间，所以可以使用数组来存储。毕竟值不是特别大，效率比map更高，是的，效果测起来会好一些。因为，map会去做key到value的哈希映射，效率会有损耗
+
+
+
+
+
+## 13. 全排列
+
+**读题：**
+
+1. [1,2,3] 内容不重复 其中 -10 <= nums[i] <= 10  1 <= nums.length <= 6
+   回所有可能的排列的组合 [1,2,3] [1,3,2] [2, 1, 3], [2, 3, 1]
+
+**算法：**
+
+1. [1,2]和[2,1]是不同的排列顺序，之前都是算做一个组合。所以这里**不需要用到startIndex**,如果有startIndex,出现不了[1,2] 和 [2,1]
+2. 要使用一个**used**数组，能够记录，哪个数字使用过了 就用 “**continue**” 注意是continue而不是return或者是break
+3. 如何退出呢？当path数组的长度等于nums数组的长度就退出
+
+
+
+```js
+var permute = function (nums) {
+    debugger
+    let res = []
+    let path = []
+    let used = new Array(nums.length).fill(0)
+    function backtracking(nums, used) {
+        debugger
+        if (path.length === nums.length) {
+            res.push([...path])
+        }
+        for (let i = 0; i < nums.length; i++) {
+            debugger
+            if (used[i]) continue
+            used[i] = true
+            path.push(nums[i])
+            backtracking(nums, used)
+            used[i] = false
+            path.pop()
+        }
+    }
+    backtracking(nums, used)
+    return res
+};
+console.log(permute([1, 2, 3]));
+```
+
+
+
+
+
+
+
+![image-20221020090837828](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221020090837828.png)
+
+
+
+
+
+## 14. 全排列II
+
+**去重的关键两步**
+
+1. res里面有了[[1,1,2], [1,2,1]]，如果又再次生成了[1,1,2]又放进去了 这样就会重复，我们要在“考虑nums[1,1,2]“的索引为0的1要不要放进去时，就要决定好，放进去，就会重复。这里可以用 used[i]如果是true就不放进去
+
+2. 如果是[1,1,2]如果是第二个1放进去的时候，我就可以考虑，nums[i] === nums[i - 1] 并且nums[i - 1]是false，如果是false，表示之前回溯过了，就用过了，就不要用了(姑且这么理解)
+
+
+
+```js
+// 1. 第一步 数组一定要排序
+// 2. 声明好result 和 path
+// 3. 写递归逻辑
+// 3.1 递归退出条件 -> 如果path的长度和nums的长度一致 就放进result结果数组 然后return
+// 3.2 for循环 初始值从0，而不是startIndex开始，为什么，因为[1,1,2]和[1,2,1]是算作不同的排列顺序 有startIndex就不能 这样做
+// 3.3 退出条件 -> i > 0 大于0的原因是 nums[i - 1]i如果是0就出问题了 && i === 0时，我们会去单独处理 -> 用的是continue而不是break 注意
+// 注意 used[i - 1] 是false
+// 3.4 !used[i]表示如果是 used[i]是true，就不能进入，这个是给同一个树枝上面的去重处理
+// 3.5 接下来就是 used[i]改为true path.push(nums[i]) + 回溯 used[i]改为false 和 path.pop
+var permuteUnique = function (nums) {
+    // 1.
+    nums.sort((a, b) => {
+        return a - b
+    })
+    // 2. 
+    let res = []
+    let path = []
+    function backtracking(used) {
+        // 3.1
+        if (path.length === nums.length) {
+            res.push([...path])
+            return res
+        }
+        // 3.2 
+        for (let i = 0; i < nums.length; i++) {
+            // 3.3 
+            if (i > 0 && nums[i] === nums[i - 1] && used[i - 1] === false) {
+                continue
+            }
+            // 3.4
+            if (!used[i]) {
+                // 3.5
+                used[i] = true
+                path.push(nums[i])
+                backtracking(used)
+                used[i] = false
+                path.pop()
+            }
+        }
+    }
+
+    backtracking([])
+    return res
+}
+console.log(permuteUnique([1, 1, 2]));
+```
+
+
+
+问题：**到底什么时候是全局只有一个used，什么时候是每一层都有一个used数组呢?**
+
+递增子序列这题 用的是 每层递归都有一个used数组
+
+
+
+
+
+## 时间复杂度小结
+
+子集问题：
+
+- 时间复杂度：O(n* 2^n)，每个元素状态取或者不取就是O(2^n)，而构造每一个子集都需要填进数组，O(n)
+- 空间复杂度：O(n),递归的深度是n,path和res数组都是一次声明。组合问题和排序问题都一致
+
+
+
+排序问题：
+
+- 时间复杂度：每一层的节点都是n，第二层，每一个分支都延伸了n-1个节点，再往下是n-2个分支，一直到叶子结点是n * n - 1 * n - 2 * n - 3……1 = n!，放到数组里面又是 n * n!
+- 空间: O(n)
+
+
+
+组合问题：
+
+- 时间复杂度：O(n*2^n)
+- 空间：O(n)
+
+
+
+
+
+## **去重问题的另外一种写法：**
+
+在[回溯算法：求子集问题（二） (opens new window)](https://programmercarl.com/0090.子集II.html)中的去重和 [回溯算法：递增子序列 (opens new window)](https://programmercarl.com/0491.递增子序列.html)中的去重 都是 同一父节点下本层的去重。
 

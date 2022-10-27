@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 读题：
+        // 1. 和子集II的区别是：给定的集合里面可能包含重复的元素
+        // 2. 既然包含重复的元素，意味着选出的集合可能是有重复的
+        // 3. 要进行集合的去重
+        // [1, 2, 2]集合，那么可能同时选出[1, 2]和[1, 2]两个集合，就要去重
+
+
+        // 如何去重是关键：
+        // 1.必须排序数组
+        // 2.必须要使用used数组 然后回溯时 used数组也要归类为false
+        //   如果前后数字相同，前一个数组表示true，那么后一个数字可以使用；如果前一个数组表示false 后一个数字不能使用 这个是一种规则
+        var subsetsWithDup = function (nums) {
+            debugger
+            let res = []
+            let path = []
+            let len = nums.length
+            // used数组
+            let used = new Array(nums.length).fill(0)
+            // 排序数组
+            nums = nums.sort((a, b) => a - b)
+            backtracking(0)
+            return res
+            function backtracking(i) {
+                debugger
+                res.push([...path])
+                let helpSet = new Set()
+                for (let j = i; j < len; j++) {
+                    if (helpSet.has(nums[j])) continue
+                    helpSet.add(nums[j])
+                    path.push(nums[j])
+                    backtracking(j + 1)
+                    path.pop()
+                }
+            }
+        };
+        console.log(subsetsWithDup([1, 2, 2]));
+    </script>
+</body>
+
+</html>

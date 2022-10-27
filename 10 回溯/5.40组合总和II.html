@@ -29,6 +29,7 @@
         */
 
         const combinationSum2 = function (candidates, target) {
+            debugger
             let path = []
             let res = []
             // 如果这里初始化为0 那么下面的 判断重复时，里面也要增加为used[i] =false
@@ -36,6 +37,7 @@
             // 要进行排序，为什么？否则 [10, 1, 2, 7, 6, 1, 5] 直接第一个reutrn
             candidates = candidates.sort((a, b) => a - b)
             function tracking(sum, startIndex, used) {
+                debugger
                 // 3.
                 if (sum >= target) {
                     if (sum === target) {
@@ -77,7 +79,8 @@
         };
         // console.log(combinationSum2([1, 1, 2], 3));
         // console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
-        console.log(combinationSum2([2, 2, 2], 2));
+        // console.log(combinationSum2([2, 2, 2], 2));
+        console.log(combinationSum2([2, 5, 2, 1, 2], 5));
     </script>
 </body>
 
