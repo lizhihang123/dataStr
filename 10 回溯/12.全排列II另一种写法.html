@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var permuteUnique = function (nums) {
+            // 和前面的都一样，只是去重，使用了used数组结合 set 不需要判断 (used[i - 1] === false 和 nums[i - 1] === nums[i]) 这个了
+            // 1.
+            nums.sort((a, b) => {
+                return a - b
+            })
+            // 2. 
+            let res = []
+            let path = []
+            debugger
+            function backtracking(used) {
+                debugger
+                // 3.1 
+                if (path.length === nums.length) {
+                    res.push([...path])
+                    return res
+                }
+                // 3.2 
+                const usedSet = new Set()
+                for (let i = 0; i < nums.length; i++) {
+                    // 3.3 used[i] === true的continue控制(防止选了索引为0的1之后再次选索引为0的1)
+                    if (used[i] === true || usedSet.has(nums[i])) continue
+                    // 3.4
+                    usedSet.add(nums[i])
+                    // 3.5
+                    used[i] = true
+                    path.push(nums[i])
+                    backtracking(used)
+                    used[i] = false
+                    path.pop()
+                }
+            }
+
+            backtracking([])
+            return res
+        }
+        console.log(permuteUnique([1, 1, 2]));
+    </script>
+</body>
+
+</html>

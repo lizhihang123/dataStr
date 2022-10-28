@@ -1249,9 +1249,67 @@ console.log(permuteUnique([1, 1, 2]));
 
 
 
-问题：**到底什么时候是全局只有一个used，什么时候是每一层都有一个used数组呢?**
 
-递增子序列这题 用的是 每层递归都有一个used数组
+
+**去重的另一种方式**
+
+1. 树层上面去重，是used[i - 1] = false 
+
+2. 树枝上面去重，是used[i - 1] = true
+
+**树枝上面去重和树层上面去重，都是可以的，为什么呢？**
+
+
+
+**used[i - 1] = false**，都是因为**used[false, false, false]**,且符合了`i > 0 && nums[i] === nums[i - 1] && !used[i - 1]`的条件
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221028085612442.png" alt="image-20221028085612442" style="zoom:50%;" />
+
+
+
+**used[i - 1] = true**
+
+![image-20221028090534556](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221028090534556.png)
+
+```diff
+var permuteUnique = function (nums) {
+    // used[i - 1] === true 实在是效率太低了 树层去重 所以不推荐 很难理解
+    debugger
+    nums.sort((a, b) => {
+        return a - b
+    })
+    let result = []
+    let path = []
+    function backtracing(used) {
+        debugger
+        if (path.length === nums.length) {
+            result.push([...path])
+            return
+        }
+        for (let i = 0; i < nums.length; i++) {
+        // 很大的区别在这里 used[i - 1] === true 
++            if (i > 0 && nums[i] === nums[i - 1] && used[i - 1] === true) {
+                continue
+            }
+            if (!used[i]) {
+                used[i] = true
+                path.push(nums[i])
+                backtracing(used)
+                path.pop()
+                used[i] = false
+            }
+        }
+    }
+    backtracing([])
+    return result
+}
+```
+
+
+
+
+
+
 
 
 
@@ -1284,5 +1342,19 @@ console.log(permuteUnique([1, 1, 2]));
 
 ## **去重问题的另外一种写法：**
 
-在[回溯算法：求子集问题（二） (opens new window)](https://programmercarl.com/0090.子集II.html)中的去重和 [回溯算法：递增子序列 (opens new window)](https://programmercarl.com/0491.递增子序列.html)中的去重 都是 同一父节点下本层的去重。
+1. 子集II 全排列II 和 组合问题II都可以使用set去重
 
+2. 使用set去重，set去重必须在每一层都要有一个set，而不是在全局下面有一个set（全局下面有set，导致最终只有一个排列结果）
+3. 特别好的测试方法：debugger时，结合树枝图，来判断此时处于哪一个阶段，不需要去特别记忆，i = 0，这些。
+
+只需要知道，i = 0还是i = startIndex即可。知道去重条件即可
+
+
+
+
+
+**set去重和used去重性能分析：**
+
+1. set去重，时间复杂度更高，频繁的执行insert方法，还有哈希映射(把key  -> 通过 哈希函数 -> 唯一的哈希值) | used数组在时间复杂度上面没有负担
+
+2. set空间利用，是O(n^2)，n层递归，每层都有一个哈希 | used数组，全局数组，就是O(n)
