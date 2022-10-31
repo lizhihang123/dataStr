@@ -21,7 +21,96 @@
             输出 ["JFK","MUC","LHR","SFO","SJC"]
             2. 输入 [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
             输出 ["JFK","ATL","JFK","SFO","ATL","SFO"]
-            */
+
+            问题：
+            1. 不知道第一个字母该如何确认 出现了 ['JFK', 'SFO'] 和 ['JFK', 'ATL'] 该如何去抉择呢?
+            2. 多种解法的时候，字母靠前的放前面，如何进行抉择呢？
+            3. 本题要找到对数据进行排序，增删还不会让“容器”失效的
+        */
+        var findItinerary = function (tickets) {
+            // part1
+            debugger
+            let result = ['JFK']
+            let map = {}
+
+            for (const ticket of tickets) {
+                // part2
+                /* 
+                {
+                    'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL']
+                }
+
+                {
+                    'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL'],
+                    'SFO': ['ATL'],
+                }
+
+                {
+                    'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL'],
+                    'SFO': ['ATL'],
+                    'ATL': ['JFK'] -> ['JFK', 'SFO']
+                }
+                */
+                debugger
+                const [from, to] = ticket
+                if (!map[from]) {
+                    map[from] = []
+                }
+                map[from].push(to)
+            }
+
+            // 对到达城市列表排序 为什么要排序 要把字母靠前的放前面 如果不排序怎么样呢
+            for (const city in map) {
+                /*  {
+                     'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL'],
+                     'SFO': ['ATL'],
+                     'ATL': ['JFK'] -> ['JFK', 'SFO']
+                     ---->
+                     'JFK': undefined -> ['SFO'] -> ['ATL', 'SFO'],这里变化了
+                     'SFO': ['ATL'],
+                     'ATL': ['JFK'] -> ['JFK', 'SFO']
+                 } */
+                // part3
+                map[city].sort()
+            }
+
+            // 
+            function backtracking() {
+                debugger
+                // part4
+                // 递归的退出条件
+                if (result.length === (tickets.length + 1)) {
+                    debugger
+                    return result
+                }
+                // 什么意思？
+                // part5
+                if (!map[result[result.length - 1]] || !map[result[result.length - 1]].length) {
+                    debugger
+                    return false
+                }
+
+                // 
+                for (let i = 0; i < map[result[result.length - 1]].length; i++) {
+                    debugger
+                    // part6
+                    let city = map[result[result.length - 1]][i]
+                    // 删除已经走过的航线 防止死循环
+                    map[result[result.length - 1]].splice(i, 1)
+                    // 放到结果数组里面去
+                    result.push(city)
+                    // 
+                    if (backtracking()) {
+                        return true
+                    }
+                    result.pop()
+                    map[result[result.length - 1]].splice(i, 0, city)
+                }
+            }
+            backtracking()
+            return result
+        }
+        console.log(findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]));
     </script>
 </body>
 
