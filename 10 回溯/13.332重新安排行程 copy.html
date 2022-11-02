@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var findItinerary = function (tickets) {
+
+            //  4.7 result进行pop 也就是碰到死循环了()
+            // 1. result初始值是['JFK'] 因为题目要求
+            let result = ['JFK']
+            let map = {}
+            // 2. map遍历tickets 
+            /* 
+                map: {
+                    JFK: ['SFO', 'ALT']
+                }
+            */
+            // 很巧妙的方式 [from, to]这样去解构出来里面的数组
+            // 出发点是 JFK,就把所有开头是JFK的to放到对应数组里面
+            // [JFK, ALT]
+            // [JFK, SFO]
+            for (const ticket of tickets) {
+                const [from, to] = ticket
+                if (!map[from]) {
+                    map[from] = []
+                }
+                map[from].push(to)
+            }
+            //  3. map里面的数组要进行排序 结合for …… in 进行排序是很巧妙的
+            for (let ticket in map) {
+                map[ticket].sort()
+            }
+            function backtracking() {
+                //  4.1 判断 result的长度是否是 === tickets.length + 1 从最终的结果就可以看出来
+                if (result.length === (tickets.length + 1)) {
+                    return true
+                }
+                let item = result[result.length - 1]
+                //  4.2 判断map里面的result[result.length - 1].length是还是有值的
+                // []不行，必须是有值的 map {'JFK': []}也不行
+                if (!map[item] && !map[item].length) {
+                    return false
+                }
+                //  4. for循环 i从0开始 小于 result[result.length - 1].length 这个显得没有那么重要了 假设 jfk -> ['alt', 'sfo']那么此时的jfk这一层递归就不能超过两次for遍历
+                for (let i = 0; i < map[result[result.length - 1]].length; i++) {
+                    //  4.3 拿到city map[item][i] i一般都是0，取的都是第一个值 因为我们排序好了所以字典顺序是符合题目要求的
+                    let city = map[item][i]
+                    //  4.4 删掉第一个值 目的是为了避免重复，而上面的city存好就行
+                    map[item].splice(i, 1)
+                    //  4.5 city放到result去
+                    result.push(city)
+                    //  4.6 递归 判断是true false是因为 map{'JFK': []}里面是空的，出现了死循环时
+                    if (backtracking()) {
+                        return true
+                    }
+                    // 表示回溯
+                    result.pop()
+                }
+            }
+            backtracking()
+            return result
+        }
+        console.log(findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]));
+    </script>
+</body>
+
+</html>

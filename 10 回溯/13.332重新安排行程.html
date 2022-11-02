@@ -72,6 +72,15 @@
                  } */
                 // part3
                 map[city].sort()
+                /*  {
+                  'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL'] -> ['ATL', 'SFO']
+                  'SFO': ['ATL'],
+                  'ATL': ['JFK'] -> ['JFK', 'SFO']
+                  ---->
+                  'JFK': undefined -> ['SFO'] -> ['ATL', 'SFO'],这里变化了
+                  'SFO': ['ATL'],
+                  'ATL': ['JFK'] -> ['JFK', 'SFO']
+              } */
             }
 
             // 
@@ -83,15 +92,43 @@
                     debugger
                     return result
                 }
-                // 什么意思？
                 // part5
                 if (!map[result[result.length - 1]] || !map[result[result.length - 1]].length) {
+                    // 表示 找不到下一个目的地了 出现了死循环
                     debugger
                     return false
                 }
 
                 // 
                 for (let i = 0; i < map[result[result.length - 1]].length; i++) {
+                    /* 
+                        result[result.length - 1] -> JFK
+                        i = 0, city = 'ALT'
+                        map[JFK] -> ['ATL', 'SFO'],
+                        splice 删掉'ALT', map[JFK] -> ['SFO'] 删掉了 下一回就不会再次放入
+                        result.push(city) -> ['JFK', 'ALT']
+                        进入下一波递归,backtracking()
+                            i = 0
+                            map[ALT] -> ['JFK', 'SFO'][0] -> 'JFK' city
+                            splice 删掉'JFK' -> map[ALT] -> ['SFO'] 删掉了 下一回就再次放
+                            result.push(city) ['JFK', 'ALT', 'JFK']
+                            进入下一波递归，backtracking()
+                                i = 0
+                                map['JFK'] -> ['SFO'][0] -> 'SFO' city
+                                splice 删掉 'SFO' -> map[JFK] -> []
+                                result.push('SFO') ['JFK', 'ALT', 'JFK', 'SFO']
+                                进入下一波递归，backtracking()
+                                    i = 0
+                                    map['SFO'] -> ['ALT'][0] -> 'ALT' city
+                                    splice 删掉 'ALT' -> map[SFO] -> []
+                                    result.push('SFO') ['JFK', 'ALT', 'JFK', 'SFO','ALT']
+                                    进入下一波递归，backtracking()
+                                        i = 0
+                                        map['ALT'] -> ['SFO'][0] -> 'SFO' city
+                                        splice 删掉 'SFO' -> map[ALT] -> []
+                                        result.push('SFO') ['JFK', 'ALT', 'JFK', 'SFO','ALT', 'SFO']
+
+                    */
                     debugger
                     // part6
                     let city = map[result[result.length - 1]][i]
