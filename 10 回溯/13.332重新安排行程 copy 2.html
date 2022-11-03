@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var findItinerary = function (tickets) {
+            // 1.变量声明和map处理{JFK: [], ALT: []} + map排序
+            let map = {}
+            let result = ['JFK']
+            for (const ticket of tickets) {
+                const [from, to] = ticket
+                if (!map[from]) {
+                    map[from] = []
+                }
+                map[from].push(to)
+            }
+            for (let key in map) {
+                map[key].sort()
+            }
+            // 2.递归函数构建
+            // 2.1 退出条件 true(航班走完) false(map{JFK: []})
+            // 2.2 city存储 删除map里面的值 resultpush
+            // 2.3 退出 backtracking()是true 或者回溯 result.pop()
+            function backtracking() {
+                debugger
+                if (result.length === tickets.length + 1) {
+                    return true
+                }
+                let item = result[result.length - 1]
+                if (!map[item] || !map[item].length) {
+                    return false
+                }
+
+                for (let i = 0; i < map[item].length; i++) {
+                    debugger
+                    let city = map[item][i]
+                    map[item].splice(i, 1)
+                    result.push(city)
+                    if (backtracking()) {
+                        return true
+                    }
+                    result.pop()
+                    // 这句代码很关键 ["JFK","NRT","JFK","KUL"]
+                    // map[item].splice(i, 0, city)
+                }
+            }
+            backtracking()
+            return result
+        }
+        // console.log(findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]));
+        console.log(findItinerary([["JFK", "KUL"], ["JFK", "NRT"], ["NRT", "JFK"]]));
+    </script>
+</body>
+
+</html>

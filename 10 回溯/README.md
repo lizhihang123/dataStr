@@ -1371,7 +1371,7 @@ var permuteUnique = function (nums) {
 
 
 
-1.如果，递归时，搜索其中一条符合条件的值，那么递归一定需要返回值。搜索到了就return
+1.如果，递归时，搜索其中一条符合条件的值就好了，那么递归一定需要返回值。搜索到了就return
 
 2.如果递归不用处理返回值，递归函数就不需要返回值
 
@@ -1379,4 +1379,49 @@ var permuteUnique = function (nums) {
 
 
 
-![image-20221029150635463](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221029150635463.png)
+
+
+
+
+**当给到这样的数据结构时，如何进行处理？**
+
+- 从JFK可以到SFK，也可以到ALT，就要想到可以用对象的方式，一个JFK对应一个数组
+- 为何要进行排序，因为题目说，要字典树靠前的，就是要它。字典树靠前，就可以联想for in遍历对象的每个属性，每个属性都是数组，再用sort方法
+
+```js
+console.log(findItinerary(
+    [["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]));
+
+/*  {
+  'JFK': undefined -> ['SFO'] -> ['SFO', 'ATL'] -> ['ATL', 'SFO']
+  'SFO': ['ATL'],
+  'ATL': ['JFK'] -> ['JFK', 'SFO']
+  ---->
+  'JFK': undefined -> ['SFO'] -> ['ATL', 'SFO'],这里变化了
+  'SFO': ['ATL'],
+  'ATL': ['JFK'] -> ['JFK', 'SFO']
+} */
+```
+
+
+
+**for循环如何去处理？**
+
+1.第一个是要从JFK出发，就是要找到JFK对应的数组里面的一个值，我们排序好了的。如何找到，这个是个关键。以及接下来的递归，我们用什么方式去找。
+
+- i从0开始，每次递归都是从0开始，我们要的都是第一个，
+- i < 的值是每个航班的目的地，假设有3个，那么就要小于3个
+- city的值取的就是第一个。
+- 然后再删掉对应的值，city放到result里面去
+- backtraking()的写法很特别，就是调用，只有在航班全部走完时，才会返回true，这里的if语句才会通过
+
+```js
+for (let i = 0; i < map[result[result.length - 1]].length; i++) {
+    let city = map[item][i]
+    map[item].splice(i, 1)
+    result.push(city)
+    if (backtracking()) {
+        return true
+    }
+```
+
