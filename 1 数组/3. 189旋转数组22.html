@@ -1,0 +1,51 @@
+<!--
+ * @Date: 2022-01-17 06:25:13
+ * @LastEditTime: 2022-11-04 08:55:56
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 时间复杂度O(n)
+    // 空间复杂度O(1)
+    // reverse方法
+    var rotate = function (nums, k) {
+      let n = nums.length
+      // k是null 0 undefined之类
+      if (n === 0 || !k) {
+        return nums
+      }
+      // k如果大于长度
+      k = k % n
+      function reverse(nums, i, j) {
+        while (i < j) {
+          // 解构赋值 进行交换
+          [arr[i], arr[j]] = [arr[j], arr[i]]
+          i++
+          j--
+        }
+      }
+      if (k) {
+        // 反转整个数组
+        reverse(nums, 0, n - 1)
+        // 反转前k个数
+        reverse(nums, 0, k - 1)
+        // 反转后续的所有数
+        reverse(nums, k, n - 1)
+      }
+      return nums
+    };
+    console.log(rotate([1, 2, 3, 4, 5, 6, 7], 3));
+    // console.log(rotate([1, 2, 3, 4], 5));
+  </script>
+</body>
+
+</html>
