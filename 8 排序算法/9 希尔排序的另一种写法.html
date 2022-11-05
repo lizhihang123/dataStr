@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        // https://juejin.cn/post/6844903534861746183#heading-5
+        function shellSort(nums) {
+            let step = parseInt(nums.length / 2)
+            while (step >= 1) {
+                for (let i = step; i < nums.length; i++) {
+                    let n = i
+                    while (nums[n] > nums[n - step] && (n - step) > 0) {
+                        let temp = nums[n]
+                        nums[n] = nums[n - step]
+                        nums[n - step] = temp
+                        n = n - step
+                    }
+                }
+                step = parseInt(step / 2)
+            }
+            return nums
+        }
+        console.log(shellSort([90, 83, 76, 38, 99, 26, 44, 86]));
+    </script>
+</body>
+
+</html>

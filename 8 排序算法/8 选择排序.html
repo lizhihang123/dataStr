@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        // 1 思路：学生站一排 排队。最矮的放第一个，余下的找到第二矮的放在第二个，以此类推
+        // 2 时间复杂度 O(n ^ 2) 因为两层for循环 外层的遍历次数是nums.length - 2 内层的遍历次数是num.length - 1 近乎理解为O(n ^ 2)
+        // 3 空间复杂度 O(1) 是原地排序 没有使用额外的数组
+        // 4 稳定排序 ? 不稳定，会改变 相同元素的相对顺序
+        //     => 区别于冒泡排序，冒泡排序如果元素相同，不会进行交换
+        //         => 当数组当中的元素大部分是有序时，冒泡排序的效率更高
+        //             => 而选择排序 无论如何，交换次数都是n - 1
+        function selectionSort(nums) {
+            // !易错点 i < nums.length - 1 为什么呢？不这样写 而 j = i + 1 可能会越界
+            for (let i = 0; i < nums.length - 1; i++) {
+                // 1.最小值的索引(存储)
+                let minIndex = i
+                // 2.查找是否有更小的元素 有的话就minIndex重新赋值
+                for (let j = i + 1; j < nums.length; j++) {
+                    if (nums[j] < nums[minIndex]) {
+                        minIndex = j
+                    }
+                }
+                // 3.i和minIndex不同，说明后面有更小的元素 就交换
+                if (i !== minIndex) {
+                    let temp = nums[i]
+                    nums[i] = nums[minIndex]
+                    nums[minIndex] = temp
+                }
+            }
+            return nums
+        }
+        console.log(selectionSort([5, 8, 6, 3, 9, 2, 1, 7]));
+    </script>
+</body>
+
+</html>

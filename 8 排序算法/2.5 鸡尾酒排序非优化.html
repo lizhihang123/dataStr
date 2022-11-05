@@ -52,14 +52,13 @@
             }
             return array
         }
-        console.log(sort([5, 7, 2, 8, 9, 1]));
-        // let arr = []
-        // for (let i = 2; i < 1000000; i++) {
-        //     arr.push(i)
-        // }
-        // console.time('排序')
-        // console.log(sort([...arr, 1]));
-        // console.timeEnd('排序')
+        let arr = []
+        for (let i = 2; i < 1000000; i++) {
+            arr.push(i)
+        }
+        console.time('排序')
+        console.log(sort([...arr, 1]));
+        console.timeEnd('排序')
     </script>
 </body>
 

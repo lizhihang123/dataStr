@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /* 
+        时间复杂度O(k * (m + n)) m是桶的个数 n是nums的个数 k是最大有多少位数
+            为什么？虽然里面有两层for循环，但是第二层很小很小
+        
+        空间复杂度：有点不会看 是O(n + k)？
+        1. 核心思路：
+           123 345 456 111 121 => [[111 121] [123] [345] [456] ]
+           给数字排序 先根据最小的位数 把一样的放到一个桶里面，
+           再把桶里面的数字 依次取出来 => 再根据第二位数字 => 放到一个桶里 如此le
+           最小的位数之间的比较 用桶排序
+        2. 细节：
+           1 找到数字的最大值 注意 可以用toString().length 也可以用 + ''
+           2 取位数的算法注意 利用一个变量
+           let digit = Math.floor((nums[i] / significantDigit) % 10)  
+           等到比较下一位的数字时，significantDigit要乘以10 
+           因为位数的倍数是10倍
+           3 取出桶里面的数字的方法 => 其实就好像把二维数组 => 一维数组[两个for循环 或者用concat]
+        
+        */
+        function findMaxValue(nums) {
+            var max = nums[0];
+            for (var i = 0; i < nums.length; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                }
+            }
+            return max
+        }
+
+        function radixSort(nums) {
+            // 1 找出最大位数
+            let count = findMaxValue(nums).toString().length
+            debugger
+            //   桶的个数
+            let bucket = []
+            //   用于取位数
+            let significantDigit = 1
+
+            // 2 while 循环count次 就是最长的字符位数
+            while (count > 0) {
+                // 3 创建桶 10次
+                for (let i = 0; i < 10; i++) {
+                    // 有几个桶？10个 因为数字都是从 0 - 9
+                    bucket[i] = []
+                }
+
+                // 4 值进行分类放入桶中 O(n)
+                for (let i = 0; i < nums.length; i++) {
+                    // 得出位数的值的索引
+                    let digit = Math.floor((nums[i] / significantDigit) % 10)
+                    //   值放入对应索引的桶里去
+                    bucket[digit].push(nums[i])
+                }
+
+                //   修改原位数的值
+                significantDigit = significantDigit * 10
+                //   清空原数组
+                nums.length = 0
+                //   桶里面的值 放到原数组里去
+                // for (let i = 0; i < bucket.length; i++) {
+                //     // concat不会修改数组本身
+                //     nums = nums.concat(bucket[i])
+                // }
+
+                // 5 桶里面的值拿出来放入原始数组 O(m * 3)
+                for (let i = 0; i < bucket.length; i++) {
+                    for (let j = 0; j < bucket[i].length; j++) {
+                        nums.push(bucket[i][j])
+                    }
+                }
+                count--
+            }
+            return nums
+        }
+        console.log(radixSort([3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]));
+    </script>
+</body>
+
+</html>

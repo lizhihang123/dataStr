@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 交换元素
+        function swap(arr, index1, index2) {
+            let temp = arr[index1]
+            arr[index1] = arr[index2]
+            arr[index2] = temp
+        }
+        // 堆的类
+        class Heap {
+            constructor() {
+                // 初始值置为空
+                this.data = [null]
+            }
+
+            // 获取数据
+            getData() {
+                return this.data
+            }
+
+
+            // 添加元素
+            insert(item) {
+                // 添加元素 放到当前的data末尾
+                this.data.push(item)
+                // 每次添加一个元素都要“维持堆顶的状态” 插入的这个元素有可能是最大的值 所以要和父亲进行比较
+                this.shiftUp(this.data.length - 1)
+            }
+
+            // 维持堆顶的状态
+            shiftUp(currentIndex) {
+                // 这个值要和父亲进行比较 假设父亲是1，那么两个子节点的序号就是 1 * 2 和 1 * 2 + 1 反过来根据当前节点求父亲 就是 parseInt(currentIndex / 2) 不管是左还是右节点 都是ok的
+                // currentIndex如果是1，就是根节点，就不需要进行while循环了
+                // 维持堆顶是要从 下 -》上走，所以是在插入元素的时候进行
+                while (this.data[currentIndex] > this.data[parseInt(currentIndex / 2)] && currentIndex > 1) {
+                    // 1. 交换当前节点和父节点
+                    swap(this.data, currentIndex, parseInt(currentIndex / 2))
+                    // 2. 更新 currentIndex
+                    currentIndex = parseInt(currentIndex / 2)
+                }
+            }
+
+            // 删除元素
+            // 只能交换最后一个元素和堆顶元素 再进行删除最后一个元素->此时删除的就是最大的那个元素 为什么是这样的操作
+            //   为什么删除 只能删除堆顶的元素
+            //   为什么要和最后一个元素交换 -》删除最后一个元素
+            extractMax() {
+                // 1. 交换堆顶的元素和最后一个元素
+                // 注意 this.data[null, 1……] 所以是this.data.length
+                swap(this.data, 1, this.data.length)
+                // 2. 删除交换后的最后一个元素
+                let result = this.data.pop()
+                // 3. 维护顶层的元素? -> 什么意思
+                // 意思是 交换上来的元素，此时有可能不是最大的，所以还要去和子元素进行比较 因此是 shiftDown
+                this.shiftDown(1)
+                // 返回结果元素
+                return result
+            }
+
+
+            shiftDown(currentIndex) {
+                // 1. 如果当前节点 小于左节点
+                //    或者当前节点小于右节点 需要注意的是 currentIndex * 2 || currentIndex * 2 + 1
+                // 只有子节点有更大的 才会进入while循环
+                while (
+                    this.data[currentIndex] < this.data[currentIndex * 2] ||
+                    this.data[currentIndex] < this.data[currentIndex * 2 + 1]
+                ) {
+                    // 2. 如果左节点比右节点更大 交换更大的
+                    if (this.data[currentIndex * 2] > this.data[currentIndex * 2 + 1]) {
+                        swap(this.data, currentIndex, currentIndex * 2)
+                        // 2.1 记得更新节点
+                        currentIndex = currentIndex * 2
+                    } else if (this.data[currentIndex * 2] < this.data[currentIndex * 2 + 1]) {
+                        // 3. 如果左节点比右节点更大 交换更大的
+                        swap(this.data, currentIndex, currentIndex * 2 + 1)
+                        currentIndex = currentIndex * 2 + 1
+                    }
+                }
+            }
+        }
+        let initArr = [1, 2, 99, 10, 12, 87]
+        function HeapSort(arr) {
+            debugger
+            // 创建heap类
+            let heap = new Heap()
+            // 结果数组
+            let resultArr = []
+            for (let i = 0; i < arr.length; i++) {
+                // 遍历要排序的数组 放到 “堆里面去”
+                heap.insert(arr[i])
+            }
+            for (let j = 0; j < arr.length; j++) {
+                // 把最大的元素取出来 放到result的里面去 从开头插入
+                // 出现问题就是 extractMax这个API
+                let result = heap.extractMax()
+                resultArr.unshift(result)
+            }
+            return resultArr
+        }
+        let res = HeapSort(initArr)
+        console.log(res);
+    </script>
+</body>
+
+</html>

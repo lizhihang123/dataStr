@@ -1,0 +1,44 @@
+<!--
+ * @Date: 2022-01-19 10:33:19
+ * @LastEditTime: 2022-11-05 09:35:31
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+    // 输入: [2, 2, 1]
+    // 输出: 1
+    // 2. 异或运算
+    //  0 ^ 0 = 0
+    //  1 ^ 1 = 0  自己和自己异或运算就是 0
+    //  0 ^ 1 = 1  和0异或运算 就是 本身
+    //  0 ^ 2 = 2
+
+
+    // 1.异或
+    // 2.hash算法 但是空间是O(n)
+    var singleNumber = function (nums) {
+      let result = 0
+      for (let i = 0; i < nums.length; i++) {
+        // 0 ^ 1 / 1 ^ 1 / 0 ^ 2 / 2 ^ 2 / 0 ^ 3 / 3 ^ 3 / 0 ^ 4
+        // 4 ^ 3 是 7 / 7 ^ 3异或是4
+        // 异或的原理是？
+        // 如果一个数组里面出现了两个相同的数 该怎么办呢？
+        result ^= nums[i]
+      }
+      return result
+    }
+    console.log(singleNumber([1, 1, 2, 2, 4, 3, 3]))
+  </script>
+</body>
+
+</html>

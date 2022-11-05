@@ -1,0 +1,34 @@
+<!--
+ * @Date: 2022-01-19 10:10:12
+ * @LastEditTime: 2022-11-05 09:11:49
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 判断这个数组是不是有重复的数字 如果有的话就返回false 力扣先不用去看
+    // 2. 写法1: 先对数组进行排序 nums.sort() js内置方法 a - b是升序 然后进行隔行比较是否重复 如果没有 最后再返回false
+    var containsDuplicate = function (nums) {
+      nums.sort(function (a, b) {
+        return a - b
+      })
+      for (var i = 0; i < nums.length - 1; i++) {
+        if (nums[i] === nums[i + 1]) {
+          return true
+        }
+      }
+      return false // 注意这个位置
+    }
+    console.log(containsDuplicate([1, 2, 2, 3, 4, 6]))
+  </script>
+</body>
+
+</html>

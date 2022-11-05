@@ -114,12 +114,11 @@
                 // debugger
                 array[Math.floor((arr[i] - min) / bucketSize)].push(arr[i])
             }
-            debugger
             arr = []
             // 5.再利用归并排序或者归并排序的优化版本对里面的每个值进行排序 
             for (let i = 0; i < array.length; i++) {
                 // debugger
-                sortArray(array[i]) // 对array里面的二维数组进行排序
+                mergeSort(array[i]) // 对array里面的二维数组进行排序
                 for (let j = 0; j < array[i].length; j++) {
                     // debugger
                     // 6.内层再嵌套一层for循环把值放到arr数组里面去
