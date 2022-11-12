@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function swap(arr, num1, num2) {
+            let temp = arr[num1]
+            arr[num1] = arr[num2]
+            arr[num2] = temp
+        }
+        class Heap {
+            constructor() {
+                this.data = [null]
+            }
+            // 获取整体的数据
+            getData() {
+                return this.data
+            }
+            // 插入元素
+            insert(value) {
+                // 插入值一定是在最末尾去插入 所以shiftUp一定是从最底下开始，从this.data.length - 1开始
+                this.data.push(value)
+                // 插入值一定是在最末尾去插入 所以shiftUp一定是从最底下开始，从this.data.length - 1开始
+                this.shiftUp(this.data.length - 1)
+            }
+            // 维持堆顶元素 向上
+            shiftUp(currentIndex) {
+                // while循环 currentIndex大于0时，并且当前元素比父元素大的时候
+                // currentIndex 一定是大于1
+                while (currentIndex > 1 && (this.data[currentIndex] > this.data[(parseInt(currentIndex / 2))])) {
+                    swap(this.data, currentIndex, parseInt(currentIndex / 2))
+                    currentIndex = parseInt(currentIndex / 2)
+                }
+            }
+            // 删除元素
+            extractMax() {
+                // 我理解的思路
+                // 第一步 交换索引为1和索引为数组长度的值
+                // 第二步，删掉最后一个值
+                // 第三步，从顶部往下开始回滚
+                // 第四步，返回结果
+                // 到底是this.data.length - 1还是this.data.length
+                swap(this.data, 1, this.data.length - 1)
+                let result = this.data.pop()
+                this.shiftDown(1)
+                return result
+            }
+
+            // 往下面回滚
+            shiftDown(currentIndex) {
+                // let currentValue = this.data[currentIndex]
+                // let leftValue = this.data[currentIndex * 2]
+                // let rightValue = this.data[currentIndex * 2 + 1]
+                //是小于 这里明显理解错了。应该是小于 才会往下面的去计算的
+                while ((this.data[currentIndex] < this.data[currentIndex * 2] || this.data[currentIndex] < this.data[currentIndex * 2 + 1])) {
+                    // 判断左右子元素 谁更大一些 选择更大的那个
+                    if (this.data[currentIndex * 2] > this.data[currentIndex * 2 + 1]) {
+                        swap(this.data, currentIndex, currentIndex * 2)
+                        currentIndex = currentIndex * 2
+                    } else {
+                        swap(this.data, currentIndex, currentIndex * 2 + 1)
+                        currentIndex = currentIndex * 2 + 1
+                    }
+                }
+            }
+        }
+
+        let initArr = [1, 2, 99, 10, 12, 87]
+        let heap = new Heap()
+        function HeapSort() {
+            // debugger
+            // 把所有的数据放到堆里面去，然后进行插入 回滚
+            for (let i = 0; i < initArr.length; i++) {
+                heap.insert(initArr[i])
+            }
+            return heap.getData()
+        }
+        let res = HeapSort(initArr)
+        console.log(res);
+        heap.insert(100)
+    </script>
+</body>
+
+</html>

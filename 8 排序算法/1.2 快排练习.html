@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+时间O(nlogn)
+空间O(n)
+出错： 1. 递归退出条件记得
+      2. 左边的元素一定是小于等于的
+*/
+        function sortArray(arr) {
+            debugger
+            // 1.给一个初始值即可
+            let startIndex = 0
+            let endIndex = arr.length - 1
+            quickSort(arr, startIndex, endIndex)
+            return arr
+        }
+        function quickSort(arr, startIndex, endIndex) {
+            debugger
+            if (startIndex > endIndex) {
+                return
+            }
+            // 2.传入初始值给partition函数
+            // 2.1 获取下一个分解值
+            // 2.2 递归quickSort函数
+            let privtIndex = partition(arr, startIndex, endIndex)
+            quickSort(arr, startIndex, privtIndex - 1)
+            quickSort(arr, privtIndex + 1, endIndex)
+        }
+
+        function partition(arr, startIndex, endIndex) {
+            debugger
+            // 3.主要是进行排序
+            let left = startIndex
+            let right = endIndex
+            let privt = arr[startIndex]
+            // 大条件是left一定小于right
+            while (left < right) {
+                // 右边的数一定比基准值大
+                while (left < right && arr[right] > privt) {
+                    right--
+                }
+                // 左边的数一定比基准值小
+                // 注意易错点就是 arr[left] 一定小于等于基准值 因为left从0开始的
+                while (left < right && arr[left] <= privt) {
+                    left++
+                }
+                // 如果left的值小于right的值+此时上面的左右指针都停止了 就要交换两边的值
+                if (left < right) {
+                    let temp = arr[left]
+                    arr[left] = arr[right]
+                    arr[right] = temp
+                }
+            }
+            // 一波交换结束 要交换开头的值和基准值 并且返回“新生成的基准值”
+            arr[startIndex] = arr[left]
+            arr[left] = privt
+            return left
+        }
+        console.log(sortArray([5, 9, 7, 10, 3, 4]));
+    </script>
+</body>
+
+</html>

@@ -57,7 +57,7 @@
             extractMax() {
                 // 1. 交换堆顶的元素和最后一个元素
                 // 注意 this.data[null, 1……] 所以是this.data.length
-                swap(this.data, 1, this.data.length)
+                swap(this.data, 1, this.data.length - 1)
                 // 2. 删除交换后的最后一个元素
                 let result = this.data.pop()
                 // 3. 维护顶层的元素? -> 什么意思

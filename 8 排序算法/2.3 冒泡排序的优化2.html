@@ -25,14 +25,15 @@
             let sortBorder = nums.length - 1
             let lastExchangeIndex = 0
             for (let i = 0; i < len - 1; i++) {
-                let isSorted = true
+
+                let isSorted = false
                 debugger
                 // 里面的for循环 表示 每一趟走多少次，长度 - i - 1 而i表示当前是第几趟
                 for (let j = 0; j < sortBorder; j++) {
                     debugger
                     if (nums[j] > nums[j + 1]) {
                         swap(nums, j, j + 1)
-                        isSorted = false
+                        isSorted = true
                         // 更新为最后一次交换元素的位置
                         // 也就是说 如果是 5, 4, 3, 6, 7, 8, 9 => j此时就是3，下一次遍历的范围就是 0, 3
                         lastExchangeIndex = j
@@ -40,7 +41,7 @@
                 }
                 // 请注意 边界更新 要等到 “内层for循环结束再去进行”
                 sortBorder = lastExchangeIndex
-                if (isSorted) {
+                if (!isSorted) {
                     break
                 }
             }
@@ -48,7 +49,14 @@
         }
         // console.log(BubbleSort([5, 8, 6, 3, 9, 2, 1, 7]));
         // console.log(BubbleSort([5, 2, 1, 6, 3, 7, 8, 9]));
-        console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
+        // console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
+        // let arr = []
+        // for (let i = 2; i < 10; i++) {
+        //     arr.push(i)
+        // }
+        // console.time('排序')
+        // console.log(BubbleSort([...arr, 1]));
+        // console.timeEnd('排序')
     </script>
 </body>
 

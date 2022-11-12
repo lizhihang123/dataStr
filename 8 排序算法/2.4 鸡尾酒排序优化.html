@@ -12,6 +12,18 @@
     <script>
         // 适合大部分数据都是有序的数组
         // 可以对“有序部分”进行优化
+        // 时间是小于O(n^2)
+        // 空间是O(1)
+        // 1. 求出mid最多只走一半的路程
+        //    leftBorder和rightBorder记录左右分别遍历的最后顺序
+        //    leftLast和rightLast分别记录最后交换的位置
+        //    左边去交换一波
+        //    右边去交换一波 这样以后基本交换完毕了(在大部分元素是有序的情况)
+        //    然后最后再去交换一次，发现没有任何变化直接就break
+
+        // 2. 优化和没有优化的区别就是
+        //    是否记录最后一个交换的地方，作为for循环的边界
+
         function swap(arr, m, n) {
             let temp = arr[m]
             arr[m] = arr[n]
@@ -19,12 +31,12 @@
         }
         function sort(array) {
             // debugger
-            let mid = Math.floor(array.length / 2)
+            let mid = Math.floor(array.length / 2) // 交换趟
             let len = array.length
-            let leftBorder = 0
-            let rightBorder = array.length - 1
-            let leftLast = 0
-            let rightLast = 0
+            let leftBorder = 0 // 从右 -> 左的边界
+            let rightBorder = array.length - 1 // 从左 -> 右的边界
+            let leftLast = 0 // 左边最后一个交换的位置
+            let rightLast = 0 // 右边最后一个交换的位置
             // 控制循环的回合数
             for (let i = 0; i < mid; i++) {
                 // debugger
@@ -62,7 +74,7 @@
             return array
         }
         let arr = []
-        for (let i = 2; i < 1000000; i++) {
+        for (let i = 2; i < 10; i++) {
             arr.push(i)
         }
         console.time('排序')

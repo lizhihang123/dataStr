@@ -509,20 +509,6 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 
 
->1.二叉堆 ok
->
->2.完全二叉树ok
->
->3.堆排序的代码 删除 插入 ok
->
->但是构建 不ok
->
->4.堆排序的时间复杂度不ok
->
->……
-
-
-
 ## 3.1 基础概念
 
 堆排序一定满足是完全二叉树，一定是最大堆或者是最小堆
@@ -541,7 +527,7 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 
 
-**二叉堆**
+**二叉堆** 注意区分二叉搜索树
 
 二叉堆一定是 “完全二叉树”，然后再是“最大堆和最小堆”
 
@@ -559,17 +545,17 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 ## 3.2 二叉堆的索引关系
 
-用数组来存储。
+- 用数组来存储。注意，第一个节点的索引从1开始
 
-如果当前节点是 i，那么请问，父节点的索引是多少？是 parseInt(i / 2)
+- 如果当前节点是 i，那么请问，父节点的索引是多少？是 parseInt(i / 2)
 
-如果当前节点是 i,请问，左右子节点的值是多少？
+- 如果当前节点是 i,请问，左右子节点的值是多少？
 
-​	左子节点的索引, i * 2【i是父节点的索引】
+​	左子节点的索引, i * 2。
 
 ​	右子节点的索引， i * 2 + 1
 
-![image-20220715080407329](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220715080407329.png)
+![image-20221111092543293](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221111092543293.png)
 
 
 
@@ -583,9 +569,15 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 ### 添加操作
 
-只能在最底部添加元素，然后和父元素比较。假设是最大堆，如果比子元素大，就进行交换，直到”根元素“为止
+只能在最底部添加元素，然后和父元素比较。假设是最大堆，如果比父元素大，就进行交换，直到”根元素“为止
 
-![image-20220715081429670](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220715081429670.png)
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112092720339.png" alt="image-20221112092720339" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112092730809.png" alt="image-20221112092730809" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112092741405.png" alt="image-20221112092741405" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112092748727.png" alt="image-20221112092748727" style="zoom:50%;" />
 
 
 
@@ -599,9 +591,15 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 3.紧接着，顶部元素开始 “自顶向下“的进行比较。假设是最大堆，父元素要和子元素进行比较，如果子元素更大，就进行交换。
 
-<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220715081536400.png" alt="image-20220715081536400" style="zoom:50%;" />
 
-<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220715081613977.png" alt="image-20220715081613977" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112093137409.png" alt="image-20221112093137409" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112093147609.png" alt="image-20221112093147609" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112093154801.png" alt="image-20221112093154801" style="zoom:50%;" />
+
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221112093201684.png" alt="image-20221112093201684" style="zoom:50%;" />
 
 
 
@@ -617,56 +615,42 @@ console.log(BubbleSort([3, 4, 2, 1, 5, 6, 7, 8]));
 
 ### 走过的坑
 
-1 为什么要设置数组第一个值是null
+1. 为什么要设置数组第一个值是**null**，因为索引是从1开始
+
+2. insert(value) 只跟一个参数， 因为插入的位置一定是数组的最后一个
+3. shiftUp的while判断条件，一定要包含：currentIndex > 1，一定是大于1，因为如果是等于1，**索引为1的元素也会和null进行比较，就会把null纳入到排序里面来**
+4. extractMax方法一定要返回一个值，这个是函数的功能设计
+5. shiftUp往下回滚，不需要currentIndex的判断，一定是从索引为1的元素开始即可
+6. extractMax使用了shiftDown,注意，shiftDown里面的this.data[currentIndex]和this.data[currentIndex * 2] 和 this.data[currentIndex * 2 + 1] 这些值都是要变化的，因为curretnIndex要变化。所以不能存储给要给固定的值。下面绿色就是错的
 
 ```diff
-为什么要设置一个null?
-    和堆的索引 第一个从1开始有关系
-为什么堆的索引要从1开始?
-和我们判断父节点 子节点有关系
-    如果索引从1开始 每个节点的父节点就是parseInt(i / 2)
-    每个节点的左子节点的索引就是 i * 2
-    右子节点的索引就是 i * 2 + 1
+shiftDown(currentIndex) {
++    // let currentValue = this.data[currentIndex]
++    // let leftValue = this.data[currentIndex * 2]
++    // let rightValue = this.data[currentIndex * 2 + 1]
+    //是小于 这里明显理解错了。应该是小于 才会往下面的去计算的
+    while ((this.data[currentIndex] < this.data[currentIndex * 2] || this.data[currentIndex] < this.data[currentIndex * 2 + 1])) {
+        // 判断左右子元素 谁更大一些 选择更大的那个
+        if (this.data[currentIndex * 2] > this.data[currentIndex * 2 + 1]) {
+            swap(this.data, currentIndex, currentIndex * 2)
+            currentIndex = currentIndex * 2
+        } else {
+            swap(this.data, currentIndex, currentIndex * 2 + 1)
+            currentIndex = currentIndex * 2 + 1
+        }
+    }
+}
 ```
 
 
-
-2 为什么添加元素一定是在底部添加
-
-其他位置添加不好 会很混乱
-
-
-
-3 维持堆顶状态的的while递归的条件搞错
-
-while (this.data[currentIndex] > this.data[parseInt(currentIndex / 2 )] 
-
-
-
-4 删除的思路 先交换索引为1的元素和最后一个 再进行向底下冒泡的过程
-
-```diff
-                swap(this.data, 1, this.data.length - 1)
-                let result = this.data.pop()
-                this.shiftDown(1)
-                return result
-```
-
-
-
-5 删除的while 退出循环的条件搞错 只有当前元素小于子节点的值时，才需要退出
-
-```diff
-+         while (
-                    // 需要 currentIndex的值 小于 左 或者 右子节点
-                    this.data[currentIndex] < this.data[currentIndex * 2] ||
-                    this.data[currentIndex] < this.data[currentIndex * 2 + 1]
-                ) {
-```
 
 
 
 ### 正式编码
+
+时间复杂度：O(n * logn)
+
+空间：O(n)
 
 ```diff
 function swap (arr, index1, index2) {
@@ -753,6 +737,8 @@ heapData.getData()
 ```
 
 
+
+时间复杂度
 
 ## 3.5 堆排序的正式编码
 
