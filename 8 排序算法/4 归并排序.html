@@ -12,11 +12,10 @@
     <script>
         // 归并排序的思路
         // 先归类 -> 每个类别里面排序 -> 再合并类别的进行排序
-
         // 主函数
         function sortArray(arr) {
             debugger
-            // 1.调用_mergeSort函数
+            // 1. 调用_mergeSort函数
             // 返回
             _mergeSort(arr, 0, arr.length - 1)
             return arr
@@ -51,6 +50,7 @@
                 p = 0, // 因为结果数组每次都是空的
                 tempArr = []
             while ((p1 <= mid) && (p2 <= end)) {
+                debugger
                 // 思考，这里能否写等于号呢？
                 if (arr[p1] <= arr[p2]) {
                     tempArr[p++] = arr[p1++]
@@ -59,12 +59,15 @@
                 }
             }
             while (p1 <= mid) {
+                debugger
                 tempArr[p++] = arr[p1++]
             }
             while (p2 <= end) {
+                debugger
                 tempArr[p++] = arr[p2++]
             }
             for (let i = 0; i < tempArr.length; i++) {
+                debugger
                 arr[i + start] = tempArr[i]
             }
         }

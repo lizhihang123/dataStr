@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 总的排序函数
+        // 分治函数
+        //  1. 找到中间值
+        //  2. 递归
+        //  3. 注意递归的退出点
+        //  4. 返回这个值
+        // 排序函数
+        //  1. 声明变量 p1 p2 p
+        //  2. 比较p1和p2的值的大小 放到tempArr
+        //  3. 看看 p1是否小于mid 看看p2是否小于end
+
+        function sortArray(arr) {
+            mergeSort(arr, 0, arr.length - 1)
+            return arr
+        }
+        function mergeSort(arr, start, end) {
+            if (start >= end) {
+                return
+            }
+            let mid = parseInt((start + end) / 2)
+            mergeSort(arr, start, mid)
+            mergeSort(arr, mid + 1, end)
+            _merge(arr, start, mid, end)
+        }
+
+        function _merge(arr, start, mid, end) {
+            let p1 = start,
+                p2 = end,
+                p = mid,
+                tempArr = []
+            while ((p1 <= p) && (p2 <= p)) {
+                if (arr[p1] < arr[p2]) {
+                    // 这里的arr的索引的访问有问题
+                    tempArr[p1++] = arr[p1++]
+                } else {
+                    tempArr[p2++] = arr[p2++]
+                }
+            }
+            while (p1 <= p) {
+                // 这里的两个while循环也有问题
+                tempArr[p1++] = arr[p1]
+            }
+            while (p2 <= end) {
+                tempArr[p2++] = arr[p2]
+            }
+            for (let i = 0; i < tempArr.length; i++) {
+                // 覆盖原始的arr数组
+                arr[i + start] = tempArr[i]
+            }
+        }
+    </script>
+</body>
+
+</html>
