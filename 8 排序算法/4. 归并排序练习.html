@@ -10,56 +10,71 @@
 
 <body>
     <script>
+        // 时间复杂度O(nlogn)
+        // 空间复杂度O(n)
+
+
         // 总的排序函数
         // 分治函数
         //  1. 找到中间值
         //  2. 递归
         //  3. 注意递归的退出点
-        //  4. 返回这个值
+        //  4. 注意 先分治好，再开始_merge
         // 排序函数
         //  1. 声明变量 p1 p2 p
         //  2. 比较p1和p2的值的大小 放到tempArr
         //  3. 看看 p1是否小于mid 看看p2是否小于end
+        //  易错点：p2指针是给到mid+1不是end，p指针是指向tempArr使用的
 
         function sortArray(arr) {
-            mergeSort(arr, 0, arr.length - 1)
+            mergeArray(arr, 0, arr.length - 1)
             return arr
         }
-        function mergeSort(arr, start, end) {
+        function mergeArray(arr, start, end) {
+            // 这个是递归的退出条件
             if (start >= end) {
                 return
             }
+            // 求的是中间值 以此来分组
             let mid = parseInt((start + end) / 2)
-            mergeSort(arr, start, mid)
-            mergeSort(arr, mid + 1, end)
+            // 注意这个顺序 先左边 后右边
+            // 然后再针对当前的 start mid end 进行排序 -> 其实是最小分组先进行排序
+            mergeArray(arr, start, mid)
+            mergeArray(arr, mid + 1, end)
             _merge(arr, start, mid, end)
         }
 
         function _merge(arr, start, mid, end) {
+            // p1指针在前面半部分，p2指针是后面半部分
+            // p指针给到tempArr组合
+            // 如果p1小于p2就把p1放到tempArr数组里面去
             let p1 = start,
-                p2 = end,
-                p = mid,
-                tempArr = []
-            while ((p1 <= p) && (p2 <= p)) {
-                if (arr[p1] < arr[p2]) {
-                    // 这里的arr的索引的访问有问题
-                    tempArr[p1++] = arr[p1++]
+                p2 = mid + 1,
+                p = 0,
+                tempArr = [];
+            while ((p1 <= mid) && (p2 <= end)) {
+                // 注意 为了是原地排序 这里要是<= 如果是等于的情况 就把左边的先放进去，这样相对的位置就不会改变了
+                if (arr[p1] <= arr[p2]) {
+                    tempArr[p++] = arr[p1++]
                 } else {
-                    tempArr[p2++] = arr[p2++]
+                    tempArr[p++] = arr[p2++]
                 }
             }
-            while (p1 <= p) {
-                // 这里的两个while循环也有问题
-                tempArr[p1++] = arr[p1]
+            // 有情况就是p1的值并没有完全放到tempArr或者是p2的  
+            while (p1 <= mid) {
+                tempArr[p++] = arr[p1++]
             }
             while (p2 <= end) {
-                tempArr[p2++] = arr[p2]
+                tempArr[p++] = arr[p2++]
             }
+            // 注意思考，为什么这里是遍历tempArr数组呢，因为这个是排序好的结果。为什么是arr[i + start] 因为start开始的地方可能是不同的
             for (let i = 0; i < tempArr.length; i++) {
-                // 覆盖原始的arr数组
                 arr[i + start] = tempArr[i]
             }
         }
+
+        let initArr = [3, 1, 6, 5, 7, 2, 9, 8]
+        console.log(sortArray(initArr));
     </script>
 </body>
 
