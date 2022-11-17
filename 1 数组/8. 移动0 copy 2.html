@@ -1,0 +1,32 @@
+<!--
+ * @Date: 2022-01-25 19:21:38
+ * @LastEditTime: 2022-11-11 09:07:54
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 2. 双指针 交换变量
+    // 和移动元素的逻辑是一样的
+    var moveZeroes = function (nums) {
+      let k = 0
+      for (let j = 0; j < nums.length; j++) {
+        if (nums[j] !== 0) {
+          nums[k++] = nums[j]
+        }
+      }
+      return k
+    }
+    console.log(moveZeroes([1, 2, 0, 0, 3, 2, 0]))
+  </script>
+</body>
+
+</html>

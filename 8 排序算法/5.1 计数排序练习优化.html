@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /*  
+            // 1.求最大值和最小值
+            // 2.依据最大最小的差值 初始化数组的值
+            // 3.把nums数组的值填充进去
+            // 4.每个值修改为(当前值+上一个值的和)
+            // 5.倒序遍历原始数组，从统计数组找到正确位置，输出到结果数组里面去
+        */
+        function sortArray(nums) {
+            // 1. 求最大值和最小值的差 就是新创建的数组的长度 + 1
+            let max = nums[0]
+            let min = nums[0]
+            let result = []
+            for (let i = 1; i < nums.length; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                } else if (nums[i] < min) {
+                    min = nums[i]
+                }
+            }
+            let sub = max - min
+            let array = new Array(sub + 2).fill(0)
+            // 2. 根据数量 去新数组里面进行值的累加
+            for (let j = 0; j < nums.length; j++) {
+                array[nums[j] - min]++
+            }
+            // 3. 倒序相加
+            for (let j = 1; j < array.length; j++) {
+                array[j] += array[j - 1]
+            }
+            console.log(array);
+            // 4. 根据array 输出新的数组
+            for (let i = nums.length - 1; i >= 0; i--) {
+                let index = nums[i] - min
+                let value = array[index] - 1
+                result[value] = nums[i]
+                array[index]--
+            }
+            return result
+        }
+        console.log(sortArray([94, 90, 95, 95, 99]));
+    </script>
+</body>
+
+</html>

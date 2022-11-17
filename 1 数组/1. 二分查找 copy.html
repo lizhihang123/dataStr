@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 二分查找的代码
+        // 易错点：while循环的low和high必须是<= 如果是单单< 就不行
+        const binary_search = (list, item) => {
+            /**
+             * @low: 二分查找左边的索引 
+             * @high: 二分查找右边的索引 
+             * @mid: 二分查找中间的值
+             * @guess: 根据mid得到的值
+             * @return {*}
+             */
+            let low = 0
+            let high = list.length
+            while (low <= high) {
+                let mid = Math.floor((low + high) / 2)
+                let guess = list[mid]
+                if (guess === item) {
+                    return mid
+                }
+                else if (guess > item) {
+                    high = mid - 1
+                } else if (guess < item) {
+                    low = mid + 1
+                }
+            }
+        }
+        function findMax(arr, num) {
+            // 拓展 找到所有比target大的值中的最小值
+            let index = binary_search(arr, 8)
+            debugger
+            let result = arr.slice(index)
+            return Math.min(...result)
+        }
+        console.log(findMax([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9));
+    </script>
+</body>
+
+</html>

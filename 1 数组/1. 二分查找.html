@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 二分查找的代码
+        const binary_search = (list, item) => {
+            // low是查找的范围的起始值 
+            // high是查找的范围的最大值
+            // mid是中间的位置，猜测的中间位置
+            // guess是查找的指定值 item是查找的目标值
+            let low = 0;
+            let high = list.length - 1;
+            while (low <= high) {
+                let mid = Math.floor((low + high) / 2)
+                let guess = list[mid]
+                if (guess === item) {
+                    return mid
+                } else if (guess > item) {
+                    // 猜大了，边界值变化 high => 变小
+                    high = mid - 1
+                } else {
+                    // 猜小了，边界值变化 low => 变大
+                    low = mid + 1
+                }
+            }
+            return null
+
+        }
+        console.log(binary_search([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9));
+    </script>
+</body>
+
+</html>

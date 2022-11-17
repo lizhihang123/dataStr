@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给定一个数组和一个指定的数字 移除给定的元素
+        // 逻辑：只要碰到一个数字等于目标值，就让后面所有的元素都往前面覆盖
+        // 时间复杂度：O(n ^ 2)
+        // 空间复杂度：O(1)
+        var removeElement = (nums, val) => {
+            let k = 0;
+            let size = nums.length
+            for (let i = 0; i < size; i++) {
+                if (nums[i] === val) {
+                    // 这里写 j = i + 1,只需要理解，一定是后一位覆盖掉前一位，覆盖掉目标值，然后 j - 1一定不能小于0，j一定不能越界大于0即可
+                    for (let j = i + 1; j < size; j++) {
+                        nums[j - 1] = nums[j]
+                    }
+                    i--
+                    size--
+                }
+            };
+            return size
+        }
+        console.log(removeElement([0, 1, 2, 3, 2, 0, 4, 3], 2));
+    </script>
+</body>
+
+</html>

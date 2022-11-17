@@ -871,19 +871,27 @@ function swap (arr, index1, index2) {
 
 ## 3.6 heapify()
 
+在Heap里面添加下面函数。时间复杂度O(n)
+
+- 开头插入一个null值，然后整个数组给到this.data
+- 找到最后一个非叶子结点 parseInt((arr.length - 1) / 2)，举例就可以求出
+- 为什么要从最后一个非叶子节点出发，因为叶子节点没有根节点，都可以理解为是最大堆，因此从非叶子节点触发，最后一个非叶子节点前面所有的节点，都需要调整
+- 往上还是往下呢，是往下，shiftDown，往下处理。
+
 ```js
-1 找到数组的 最后一个非叶子节点 最后一个非叶子节点 => parseInt( (数组的长度 - 1) / 2 )
-3 为什么要从最后一个非叶子节点出发 因为叶子节点都只有一个节点 都可以理解为是最大堆 因此从非叶子节点触发
-  而最后一个非叶子节点 的前面所有的节点 都需要调整 
-4 判断此时是向上还是向下去调整 
-  是向下 为什么 因此此时堆顶的元素是有问题的 要往下挪? 是上面的元素要往下 => 调用shiftDown即可
-5 heapify(arr)的时间复杂度是O(n)
-heapify的性能比一个一个遍历去求时间复杂度要高很多
+heapify(arr) {
+    arr.unshift([null])
+    this.data = arr
+    let lastIndex = parseInt((this.data.length - 1) / 2)
+    // 使用for循环 从最后一个非叶子节点开始 往上 对每一个非叶子节点进行shiftDown
+    for (let i = lastIndex; i > 0; i--) {
+        debugger
+        this.shiftDown(i)
+    }
+}
 ```
 
-![image-20220716100853774](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220716100853774.png)
-
-
+<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221116090159056.png" alt="image-20221116090159056" style="zoom:50%;" />
 
 
 
@@ -998,14 +1006,6 @@ console.log(sortArray(initArr));
 
 
 ## 4.3 归并演示
-
-<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220919100435726.png" alt="image-20220919100435726" style="zoom:50%;" />
-
-
-
-
-
-<img src="https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20220919100454884.png" alt="image-20220919100454884" style="zoom:50%;" />
 
 
 
@@ -1142,6 +1142,8 @@ console.log(sortArray([94, 90, 95, 95, 99]));
 ```
 
 
+
+![image-20221117085115868](https://typora-1309613071.cos.ap-shanghai.myqcloud.com/typora/image-20221117085115868.png)
 
 # 6. 桶排序
 

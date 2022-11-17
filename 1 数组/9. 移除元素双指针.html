@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 时间O(N)
+        // 空间O(1)
+        // 给定一个数组和一个指定的数字 移除给定的元素
+        //      如何移除？下面的是双指针法，k和i分别是一个指针
+        // 如果没有碰到指定的元素，两个指针指向一样的值 一旦碰到指定的元素跳过if循环，两个指针会错开，就会发生替换
+        // 为什么返回的是k呢？
+        //      i是遍历了整个数组。如果遇见了目标值，不会进入if循环，没遇见，就会进入，那么k就会++，那么返回的k就是剩余的数组的长度。即便数组的值没有被我们删去
+        var removeElement = (nums, val) => {
+            let k = 0;
+            for (let i = 0; i < nums.length; i++) {
+                if (nums[i] != val) {
+                    nums[k++] = nums[i]
+                }
+            }
+            return k;
+        };
+        console.log(removeElement([0, 1, 2, 3, 2, 0, 4, 3], 2));
+    </script>
+</body>
+
+</html>

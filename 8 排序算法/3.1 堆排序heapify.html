@@ -23,6 +23,15 @@
             constructor() {
                 this.data = [null]
             }
+            heapify(arr) {
+                arr.unshift([null])
+                this.data = arr
+                let lastIndex = parseInt((this.data.length - 1) / 2)
+                for (let i = lastIndex; i > 0; i--) {
+                    debugger
+                    this.shiftDown(i)
+                }
+            }
             // 获取整体的数据
             getData() {
                 return this.data
@@ -59,35 +68,39 @@
 
             // 往下面回滚
             shiftDown(currentIndex) {
+                debugger
                 // let currentValue = this.data[currentIndex]
                 // let leftValue = this.data[currentIndex * 2]
                 // let rightValue = this.data[currentIndex * 2 + 1]
                 //是小于 这里明显理解错了。应该是小于 才会往下面的去计算的
                 while ((this.data[currentIndex] < this.data[currentIndex * 2] || this.data[currentIndex] < this.data[currentIndex * 2 + 1])) {
-                    // 判断左右子元素 谁更大一些 选择更大的那个
-                    if (this.data[currentIndex * 2] > this.data[currentIndex * 2 + 1]) {
-                        swap(this.data, currentIndex, currentIndex * 2)
-                        currentIndex = currentIndex * 2
-                    } else {
+                    // 右边的数字更大(注意，右边子树可能是undefined 2<undefined是false)
+                    if (this.data[currentIndex * 2] < this.data[currentIndex * 2 + 1]) {
                         swap(this.data, currentIndex, currentIndex * 2 + 1)
                         currentIndex = currentIndex * 2 + 1
+                    } else {
+                        // 如果右边是空 | 右子树有值 且小于左子树
+                        swap(this.data, currentIndex, currentIndex * 2)
+                        currentIndex = currentIndex * 2
                     }
                 }
             }
         }
         let initArr = [1, 2, 99, 10, 12, 87]
         let heap = new Heap()
-        function HeapSort() {
-            // debugger
-            // 把所有的数据放到堆里面去，然后进行插入 回滚
-            for (let i = 0; i < initArr.length; i++) {
-                heap.insert(initArr[i])
-            }
-            return heap.getData()
-        }
-        let res = HeapSort(initArr)
-        console.log(res);
-        heap.insert(100)
+        heap.heapify(initArr)
+        heap.getData()
+        // function HeapSort() {
+        //     // debugger
+        //     // 把所有的数据放到堆里面去，然后进行插入 回滚
+        //     for (let i = 0; i < initArr.length; i++) {
+        //         heap.insert(initArr[i])
+        //     }
+        //     return heap.getData()
+        // }
+        // let res = HeapSort(initArr)
+        // console.log(res);
+        // heap.insert(100)
     </script>
 </body>
 

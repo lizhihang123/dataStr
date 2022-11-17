@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>标题</title>
+</head>
+
+<body>
+    <script>
+        /*  
+            1. 利用数组的下表来进行排序
+            2. 适合数字范围不是很大的排序
+            [2,2,3,5,1,4]
+            [0,0,0,0,0,0]
+            [0,1,2,1,1,1]
+            [0,1,2,2,3,4,5]
+            3. 时间复杂度 O(N+K) 空间复杂度O(N)
+            4. 不合适小数 不适合最小值和最大值差距过大的情况
+            5. 不是原地排序 会有额外的空间占用
+        */
+        function sortArray(nums) {
+            // 1.求最大值和最小值的差 就是新创建的数组的长度 + 2
+            // 2.根据最大值初始化数组0
+            // 3.填充初始化数组 把nums对应的值塞到数组对应的值里面去
+            // 4.然后创建结果数组2
+            // 5.把数组1的值放到结果2里面去
+
+
+            // 1. 求最大值和最小值的差 就是新创建的数组的长度 + 1
+            let max = nums[0]
+            let min = nums[0]
+            let result = []
+            for (let i = 1; i < nums.length; i++) {
+                if (nums[i] > max) {
+                    max = nums[i]
+                } else if (nums[i] < min) {
+                    min = nums[i]
+                }
+            }
+            let sub = max - min
+            // 这里写的是sub+2而不是+1
+            let array = new Array(sub + 2).fill(0)
+            debugger
+            // 2. 根据数量 去新数组里面进行值的累加
+            for (let j = 0; j < nums.length; j++) {
+                array[nums[j] - min]++
+            }
+            // 3. 根据array 输出新的数组
+            for (let i = 0; i < array.length; i++) {
+                debugger
+                for (let j = 0; j < array[i]; j++) {
+                    debugger
+                    // push的是i而不是array[i] i表示的下标就是我们要的数字
+                    result.push(nums[i])
+                }
+            }
+            return result
+        }
+        console.log(sortArray([94, 90, 95, 95, 99]));
+        // console.log(sortArray([2, 2, 3, 3, 5, 4, 1]));
+    </script>
+</body>
+
+</html>
