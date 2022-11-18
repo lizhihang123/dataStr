@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+        排序部分
+         */
+        function swap(arr, num1, num2) {
+            let temp = arr[num1]
+            arr[num1] = arr[num2]
+            arr[num2] = temp
+            return arr
+        }
+        function insertSort(arr) {
+            // 1.如果长度小于2，就直接return arr的结果
+            // 2.第一个元素为有序区，然后后一个元素和第一个元素比较 如果更小，就交换
+            if (arr.length < 2) {
+                return arr
+            }
+            for (let i = 1; i < arr.length; i++) {
+                for (let j = i; j > 0; j--) {
+                    if (arr[j] < arr[j - 1]) {
+                        swap(arr, j, j - 1)
+                    } else {
+                        // 记得增加一个break 如果当前元素更大就直接跳出循环
+                        break
+                    }
+                }
+            }
+            return arr
+        }
+        console.log(insertSort([3, 5, 1, 9, 4, 2, 11, 8]));
+        // let initArr = []
+        // for (let i = 1000; i > 0; i--) {
+        //     initArr.push(i)
+        // }
+        // console.time('init1')
+        // console.log(insertSort(initArr));
+        // console.timeEnd('init1')
+    </script>
+</body>
+
+</html>
